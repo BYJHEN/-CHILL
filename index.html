@@ -58,7 +58,7 @@
     min-height:100vh;
     overscroll-behavior:none;
   }
-  h1,h2,h3,.hero-title,#topTitle,.day-heading,.doc-title,.tip-h,.fm-airline-name{
+  h1,h2,h3,.hero-title,#topTitle,.day-heading,.doc-title,.tip-h-input,.fm-airline-name{
     font-family:"Noto Serif TC","Noto Sans TC",serif;
     color:var(--primary-dark);
   }
@@ -345,13 +345,31 @@
   }
   .doc-card-head input.doc-title:focus{ outline:none; border-bottom:1px dashed var(--line); }
   .doc-icon-btn{ font-size:14px; color:var(--brown-soft); padding:4px 6px; flex:0 0 auto; }
+  .doc-icon-btn.edit-btn{
+    font-size:11.5px; font-weight:500; background:var(--panel); border:1px solid var(--line);
+    padding:5px 10px; border-radius:14px; color:var(--text);
+  }
+  .doc-title-view{
+    flex:1; font-family:"Noto Serif TC","Noto Sans TC",serif; font-weight:700; font-size:14px; color:var(--primary-dark);
+  }
+  .doc-content-view{
+    margin-top:8px; font-size:12.5px; color:var(--text); white-space:pre-wrap; line-height:1.5;
+  }
+  .doc-edit-actions{ display:flex; align-items:center; gap:8px; margin-top:10px; }
+  .doc-del-btn{ font-size:11.5px; color:var(--clay); background:var(--clay-soft); padding:6px 11px; border-radius:20px; }
+  .doc-cancel-btn{ font-size:11.5px; color:var(--brown-soft); padding:6px 10px; }
+  .doc-save-btn{ font-size:12px; font-weight:500; color:#FFFDF8; background:var(--primary); padding:7px 16px; border-radius:20px; }
   .doc-content{
     width:100%; margin-top:8px; border:1px solid var(--line); border-radius:10px; background:#fff;
     font-family:inherit; font-size:12.5px; color:var(--grey); padding:9px 10px; resize:vertical; min-height:60px;
   }
   .doc-content:focus{ outline:2px solid var(--sage); outline-offset:1px; }
   .doc-img-wrap{ margin-top:8px; }
-  .doc-img-wrap img{ max-width:100%; border-radius:10px; display:block; }
+  .doc-photo-chip{
+    display:inline-flex; align-items:center; gap:6px; font-size:11.5px; background:var(--sage-soft);
+    color:var(--primary-dark); padding:6px 11px; border-radius:20px; font-weight:500; border:none; cursor:pointer;
+  }
+  .doc-photo-chip:active{ opacity:.7; }
   .doc-img-actions{ display:flex; gap:8px; margin-top:8px; align-items:center; flex-wrap:wrap; }
   .doc-img-btn{
     font-size:11px; background:var(--sand-deep); padding:6px 10px; border-radius:20px; color:var(--brown-soft);
@@ -370,11 +388,28 @@
   /* ---------- Tips ---------- */
   .tip-card{
     background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:12px 14px; margin-bottom:10px;
-    display:flex; gap:10px;
+    display:flex; gap:10px; align-items:flex-start;
   }
-  .tip-ico{ font-size:19px; }
-  .tip-h{ font-size:13px; font-weight:700; margin-bottom:2px; }
-  .tip-t{ font-size:12.5px; color:var(--grey); }
+  .tip-ico{ font-size:19px; width:34px; flex:0 0 auto; text-align:center; }
+  .tip-ico-input{
+    font-size:19px; width:34px; flex:0 0 auto; text-align:center; border:none; background:transparent;
+    padding:2px 0;
+  }
+  .tip-body{ flex:1; min-width:0; }
+  .tip-h-input{
+    font-family:"Noto Serif TC","Noto Sans TC",serif; font-weight:700; font-size:13px; color:var(--primary-dark);
+    border:none; background:transparent; width:100%; padding:2px 0; margin-bottom:2px;
+  }
+  .tip-t-input{
+    font-size:12.5px; color:var(--text); border:none; background:transparent; width:100%;
+    resize:vertical; min-height:36px; padding:2px 0; font-family:inherit;
+  }
+  .tip-h-view{
+    font-family:"Noto Serif TC","Noto Sans TC",serif; font-weight:700; font-size:13px; color:var(--primary-dark);
+    margin-bottom:2px;
+  }
+  .tip-t-view{ font-size:12.5px; color:var(--text); line-height:1.5; }
+  .tip-del-btn{ font-size:11.5px; color:var(--clay); background:var(--clay-soft); padding:6px 11px; border-radius:20px; }
 
   /* ---------- Exchange / weather ---------- */
   .card{ background:var(--panel); border:1px solid var(--line); border-radius:16px; padding:14px 16px; margin-bottom:12px; box-shadow:0 2px 8px rgba(38,61,53,.05); }
@@ -407,6 +442,21 @@
     backdrop-filter:blur(2px);
   }
   .flight-modal-backdrop.open{ display:flex; }
+
+  /* ---------- Image lightbox (查看文件照片) ---------- */
+  .img-lightbox-backdrop{
+    position:fixed; inset:0; background:rgba(38,61,53,.85); z-index:110;
+    display:none; align-items:center; justify-content:center; flex-direction:column; gap:10px;
+    padding:24px;
+  }
+  .img-lightbox-backdrop.open{ display:flex; }
+  .img-lightbox-img{ max-width:100%; max-height:78vh; border-radius:12px; box-shadow:0 20px 50px rgba(0,0,0,.4); }
+  .img-lightbox-cap{ color:var(--background); font-size:12px; opacity:.85; text-align:center; }
+  .img-lightbox-close{
+    position:absolute; top:18px; right:18px; width:36px; height:36px; border-radius:50%;
+    background:rgba(245,240,230,.15); color:var(--background); font-size:16px;
+    display:flex; align-items:center; justify-content:center;
+  }
   .flight-modal{
     width:100%; max-width:520px;
     background:linear-gradient(180deg, color-mix(in srgb, var(--primary-dark), white 14%), var(--primary-dark));
@@ -615,9 +665,10 @@
   <section class="view" id="tips">
     <div class="sec-head">
       <h2>實用小提醒</h2>
-      <div class="desc">出發前再看一次就對了</div>
+      <div class="desc">出發前再看一次就對了，可以自行新增、編輯</div>
     </div>
     <div id="tipList"></div>
+    <div class="doc-add-card" id="tipAddBtn">＋ 新增一則提醒</div>
   </section>
 
   <!-- ============ EXCHANGE ============ -->
@@ -657,6 +708,13 @@
   <!-- ============ FLIGHT DETAIL MODAL ============ -->
   <div class="flight-modal-backdrop" id="flightModalBackdrop">
     <div class="flight-modal" id="flightModal"></div>
+  </div>
+
+  <!-- ============ IMAGE LIGHTBOX ============ -->
+  <div class="img-lightbox-backdrop" id="imgLightboxBackdrop">
+    <button class="img-lightbox-close" id="imgLightboxClose">✕</button>
+    <img class="img-lightbox-img" id="imgLightboxImg" src="" alt="">
+    <div class="img-lightbox-cap" id="imgLightboxCap"></div>
   </div>
 
 </div>
@@ -757,7 +815,7 @@ const FLIGHTS = {
   }
 };
 
-const TIPS = [
+const TIPS_DEFAULT = [
   { ico:'🧣', h:'穿著', t:'進入寺廟嚴禁露肩、短裙或破洞褲，請隨身備妥披肩或長裙。' },
   { ico:'🚕', h:'交通', t:'市區移動善用 Grab / Bolt 叫車，方便又不用比價。' },
   { ico:'🕶️', h:'防曬', t:'白天陽光依然強烈，記得帶傘或墨鏡遮陽。' }
@@ -1312,6 +1370,8 @@ function saveDocs(arr){
 }
 
 let docsState = loadDocs();
+let docsEditing = new Set();   // 目前正在編輯中的文件索引
+let docsDrafts = {};           // 編輯中尚未儲存的暫存內容 {i:{title,content}}
 
 function resizeImageFile(file, maxW, cb){
   const reader = new FileReader();
@@ -1335,74 +1395,104 @@ function renderDocs(){
   const wrap = document.getElementById('docList');
   wrap.innerHTML = '';
   docsState.forEach((doc, i)=>{
+    const isEditing = docsEditing.has(i);
     const card = document.createElement('div');
-    card.className = 'doc-card';
-    card.innerHTML = `
-      <div class="doc-card-head">
-        <input class="doc-title" value="${doc.title.replace(/"/g,'&quot;')}" placeholder="文件名稱">
-        <button class="doc-icon-btn del">✕</button>
-      </div>
-      <textarea class="doc-content" placeholder="輸入內容…">${doc.content || ''}</textarea>
-      <div class="doc-img-wrap">${doc.img ? `<img src="${doc.img}" alt="${doc.title}">` : ''}</div>
-      ${doc.pdfData ? `<a class="doc-pdf-chip" href="${doc.pdfData}" target="_blank" rel="noopener">📄 ${doc.pdfName || 'PDF 檔案'}　查看 →</a>` : ''}
-      <div class="doc-img-actions">
-        <label class="doc-img-btn">📷 ${doc.img?'更換照片':'新增照片'}<input type="file" accept="image/*" style="display:none" class="doc-file-input"></label>
-        ${doc.img?'<button class="doc-img-btn rm-img">移除照片</button>':''}
-        <label class="doc-img-btn">📄 ${doc.pdfData?'更換 PDF':'上傳 PDF'}<input type="file" accept="application/pdf" style="display:none" class="doc-pdf-input"></label>
-        ${doc.pdfData?'<button class="doc-img-btn rm-pdf">移除 PDF</button>':''}
-      </div>
-      <div class="doc-warn" style="display:none;"></div>
-    `;
-    card.querySelector('.doc-title').addEventListener('input', (e)=>{
-      docsState[i].title = e.target.value; saveDocs(docsState);
-    });
-    card.querySelector('.doc-content').addEventListener('input', (e)=>{
-      docsState[i].content = e.target.value; saveDocs(docsState);
-    });
-    card.querySelector('.del').addEventListener('click', ()=>{
-      docsState.splice(i,1); saveDocs(docsState); renderDocs();
-    });
-    card.querySelector('.doc-file-input').addEventListener('change', (e)=>{
-      const file = e.target.files[0];
-      if(!file) return;
-      resizeImageFile(file, 900, (dataUrl)=>{
-        const prev = docsState[i].img;
-        docsState[i].img = dataUrl;
-        if(saveDocs(docsState)){ renderDocs(); }
-        else{
-          docsState[i].img = prev;
-          showDocWarn(card, '儲存失敗，這張照片可能太大，建議換一張較小的圖片。');
-        }
+    card.className = 'doc-card' + (isEditing ? ' editing' : '');
+
+    if(isEditing){
+      if(!docsDrafts[i]) docsDrafts[i] = { title:doc.title, content:doc.content };
+      const draft = docsDrafts[i];
+      card.innerHTML = `
+        <div class="doc-card-head">
+          <input class="doc-title" value="${(draft.title||'').replace(/"/g,'&quot;')}" placeholder="文件名稱">
+        </div>
+        <textarea class="doc-content" placeholder="輸入內容…">${draft.content || ''}</textarea>
+        <div class="doc-img-wrap">${doc.img ? `<button class="doc-photo-chip open-photo">🖼️ 已上傳照片　查看 →</button>` : ''}</div>
+        ${doc.pdfData ? `<a class="doc-pdf-chip" href="${doc.pdfData}" target="_blank" rel="noopener">📄 ${doc.pdfName || 'PDF 檔案'}　查看 →</a>` : ''}
+        <div class="doc-img-actions">
+          <label class="doc-img-btn">📷 ${doc.img?'更換照片':'新增照片'}<input type="file" accept="image/*" style="display:none" class="doc-file-input"></label>
+          ${doc.img?'<button class="doc-img-btn rm-img">移除照片</button>':''}
+          <label class="doc-img-btn">📄 ${doc.pdfData?'更換 PDF':'上傳 PDF'}<input type="file" accept="application/pdf" style="display:none" class="doc-pdf-input"></label>
+          ${doc.pdfData?'<button class="doc-img-btn rm-pdf">移除 PDF</button>':''}
+        </div>
+        <div class="doc-warn" style="display:none;"></div>
+        <div class="doc-edit-actions">
+          <button class="doc-del-btn">✕ 刪除文件</button>
+          <div style="flex:1;"></div>
+          <button class="doc-cancel-btn">取消</button>
+          <button class="doc-save-btn">✓ 儲存</button>
+        </div>
+      `;
+      card.querySelector('.doc-title').addEventListener('input', (e)=>{ draft.title = e.target.value; });
+      card.querySelector('.doc-content').addEventListener('input', (e)=>{ draft.content = e.target.value; });
+      card.querySelector('.doc-save-btn').addEventListener('click', ()=>{
+        doc.title = draft.title; doc.content = draft.content;
+        saveDocs(docsState);
+        docsEditing.delete(i); delete docsDrafts[i];
+        renderDocs();
       });
-    });
-    const rmBtn = card.querySelector('.rm-img');
-    if(rmBtn) rmBtn.addEventListener('click', ()=>{
-      docsState[i].img = null; saveDocs(docsState); renderDocs();
-    });
-    card.querySelector('.doc-pdf-input').addEventListener('change', (e)=>{
-      const file = e.target.files[0];
-      if(!file) return;
-      if(file.type !== 'application/pdf'){
-        showDocWarn(card, '請選擇 PDF 檔案。');
-        return;
-      }
-      const reader = new FileReader();
-      reader.onload = (ev)=>{
-        const prevData = docsState[i].pdfData, prevName = docsState[i].pdfName;
-        docsState[i].pdfData = ev.target.result;
-        docsState[i].pdfName = file.name;
-        if(saveDocs(docsState)){ renderDocs(); }
-        else{
-          docsState[i].pdfData = prevData; docsState[i].pdfName = prevName;
-          showDocWarn(card, '儲存失敗，這份 PDF 可能太大（瀏覽器儲存空間有上限），建議改用較小的檔案。');
-        }
-      };
-      reader.readAsDataURL(file);
-    });
-    const rmPdf = card.querySelector('.rm-pdf');
-    if(rmPdf) rmPdf.addEventListener('click', ()=>{
-      docsState[i].pdfData = null; docsState[i].pdfName = null; saveDocs(docsState); renderDocs();
-    });
+      card.querySelector('.doc-cancel-btn').addEventListener('click', ()=>{
+        docsEditing.delete(i); delete docsDrafts[i];
+        renderDocs();
+      });
+      card.querySelector('.doc-del-btn').addEventListener('click', ()=>{
+        docsState.splice(i,1); saveDocs(docsState);
+        docsEditing.delete(i); delete docsDrafts[i];
+        renderDocs();
+      });
+      card.querySelector('.doc-file-input').addEventListener('change', (e)=>{
+        const file = e.target.files[0];
+        if(!file) return;
+        resizeImageFile(file, 900, (dataUrl)=>{
+          const prev = doc.img;
+          doc.img = dataUrl;
+          if(saveDocs(docsState)){ renderDocs(); }
+          else{ doc.img = prev; showDocWarn(card, '儲存失敗，這張照片可能太大，建議換一張較小的圖片。'); }
+        });
+      });
+      const rmBtn = card.querySelector('.rm-img');
+      if(rmBtn) rmBtn.addEventListener('click', ()=>{
+        doc.img = null; saveDocs(docsState); renderDocs();
+      });
+      const openPhotoBtn = card.querySelector('.open-photo');
+      if(openPhotoBtn) openPhotoBtn.addEventListener('click', ()=> openImageLightbox(doc.img, doc.title));
+      card.querySelector('.doc-pdf-input').addEventListener('change', (e)=>{
+        const file = e.target.files[0];
+        if(!file) return;
+        if(file.type !== 'application/pdf'){ showDocWarn(card, '請選擇 PDF 檔案。'); return; }
+        const reader = new FileReader();
+        reader.onload = (ev)=>{
+          const prevData = doc.pdfData, prevName = doc.pdfName;
+          doc.pdfData = ev.target.result; doc.pdfName = file.name;
+          if(saveDocs(docsState)){ renderDocs(); }
+          else{
+            doc.pdfData = prevData; doc.pdfName = prevName;
+            showDocWarn(card, '儲存失敗，這份 PDF 可能太大（瀏覽器儲存空間有上限），建議改用較小的檔案。');
+          }
+        };
+        reader.readAsDataURL(file);
+      });
+      const rmPdf = card.querySelector('.rm-pdf');
+      if(rmPdf) rmPdf.addEventListener('click', ()=>{
+        doc.pdfData = null; doc.pdfName = null; saveDocs(docsState); renderDocs();
+      });
+    } else {
+      card.innerHTML = `
+        <div class="doc-card-head">
+          <div class="doc-title-view">${doc.title ? doc.title.replace(/</g,'&lt;') : '未命名文件'}</div>
+          <button class="doc-icon-btn edit-btn">✎ 編輯</button>
+        </div>
+        <div class="doc-content-view">${doc.content ? doc.content.replace(/</g,'&lt;') : '（尚未填寫內容）'}</div>
+        <div class="doc-img-wrap">${doc.img ? `<button class="doc-photo-chip open-photo">🖼️ 已上傳照片　查看 →</button>` : ''}</div>
+        ${doc.pdfData ? `<a class="doc-pdf-chip" href="${doc.pdfData}" target="_blank" rel="noopener">📄 ${doc.pdfName || 'PDF 檔案'}　查看 →</a>` : ''}
+      `;
+      card.querySelector('.edit-btn').addEventListener('click', ()=>{
+        docsEditing.add(i); renderDocs();
+      });
+      const openPhotoBtn = card.querySelector('.open-photo');
+      if(openPhotoBtn) openPhotoBtn.addEventListener('click', ()=> openImageLightbox(doc.img, doc.title));
+    }
+
     wrap.appendChild(card);
   });
 }
@@ -1410,29 +1500,103 @@ renderDocs();
 
 function showDocWarn(cardEl, msg){
   const warn = cardEl.querySelector('.doc-warn');
+  if(!warn) return;
   warn.textContent = '⚠️ ' + msg;
   warn.style.display = 'block';
 }
 
 document.getElementById('docAddBtn').addEventListener('click', ()=>{
-  docsState.push({ title:'新文件', content:'', img:null, pdfData:null, pdfName:null });
+  docsState.push({ title:'', content:'', img:null, pdfData:null, pdfName:null });
   saveDocs(docsState);
+  docsEditing.add(docsState.length - 1);
   renderDocs();
 });
 
 /* =========================================================
-   Tips
+   Tips（可自行新增、編輯）
    ========================================================= */
+const TIPS_KEY = 'cnx_tips_v1';
+function loadTips(){
+  try{
+    const raw = localStorage.getItem(TIPS_KEY);
+    if(raw) return JSON.parse(raw);
+  }catch(e){}
+  const init = JSON.parse(JSON.stringify(TIPS_DEFAULT));
+  try{ localStorage.setItem(TIPS_KEY, JSON.stringify(init)); }catch(e){}
+  return init;
+}
+function saveTips(){ try{ localStorage.setItem(TIPS_KEY, JSON.stringify(tipsState)); }catch(e){} }
+
+let tipsState = loadTips();
+let tipsEditing = new Set();
+let tipsDrafts = {};
+
 function renderTips(){
   const wrap = document.getElementById('tipList');
-  wrap.innerHTML = TIPS.map(t=>`
-    <div class="tip-card">
-      <div class="tip-ico">${t.ico}</div>
-      <div><div class="tip-h">${t.h}</div><div class="tip-t">${t.t}</div></div>
-    </div>
-  `).join('');
+  wrap.innerHTML = '';
+  tipsState.forEach((t, i)=>{
+    const isEditing = tipsEditing.has(i);
+    const card = document.createElement('div');
+    card.className = 'tip-card' + (isEditing ? ' editing' : '');
+
+    if(isEditing){
+      if(!tipsDrafts[i]) tipsDrafts[i] = { ico:t.ico, h:t.h, t:t.t };
+      const draft = tipsDrafts[i];
+      card.innerHTML = `
+        <input class="tip-ico-input" value="${(draft.ico||'').replace(/"/g,'&quot;')}" maxlength="4">
+        <div class="tip-body">
+          <input class="tip-h-input" value="${(draft.h||'').replace(/"/g,'&quot;')}" placeholder="標題（例如：穿著）">
+          <textarea class="tip-t-input" placeholder="提醒內容…">${draft.t||''}</textarea>
+          <div class="doc-edit-actions">
+            <button class="tip-del-btn">✕ 刪除</button>
+            <div style="flex:1;"></div>
+            <button class="doc-cancel-btn tip-cancel-btn">取消</button>
+            <button class="doc-save-btn tip-save-btn">✓ 儲存</button>
+          </div>
+        </div>
+      `;
+      card.querySelector('.tip-ico-input').addEventListener('input', (e)=>{ draft.ico = e.target.value; });
+      card.querySelector('.tip-h-input').addEventListener('input', (e)=>{ draft.h = e.target.value; });
+      card.querySelector('.tip-t-input').addEventListener('input', (e)=>{ draft.t = e.target.value; });
+      card.querySelector('.tip-save-btn').addEventListener('click', ()=>{
+        t.ico = draft.ico; t.h = draft.h; t.t = draft.t;
+        saveTips();
+        tipsEditing.delete(i); delete tipsDrafts[i];
+        renderTips();
+      });
+      card.querySelector('.tip-cancel-btn').addEventListener('click', ()=>{
+        tipsEditing.delete(i); delete tipsDrafts[i];
+        renderTips();
+      });
+      card.querySelector('.tip-del-btn').addEventListener('click', ()=>{
+        tipsState.splice(i,1); saveTips();
+        tipsEditing.delete(i); delete tipsDrafts[i];
+        renderTips();
+      });
+    } else {
+      card.innerHTML = `
+        <div class="tip-ico">${t.ico||'📌'}</div>
+        <div class="tip-body">
+          <div class="tip-h-view">${(t.h||'未命名提醒').replace(/</g,'&lt;')}</div>
+          <div class="tip-t-view">${(t.t||'（尚未填寫內容）').replace(/</g,'&lt;')}</div>
+        </div>
+        <button class="doc-icon-btn edit-btn">✎</button>
+      `;
+      card.querySelector('.edit-btn').addEventListener('click', ()=>{
+        tipsEditing.add(i); renderTips();
+      });
+    }
+    wrap.appendChild(card);
+  });
 }
 renderTips();
+
+document.getElementById('tipAddBtn').addEventListener('click', ()=>{
+  tipsState.push({ ico:'📌', h:'', t:'' });
+  saveTips();
+  tipsEditing.add(tipsState.length - 1);
+  renderTips();
+});
 
 /* =========================================================
    Exchange rate (open.er-api.com — 免金鑰)
@@ -1617,6 +1781,23 @@ function closeFlightModal(){
 }
 document.getElementById('flightModalBackdrop').addEventListener('click', (e)=>{
   if(e.target.id === 'flightModalBackdrop') closeFlightModal();
+});
+
+/* =========================================================
+   Image lightbox（點文件照片附件才展開看完整圖）
+   ========================================================= */
+function openImageLightbox(dataUrl, caption){
+  document.getElementById('imgLightboxImg').src = dataUrl;
+  document.getElementById('imgLightboxCap').textContent = caption || '';
+  document.getElementById('imgLightboxBackdrop').classList.add('open');
+}
+function closeImageLightbox(){
+  document.getElementById('imgLightboxBackdrop').classList.remove('open');
+  document.getElementById('imgLightboxImg').src = '';
+}
+document.getElementById('imgLightboxClose').addEventListener('click', closeImageLightbox);
+document.getElementById('imgLightboxBackdrop').addEventListener('click', (e)=>{
+  if(e.target.id === 'imgLightboxBackdrop') closeImageLightbox();
 });
 
 /* =========================================================
