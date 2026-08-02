@@ -1,0 +1,971 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>清邁家族旅行 ✈️ 2026.09.19–09.26</title>
+<meta name="theme-color" content="#4A3627">
+<link rel="manifest" href="./manifest.json">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>%E2%9C%88%EF%B8%8F</text></svg>">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700;900&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+
+<style>
+  :root{
+    --sand:        #F2ECDD;
+    --sand-deep:   #E9E0C8;
+    --panel:       #FBF8F0;
+    --line:        #DCD0AE;
+    --brown:       #4A3627;
+    --brown-soft:  #6B5843;
+    --grey:        #4B4740;
+    --sage:        #7C8B6F;
+    --sage-soft:   #E4E8DC;
+    --clay:        #B8734A;
+    --clay-soft:   #F1E0D2;
+    --river:       #5F8A8B;
+    --river-soft:  #DEEAE9;
+    --gold:        #C8A24A;
+    --shadow: 0 10px 30px -12px rgba(74,54,39,.25);
+    --radius: 18px;
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:
+      radial-gradient(1200px 600px at 100% -10%, rgba(124,139,111,.10), transparent 60%),
+      radial-gradient(900px 500px at -10% 110%, rgba(184,115,74,.10), transparent 60%),
+      var(--sand);
+    color:var(--brown);
+    font-family:'Noto Sans TC','PingFang TC','Microsoft JhengHei',sans-serif;
+    font-weight:400;
+    line-height:1.35;
+    min-height:100vh;
+    overscroll-behavior:none;
+  }
+  h1,h2,h3,.rounded,.brand,.nav-label,.big-num,.hero-title,.tab-label,button{
+    font-family:'Zen Maru Gothic','Noto Sans TC',sans-serif;
+  }
+  p,li,span,div,input{ line-height:1.4; }
+  a{color:inherit;}
+  button{font:inherit; cursor:pointer; border:none; background:none; color:inherit;}
+  ::selection{ background:var(--clay-soft); }
+
+  /* ---------- App shell ---------- */
+  #app{ max-width:520px; margin:0 auto; min-height:100vh; position:relative; padding-bottom:78px; }
+
+  .topbar{
+    position:sticky; top:0; z-index:30;
+    display:flex; align-items:center; gap:10px;
+    padding:14px 16px 10px;
+    background:linear-gradient(var(--sand) 70%, rgba(242,236,221,0));
+    backdrop-filter:blur(2px);
+  }
+  .topbar .back{
+    width:36px;height:36px;border-radius:50%;
+    background:var(--panel); box-shadow:var(--shadow);
+    display:flex;align-items:center;justify-content:center;
+    font-size:16px; flex:0 0 auto;
+    transition:transform .15s ease;
+  }
+  .topbar .back:active{ transform:scale(.9); }
+  .topbar .back.hide{ visibility:hidden; }
+  .topbar .title{ font-weight:700; font-size:17px; letter-spacing:.02em; }
+  .topbar .sub{ font-size:11px; color:var(--brown-soft); margin-top:1px; }
+
+  section.view{ display:none; padding:4px 16px 20px; animation:fadeIn .35s ease; }
+  section.view.active{ display:block; }
+  @keyframes fadeIn{ from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);} }
+
+  /* ---------- HOME (single screen menu) ---------- */
+  #home{ height:calc(100vh - 0px); display:flex; flex-direction:column; padding-top:0; }
+  .hero{
+    position:relative;
+    background:var(--brown);
+    color:var(--sand);
+    border-radius:22px;
+    padding:18px 18px 16px;
+    box-shadow:var(--shadow);
+    overflow:hidden;
+    flex:0 0 auto;
+  }
+  .hero::before{
+    content:'';
+    position:absolute; inset:0;
+    background:
+      radial-gradient(140px 140px at 92% -20%, rgba(200,162,74,.35), transparent 70%),
+      radial-gradient(160px 160px at -10% 120%, rgba(95,138,139,.35), transparent 70%);
+  }
+  .hero-row{ display:flex; justify-content:space-between; align-items:flex-start; position:relative; }
+  .hero-eyebrow{ font-size:11px; opacity:.75; letter-spacing:.14em; }
+  .hero-title{ font-size:19px; font-weight:700; margin-top:2px; }
+  .stub{
+    position:relative; margin-top:12px; padding-top:12px;
+    display:flex; align-items:center; justify-content:space-between;
+  }
+  .stub::before{
+    content:''; position:absolute; top:0; left:-18px; right:-18px; height:0;
+    border-top:2px dashed rgba(242,236,221,.35);
+  }
+  .stub::after{ /* perforation notches */
+    content:''; position:absolute; top:-7px; left:-18px; width:14px; height:14px;
+    background:var(--sand); border-radius:50%;
+  }
+  .countdown{ display:flex; gap:14px; }
+  .countdown .num{ font-size:26px; font-weight:900; line-height:1; }
+  .countdown .lab{ font-size:10px; opacity:.7; margin-top:2px; }
+  .countdown .cell{ text-align:center; min-width:34px; }
+  .plane-track{ position:relative; flex:1; margin:0 14px; height:2px; background:rgba(242,236,221,.25); }
+  .plane-track span{
+    position:absolute; top:-9px; font-size:14px;
+    animation:fly 3.2s ease-in-out infinite;
+  }
+  @keyframes fly{ 0%{left:0%;} 50%{left:88%;} 100%{left:0%;} }
+  .flight-mini{ font-size:11px; opacity:.85; text-align:right; }
+
+  .menu-grid{
+    display:grid; grid-template-columns:repeat(3,1fr); gap:10px;
+    margin-top:14px; flex:1 1 auto;
+  }
+  .menu-card{
+    background:var(--panel); border-radius:16px; box-shadow:var(--shadow);
+    padding:12px 8px; display:flex; flex-direction:column; align-items:center; gap:6px;
+    justify-content:center; text-align:center;
+    border:1px solid rgba(220,208,174,.6);
+    transition:transform .15s ease;
+  }
+  .menu-card:active{ transform:scale(.94); }
+  .menu-card .ico{ font-size:22px; }
+  .menu-card .lab{ font-size:12.5px; font-weight:500; }
+  .menu-card .cap{ font-size:9.5px; color:var(--brown-soft); }
+  .menu-card.wide{ grid-column:span 3; flex-direction:row; justify-content:space-between; text-align:left; padding:12px 14px;}
+  .menu-card.wide .ico{ font-size:20px; }
+
+  .home-foot{
+    display:flex; justify-content:space-between; align-items:center;
+    margin-top:10px; font-size:11px; color:var(--brown-soft); flex:0 0 auto;
+  }
+  .dots{ display:flex; gap:4px; }
+  .dots i{ width:5px;height:5px;border-radius:50%; background:var(--line); display:block; }
+
+  /* ---------- Bottom nav ---------- */
+  .tabbar{
+    position:fixed; left:0; right:0; bottom:0; z-index:40;
+    max-width:520px; margin:0 auto;
+    background:rgba(251,248,240,.92); backdrop-filter:blur(10px);
+    border-top:1px solid var(--line);
+    display:flex; justify-content:space-around; padding:8px 4px 10px;
+  }
+  .tab-btn{ display:flex; flex-direction:column; align-items:center; gap:2px; padding:4px 8px; border-radius:12px; color:var(--brown-soft); }
+  .tab-btn.active{ color:var(--brown); background:var(--sage-soft); }
+  .tab-btn .ico{ font-size:17px; }
+  .tab-label{ font-size:9.5px; }
+
+  /* ---------- Section headers ---------- */
+  .sec-head{ margin:10px 0 12px; }
+  .sec-head h2{ font-size:18px; font-weight:700; margin:0 0 2px; }
+  .sec-head .desc{ font-size:12px; color:var(--brown-soft); }
+
+  /* ---------- Itinerary ---------- */
+  .day-scroller{ display:flex; gap:8px; overflow-x:auto; padding:4px 0 10px; scrollbar-width:none; }
+  .day-scroller::-webkit-scrollbar{ display:none; }
+  .day-chip{
+    flex:0 0 auto; padding:8px 12px; border-radius:14px; background:var(--panel);
+    border:1px solid var(--line); font-size:12px; text-align:center; min-width:56px;
+    box-shadow:0 2px 6px rgba(74,54,39,.06);
+  }
+  .day-chip .d{ font-weight:700; font-size:14px; }
+  .day-chip.today{ background:var(--brown); color:var(--sand); border-color:var(--brown); }
+  .day-chip.today .d{ color:var(--gold); }
+
+  .day-block{ margin-bottom:22px; position:relative; }
+  .day-title{ display:flex; align-items:center; gap:8px; margin-bottom:10px; }
+  .day-badge{
+    width:38px;height:38px;border-radius:12px; background:var(--brown); color:var(--sand);
+    display:flex; align-items:center; justify-content:center; font-weight:700; font-size:13px; flex:0 0 auto;
+  }
+  .day-block.is-today .day-badge{ background:var(--clay); }
+  .day-heading{ font-weight:700; font-size:14.5px; }
+  .day-heading .date{ font-size:11.5px; color:var(--brown-soft); font-weight:400; }
+  .stay-tag{
+    margin-left:auto; font-size:10px; background:var(--sage-soft); color:var(--sage);
+    padding:3px 8px; border-radius:20px; font-weight:500; white-space:nowrap;
+  }
+
+  .timeline{ position:relative; padding-left:20px; }
+  .timeline::before{ content:''; position:absolute; left:5px; top:4px; bottom:4px; width:2px; background:var(--line); }
+  .titem{ position:relative; padding-bottom:14px; }
+  .titem:last-child{ padding-bottom:0; }
+  .titem::before{
+    content:''; position:absolute; left:-19px; top:3px; width:10px; height:10px; border-radius:50%;
+    background:var(--panel); border:2px solid var(--sage);
+  }
+  .titem.flight::before{ border-color:var(--clay); background:var(--clay); }
+  .titem-card{
+    background:var(--panel); border:1px solid var(--line); border-radius:14px;
+    padding:10px 12px; box-shadow:0 2px 6px rgba(74,54,39,.05);
+  }
+  .titem.flight .titem-card{ background:var(--clay-soft); border-color:#e3c3ab; }
+  .titem-time{ font-size:11px; color:var(--brown-soft); font-weight:500; }
+  .titem-title{ font-size:13.5px; font-weight:500; margin:2px 0 3px; }
+  .titem-desc{ font-size:12px; color:var(--grey); }
+  .opt-row{ display:flex; flex-wrap:wrap; gap:6px; margin-top:6px; }
+  .opt-chip{ font-size:10.5px; background:var(--river-soft); color:var(--river); padding:3px 8px; border-radius:10px; }
+
+  /* ---------- Map ---------- */
+  #leaflet-map{ height:340px; border-radius:16px; overflow:hidden; box-shadow:var(--shadow); border:1px solid var(--line); }
+  .layer-toggles{ display:flex; flex-wrap:wrap; gap:8px; margin:10px 0; }
+  .layer-chip{
+    font-size:11.5px; padding:6px 11px; border-radius:20px; background:var(--panel);
+    border:1px solid var(--line); display:flex; align-items:center; gap:5px;
+  }
+  .layer-chip.on{ background:var(--brown); color:var(--sand); border-color:var(--brown); }
+  .pin-list{ margin-top:12px; display:flex; flex-direction:column; gap:8px; }
+  .pin-card{
+    display:flex; align-items:center; gap:10px; background:var(--panel); border:1px solid var(--line);
+    border-radius:14px; padding:9px 11px;
+  }
+  .pin-emoji{ font-size:18px; width:30px; text-align:center; }
+  .pin-name{ font-size:13px; font-weight:500; }
+  .pin-cat{ font-size:10.5px; color:var(--brown-soft); }
+  .pin-go{ margin-left:auto; font-size:11px; background:var(--sage); color:#fff; padding:6px 10px; border-radius:20px; white-space:nowrap; }
+  .map-note{ font-size:10.5px; color:var(--brown-soft); margin-top:8px; }
+
+  /* ---------- Lists (packing / wishlist) ---------- */
+  .list-add{ display:flex; gap:8px; margin-bottom:10px; }
+  .list-add input{
+    flex:1; padding:10px 12px; border-radius:12px; border:1px solid var(--line); background:var(--panel);
+    font-size:13px; color:var(--brown); font-family:inherit;
+  }
+  .list-add input:focus{ outline:2px solid var(--sage); outline-offset:1px; }
+  .list-add button{ background:var(--brown); color:var(--sand); padding:0 16px; border-radius:12px; font-size:13px; font-weight:500; }
+  .check-list{ display:flex; flex-direction:column; gap:7px; }
+  .check-item{
+    display:flex; align-items:center; gap:10px; background:var(--panel); border:1px solid var(--line);
+    border-radius:12px; padding:9px 11px;
+  }
+  .check-item .box{
+    width:20px;height:20px;border-radius:6px; border:2px solid var(--sage); flex:0 0 auto;
+    display:flex; align-items:center; justify-content:center; font-size:12px; color:#fff;
+  }
+  .check-item.done .box{ background:var(--sage); }
+  .check-item .txt{ font-size:13px; flex:1; }
+  .check-item.done .txt{ text-decoration:line-through; color:var(--brown-soft); }
+  .check-item .del{ font-size:14px; color:var(--brown-soft); padding:2px 6px; }
+  .progress-bar{ height:6px; background:var(--sand-deep); border-radius:6px; overflow:hidden; margin:2px 0 14px; }
+  .progress-bar i{ display:block; height:100%; background:var(--sage); border-radius:6px; transition:width .3s ease; }
+  .progress-lab{ font-size:11px; color:var(--brown-soft); margin-bottom:4px; }
+
+  /* ---------- Tips ---------- */
+  .tip-card{
+    background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:12px 14px; margin-bottom:10px;
+    display:flex; gap:10px;
+  }
+  .tip-ico{ font-size:19px; }
+  .tip-h{ font-size:13px; font-weight:700; margin-bottom:2px; }
+  .tip-t{ font-size:12.5px; color:var(--grey); }
+
+  /* ---------- Exchange / weather ---------- */
+  .card{ background:var(--panel); border:1px solid var(--line); border-radius:16px; padding:14px 16px; margin-bottom:12px; box-shadow:0 2px 8px rgba(74,54,39,.05); }
+  .rate-big{ font-size:26px; font-weight:700; }
+  .rate-sub{ font-size:11.5px; color:var(--brown-soft); margin-top:2px; }
+  .conv-row{ display:flex; align-items:center; gap:8px; margin-top:12px; }
+  .conv-row input{ flex:1; padding:10px; border-radius:10px; border:1px solid var(--line); font-size:14px; font-family:inherit; background:#fff; }
+  .conv-row .cur{ font-size:12px; color:var(--brown-soft); width:38px; text-align:center; }
+  .swap-btn{ font-size:15px; background:var(--sand-deep); border-radius:50%; width:30px; height:30px; }
+
+  .weather-row{ display:flex; overflow-x:auto; gap:8px; padding-bottom:4px; scrollbar-width:none; }
+  .weather-row::-webkit-scrollbar{ display:none; }
+  .w-card{
+    flex:0 0 auto; width:74px; text-align:center; background:var(--panel); border:1px solid var(--line);
+    border-radius:14px; padding:10px 4px;
+  }
+  .w-card.match{ background:var(--clay-soft); border-color:#e3c3ab; }
+  .w-date{ font-size:10.5px; color:var(--brown-soft); }
+  .w-ico{ font-size:20px; margin:4px 0; }
+  .w-temp{ font-size:12px; font-weight:500; }
+  .w-temp .lo{ color:var(--brown-soft); }
+
+  .loading{ font-size:12px; color:var(--brown-soft); padding:10px 0; }
+  .err{ font-size:12px; color:var(--clay); }
+
+  @media (prefers-reduced-motion:reduce){
+    .plane-track span{ animation:none; }
+  }
+  @media (max-width:360px){
+    .menu-card .lab{ font-size:11.5px; }
+  }
+</style>
+</head>
+<body>
+<div id="app">
+
+  <div class="topbar">
+    <button class="back hide" id="backBtn" aria-label="返回首頁">←</button>
+    <div>
+      <div class="title" id="topTitle">清邁家族旅行</div>
+      <div class="sub" id="topSub">2026.09.19 – 09.26</div>
+    </div>
+  </div>
+
+  <!-- ============ HOME ============ -->
+  <section class="view active" id="home">
+    <div class="hero">
+      <div class="hero-row">
+        <div>
+          <div class="hero-eyebrow">TPE → CNX · FAMILY TRIP</div>
+          <div class="hero-title">泰國清邁渡假 🌿</div>
+        </div>
+        <div style="text-align:right; font-size:11px; opacity:.8;">
+          Chia Yi · Jhen<br>住宿 1 間
+        </div>
+      </div>
+      <div class="stub">
+        <div class="countdown" id="countdownBox">
+          <div class="cell"><div class="num">--</div><div class="lab">天</div></div>
+          <div class="cell"><div class="num">--</div><div class="lab">時</div></div>
+          <div class="cell"><div class="num">--</div><div class="lab">分</div></div>
+        </div>
+        <div class="plane-track"><span>✈️</span></div>
+        <div class="flight-mini">JX751<br>09.19 13:05</div>
+      </div>
+    </div>
+
+    <div class="menu-grid">
+      <div class="menu-card" data-go="itinerary">
+        <div class="ico">🗓️</div><div class="lab">每日行程</div><div class="cap">Day1–8</div>
+      </div>
+      <div class="menu-card" data-go="map">
+        <div class="ico">🗺️</div><div class="lab">地圖</div><div class="cap">景點導航</div>
+      </div>
+      <div class="menu-card" data-go="packing">
+        <div class="ico">🧳</div><div class="lab">行李清單</div><div class="cap" id="packingCap">0/0</div>
+      </div>
+      <div class="menu-card" data-go="wishlist">
+        <div class="ico">🛍️</div><div class="lab">願望清單</div><div class="cap" id="wishCap">必買 / 想去</div>
+      </div>
+      <div class="menu-card" data-go="tips">
+        <div class="ico">📌</div><div class="lab">實用提醒</div><div class="cap">穿著/交通</div>
+      </div>
+      <div class="menu-card" data-go="exchange">
+        <div class="ico">💱</div><div class="lab">匯率換算</div><div class="cap">THB⇄TWD</div>
+      </div>
+      <div class="menu-card wide" data-go="weather">
+        <div style="display:flex; align-items:center; gap:10px;">
+          <div class="ico">☀️</div>
+          <div><div class="lab">清邁天氣</div><div class="cap">Open-Meteo 即時預報</div></div>
+        </div>
+        <div style="font-size:20px;">›</div>
+      </div>
+    </div>
+
+    <div class="home-foot">
+      <span id="homeFootNote">出發前每天都可以來看看喔 🍃</span>
+      <div class="dots"><i></i><i></i><i></i></div>
+    </div>
+  </section>
+
+  <!-- ============ ITINERARY ============ -->
+  <section class="view" id="itinerary">
+    <div class="sec-head">
+      <h2>每日行程</h2>
+      <div class="desc">今天會自動反白，點日期可快速跳轉</div>
+    </div>
+    <div class="day-scroller" id="dayScroller"></div>
+    <div id="dayBlocks"></div>
+  </section>
+
+  <!-- ============ MAP ============ -->
+  <section class="view" id="map">
+    <div class="sec-head">
+      <h2>地圖導航</h2>
+      <div class="desc">依圖層篩選，點「導航」直接開 Google Maps</div>
+    </div>
+    <div class="layer-toggles" id="layerToggles"></div>
+    <div id="leaflet-map"></div>
+    <div class="map-note">📍 座標為地標概略位置，實際店家請以 Google Maps 搜尋店名核對。</div>
+    <div class="pin-list" id="pinList"></div>
+  </section>
+
+  <!-- ============ PACKING ============ -->
+  <section class="view" id="packing">
+    <div class="sec-head">
+      <h2>行李清單</h2>
+      <div class="desc">勾選會自動記住，也可以自訂新增</div>
+    </div>
+    <div class="progress-lab" id="packProgLab">0 / 0 已打包</div>
+    <div class="progress-bar"><i id="packProgBar" style="width:0%"></i></div>
+    <div class="list-add">
+      <input type="text" id="packInput" placeholder="新增行李項目…">
+      <button id="packAddBtn">新增</button>
+    </div>
+    <div class="check-list" id="packList"></div>
+  </section>
+
+  <!-- ============ WISHLIST ============ -->
+  <section class="view" id="wishlist">
+    <div class="sec-head">
+      <h2>願望清單 / 必買清單</h2>
+      <div class="desc">想買、想去的通通記下來</div>
+    </div>
+    <div class="progress-lab" id="wishProgLab">0 / 0 已完成</div>
+    <div class="progress-bar"><i id="wishProgBar" style="width:0%"></i></div>
+    <div class="list-add">
+      <input type="text" id="wishInput" placeholder="新增想買 / 想去的項目…">
+      <button id="wishAddBtn">新增</button>
+    </div>
+    <div class="check-list" id="wishList"></div>
+  </section>
+
+  <!-- ============ TIPS ============ -->
+  <section class="view" id="tips">
+    <div class="sec-head">
+      <h2>實用小提醒</h2>
+      <div class="desc">出發前再看一次就對了</div>
+    </div>
+    <div id="tipList"></div>
+  </section>
+
+  <!-- ============ EXCHANGE ============ -->
+  <section class="view" id="exchange">
+    <div class="sec-head">
+      <h2>匯率換算</h2>
+      <div class="desc">即時匯率，無須金鑰</div>
+    </div>
+    <div class="card" id="rateCard">
+      <div class="loading">匯率讀取中…</div>
+    </div>
+    <div class="card">
+      <div style="font-size:12px; color:var(--brown-soft); margin-bottom:4px;">快速換算</div>
+      <div class="conv-row">
+        <span class="cur">TWD</span>
+        <input type="number" id="twdInput" placeholder="0" inputmode="decimal">
+        <button class="swap-btn" id="swapBtn">⇅</button>
+        <input type="number" id="thbInput" placeholder="0" inputmode="decimal">
+        <span class="cur">THB</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ WEATHER ============ -->
+  <section class="view" id="weather">
+    <div class="sec-head">
+      <h2>清邁天氣</h2>
+      <div class="desc">Open-Meteo 免金鑰預報 · 行程當日會特別標示</div>
+    </div>
+    <div class="card">
+      <div class="loading" id="weatherLoading">天氣讀取中…</div>
+      <div class="weather-row" id="weatherRow"></div>
+    </div>
+    <div class="map-note" id="weatherNote"></div>
+  </section>
+
+</div>
+
+<div class="tabbar" id="tabbar">
+  <button class="tab-btn active" data-go="home"><span class="ico">🏠</span><span class="tab-label">首頁</span></button>
+  <button class="tab-btn" data-go="itinerary"><span class="ico">🗓️</span><span class="tab-label">行程</span></button>
+  <button class="tab-btn" data-go="map"><span class="ico">🗺️</span><span class="tab-label">地圖</span></button>
+  <button class="tab-btn" data-go="packing"><span class="ico">🧳</span><span class="tab-label">行李</span></button>
+  <button class="tab-btn" data-go="wishlist"><span class="ico">🛍️</span><span class="tab-label">清單</span></button>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script>
+/* =========================================================
+   清邁家族旅行 App — 單檔資料設定
+   ========================================================= */
+const TRIP_START = '2026-09-19';
+const TRIP_END   = '2026-09-26';
+const DEPARTURE_DT = new Date('2026-09-19T13:05:00+08:00'); // JX751 桃園起飛(台灣時間)
+
+const DAYS = [
+  {
+    d:'2026-09-19', dow:'Sat', label:'抵達清邁', stay:true,
+    items:[
+      {t:'13:05–16:05', ty:'flight', title:'✈️ 星宇航空 JX751', desc:'桃園(TPE) → 清邁(CNX)'},
+      {t:'約 17:00', ty:'transport', title:'接機', desc:'預計傍晚 5 點左右抵達飯店 / 接機。'},
+      {t:'晚上', ty:'food', title:'寧曼路 One Nimman · White Market', desc:'逛街、吃晚餐、按摩放鬆。'}
+    ]
+  },
+  {
+    d:'2026-09-20', dow:'Sun', label:'市集慢遊日', stay:true,
+    items:[
+      {t:'睡到自然醒', ty:'note', title:'悠閒早晨', desc:'今天不趕行程，睡飽再出發。'},
+      {t:'07:00–14:00', ty:'market', title:'真心市集 Jing Jai Market', desc:'含 Pop-up Store、Srikram.17。'},
+      {t:'09:00–14:00', ty:'market', title:'雨林市集', desc:'綠意環繞的市集，適合悠閒逛逛。'},
+      {t:'早午餐', ty:'food', title:'早午餐（擇一）', desc:'', options:['Early Owls（近真心市集，步行15分）','Meena Rice Based Cuisine（雨林市集尾端）']},
+      {t:'下午', ty:'food', title:'咖啡時光（擇一）', desc:'', options:['The Baristro at Ping River（真心市集車程15分）','For the Good Times（雨林市集車程9分）','Monday Attack（想去的店，18:00關門）']},
+      {t:'晚上', ty:'market', title:'清邁週日夜市', desc:'塔佩門 → 帕辛寺 一路逛過去。'}
+    ]
+  },
+  {
+    d:'2026-09-21', dow:'Mon', label:'寧曼路・復古市集', stay:true,
+    items:[
+      {t:'白天', ty:'shop', title:'寧曼路', desc:'逛街、買睡衣。'},
+      {t:'白天', ty:'market', title:'復古市集', desc:'挖寶小物、老件雜貨。'},
+      {t:'午餐', ty:'food', title:'Blackitch Artisan Kitchen', desc:'在地食材創意料理，建議提前預約。'}
+    ]
+  },
+  {
+    d:'2026-09-22', dow:'Tue', label:'藝術村・咖啡巡禮', stay:true,
+    items:[
+      {t:'早餐', ty:'food', title:'Artisan Sourdough by Apple Fahey', desc:'手工酸種麵包早餐。'},
+      {t:'白天', ty:'attraction', title:'藝術村', desc:'感受清邁的文青創作氛圍。'},
+      {t:'下午', ty:'food', title:'咖啡（擇一）', desc:'', options:['No.39 Cafe','99 Villa Cafe','The Baristro Asian Style']}
+    ]
+  },
+  {
+    d:'2026-09-23', dow:'Wed', label:'白廟 + Akha 農場一日遊', stay:true,
+    items:[
+      {t:'07:30–18:30', ty:'attraction', title:'Klook 一日行程', desc:'白廟（Wat Rong Khun）＋ Akha 農場，含接送。'}
+    ]
+  },
+  {
+    d:'2026-09-24', dow:'Thu', label:'料理課・放鬆按摩', stay:true,
+    items:[
+      {t:'10:00–14:00 或 16:00–21:00', ty:'attraction', title:'Zabb E-Lee 泰式料理課', desc:'擇一場次體驗，動手做泰式料理。'},
+      {t:'視情況', ty:'note', title:'Zira Spa（maybe）', desc:'體力允許的話安排按摩放鬆。'}
+    ]
+  },
+  {
+    d:'2026-09-25', dow:'Fri', label:'伴手禮採購日', stay:true,
+    items:[
+      {t:'白天', ty:'market', title:'瓦洛洛市集', desc:'買伴手禮的最後衝刺。'},
+      {t:'白天', ty:'shop', title:'Big C', desc:'超市系伴手禮、零食採購。'}
+    ]
+  },
+  {
+    d:'2026-09-26', dow:'Sat', label:'賦歸', stay:true,
+    items:[
+      {t:'一早', ty:'food', title:'吃頓早一點的早餐', desc:'今天要回家囉，吃飽再出發。'},
+      {t:'08:00 / 08:20', ty:'transport', title:'出發前往機場', desc:'約 8:00 出門，8:20 抵達機場（Grab 接駁），預留充足時間辦理登機。'},
+      {t:'14:05–18:40', ty:'flight', title:'✈️ 中華航空 CI0852', desc:'清邁(CNX) → 桃園(TPE)'}
+    ]
+  }
+];
+
+const TYPE_ICON = { flight:'✈️', transport:'🚖', food:'🍜', market:'🛒', shop:'🛍️', attraction:'📍', note:'☕' };
+
+const TIPS = [
+  { ico:'🧣', h:'穿著', t:'進入寺廟嚴禁露肩、短裙或破洞褲，請隨身備妥披肩或長裙。' },
+  { ico:'🚕', h:'交通', t:'市區移動善用 Grab / Bolt 叫車，方便又不用比價。' },
+  { ico:'🕶️', h:'防曬', t:'白天陽光依然強烈，記得帶傘或墨鏡遮陽。' }
+];
+
+const PACK_DEFAULT = ['護照 / 證件影本','機票 / 訂房確認單','現金（泰銖）','信用卡','萬國轉接頭 / 充電線','行動電源','防曬乳','太陽眼鏡','薄外套（冷氣房用）','拖鞋','披肩 / 薄長裙（進廟宇用）','個人藥品','盥洗用品','泳衣','相機 / 記憶卡','濕紙巾','防蚊液','折疊傘'];
+
+const WISH_DEFAULT = ['大象褲','泰式奶茶包','手工皂 / 精油','Mistine / Beauty Buffet 美妝','清邁在地咖啡豆','泰式辣椒醬','清邁木雕小物','泰絲收納包'];
+
+const PLACES = [
+  {name:'清邁機場 CNX', cat:'transport', emo:'✈️', lat:18.7669, lng:98.9626},
+  {name:'（假設）飯店位置', cat:'hotel', emo:'🏨', lat:18.7900, lng:98.9880},
+  {name:'塔佩門 Tha Pae Gate', cat:'attraction', emo:'🚪', lat:18.7877, lng:98.9931},
+  {name:'帕辛寺 Wat Phra Singh', cat:'attraction', emo:'🛕', lat:18.7887, lng:98.9793},
+  {name:'寧曼路 One Nimman', cat:'shop', emo:'🛍️', lat:18.8000, lng:98.9673},
+  {name:'真心市集 Jing Jai Market', cat:'market', emo:'🛒', lat:18.8331, lng:98.9856},
+  {name:'雨林市集', cat:'market', emo:'🌿', lat:18.8300, lng:98.9800},
+  {name:'瓦洛洛市集 Warorot Market', cat:'market', emo:'🛒', lat:18.7906, lng:99.0011},
+  {name:'Big C Extra Chiangmai', cat:'shop', emo:'🏬', lat:18.7986, lng:99.0103},
+  {name:'Blackitch Artisan Kitchen', cat:'food', emo:'🍽️', lat:18.7959, lng:98.9673},
+  {name:'白廟 Wat Rong Khun（清萊）', cat:'attraction', emo:'⛩️', lat:19.8318, lng:99.7368},
+  {name:'Akha 農場（清萊山區，約略）', cat:'attraction', emo:'🌾', lat:19.9500, lng:99.8300},
+];
+
+/* =========================================================
+   Navigation
+   ========================================================= */
+const views = document.querySelectorAll('.view');
+const backBtn = document.getElementById('backBtn');
+const topTitle = document.getElementById('topTitle');
+const topSub = document.getElementById('topSub');
+const tabBtns = document.querySelectorAll('.tab-btn');
+
+const TITLES = {
+  home:['清邁家族旅行','2026.09.19 – 09.26'],
+  itinerary:['每日行程','Day 1 – Day 8'],
+  map:['地圖導航','景點 · 市集 · 餐廳'],
+  packing:['行李清單','出發前打勾勾'],
+  wishlist:['願望清單','必買 / 必去'],
+  tips:['實用小提醒','出發前必看'],
+  exchange:['匯率換算','THB ⇄ TWD'],
+  weather:['清邁天氣','Open-Meteo']
+};
+
+function goTo(id){
+  views.forEach(v=>v.classList.toggle('active', v.id===id));
+  backBtn.classList.toggle('hide', id==='home');
+  topTitle.textContent = TITLES[id][0];
+  topSub.textContent = TITLES[id][1];
+  tabBtns.forEach(b=>b.classList.toggle('active', b.dataset.go===id));
+  window.scrollTo({top:0});
+  if(id==='map') setTimeout(()=>{ if(mapInst){ mapInst.invalidateSize(); } else { initMap(); } }, 50);
+  if(id==='exchange' && !rateLoaded) loadRates();
+  if(id==='weather' && !weatherLoaded) loadWeather();
+}
+
+document.querySelectorAll('[data-go]').forEach(el=>{
+  el.addEventListener('click', ()=>goTo(el.dataset.go));
+});
+backBtn.addEventListener('click', ()=>goTo('home'));
+
+/* =========================================================
+   Countdown
+   ========================================================= */
+function tickCountdown(){
+  const now = new Date();
+  const diff = DEPARTURE_DT - now;
+  const box = document.getElementById('countdownBox');
+  if(diff <= 0){
+    box.innerHTML = `<div class="cell" style="min-width:auto;"><div class="num" style="font-size:16px;">旅途愉快 🌴</div></div>`;
+    return;
+  }
+  const d = Math.floor(diff/86400000);
+  const h = Math.floor(diff%86400000/3600000);
+  const m = Math.floor(diff%3600000/60000);
+  box.innerHTML = `
+    <div class="cell"><div class="num">${d}</div><div class="lab">天</div></div>
+    <div class="cell"><div class="num">${h}</div><div class="lab">時</div></div>
+    <div class="cell"><div class="num">${m}</div><div class="lab">分</div></div>`;
+}
+tickCountdown();
+setInterval(tickCountdown, 30000);
+
+/* =========================================================
+   Itinerary render + auto highlight today
+   ========================================================= */
+function todayStr(){
+  const n = new Date();
+  return n.getFullYear()+'-'+String(n.getMonth()+1).padStart(2,'0')+'-'+String(n.getDate()).padStart(2,'0');
+}
+
+function renderItinerary(){
+  const scroller = document.getElementById('dayScroller');
+  const blocksWrap = document.getElementById('dayBlocks');
+  const today = todayStr();
+  scroller.innerHTML = '';
+  blocksWrap.innerHTML = '';
+
+  DAYS.forEach((day, idx)=>{
+    const isToday = day.d === today;
+    const dnum = idx+1;
+
+    const chip = document.createElement('div');
+    chip.className = 'day-chip' + (isToday?' today':'');
+    chip.innerHTML = `<div class="d">Day${dnum}</div><div>${day.d.slice(5).replace('-','/')}</div>`;
+    chip.addEventListener('click', ()=>{
+      document.getElementById('day-block-'+idx).scrollIntoView({behavior:'smooth', block:'start'});
+    });
+    scroller.appendChild(chip);
+
+    const block = document.createElement('div');
+    block.className = 'day-block' + (isToday ? ' is-today' : '');
+    block.id = 'day-block-'+idx;
+
+    let itemsHtml = '';
+    day.items.forEach(it=>{
+      const icon = TYPE_ICON[it.ty] || '•';
+      let optsHtml = '';
+      if(it.options){
+        optsHtml = `<div class="opt-row">${it.options.map(o=>`<span class="opt-chip">${o}</span>`).join('')}</div>`;
+      }
+      itemsHtml += `
+        <div class="titem ${it.ty==='flight'?'flight':''}">
+          <div class="titem-card">
+            <div class="titem-time">${icon} ${it.t}</div>
+            <div class="titem-title">${it.title}</div>
+            ${it.desc?`<div class="titem-desc">${it.desc}</div>`:''}
+            ${optsHtml}
+          </div>
+        </div>`;
+    });
+
+    block.innerHTML = `
+      <div class="day-title">
+        <div class="day-badge">${dnum}</div>
+        <div>
+          <div class="day-heading">${day.label} <span class="date">· ${day.d.slice(5).replace('-','/')} (${day.dow})</span></div>
+        </div>
+        ${day.stay?'<div class="stay-tag">🏨 住宿</div>':''}
+      </div>
+      <div class="timeline">${itemsHtml}</div>
+    `;
+    blocksWrap.appendChild(block);
+  });
+}
+renderItinerary();
+
+/* =========================================================
+   Map (Leaflet + OSM)
+   ========================================================= */
+let mapInst = null;
+const CAT_META = {
+  hotel:{label:'住宿', color:'#B8734A'},
+  attraction:{label:'景點', color:'#7C8B6F'},
+  food:{label:'餐廳/咖啡', color:'#5F8A8B'},
+  market:{label:'市集', color:'#C8A24A'},
+  shop:{label:'購物', color:'#4A3627'},
+  transport:{label:'交通', color:'#6B5843'}
+};
+let activeLayers = new Set(Object.keys(CAT_META));
+let layerGroups = {};
+
+function initMap(){
+  mapInst = L.map('leaflet-map', {zoomControl:true}).setView([18.80, 98.99], 12);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; OpenStreetMap contributors',
+    maxZoom: 19
+  }).addTo(mapInst);
+
+  Object.keys(CAT_META).forEach(cat=>{ layerGroups[cat] = L.layerGroup().addTo(mapInst); });
+
+  PLACES.forEach(p=>{
+    const meta = CAT_META[p.cat];
+    const marker = L.circleMarker([p.lat, p.lng], {
+      radius:9, color:'#fff', weight:2, fillColor:meta.color, fillOpacity:.95
+    });
+    const gurl = `https://www.google.com/maps/dir/?api=1&destination=${p.lat},${p.lng}`;
+    marker.bindPopup(`<b>${p.emo} ${p.name}</b><br><span style="color:${meta.color}">${meta.label}</span><br><a href="${gurl}" target="_blank" rel="noopener">開啟 Google Maps 導航 →</a>`);
+    marker.addTo(layerGroups[p.cat]);
+  });
+
+  renderLayerToggles();
+  renderPinList();
+}
+
+function renderLayerToggles(){
+  const wrap = document.getElementById('layerToggles');
+  wrap.innerHTML = '';
+  Object.entries(CAT_META).forEach(([cat, meta])=>{
+    const chip = document.createElement('button');
+    chip.className = 'layer-chip' + (activeLayers.has(cat)?' on':'');
+    chip.innerHTML = `<span>${meta.label}</span>`;
+    chip.addEventListener('click', ()=>{
+      if(activeLayers.has(cat)){
+        activeLayers.delete(cat);
+        mapInst.removeLayer(layerGroups[cat]);
+      } else {
+        activeLayers.add(cat);
+        mapInst.addLayer(layerGroups[cat]);
+      }
+      chip.classList.toggle('on');
+      renderPinList();
+    });
+    wrap.appendChild(chip);
+  });
+}
+
+function renderPinList(){
+  const wrap = document.getElementById('pinList');
+  wrap.innerHTML = '';
+  PLACES.filter(p=>activeLayers.has(p.cat)).forEach(p=>{
+    const meta = CAT_META[p.cat];
+    const gurl = `https://www.google.com/maps/dir/?api=1&destination=${p.lat},${p.lng}`;
+    const card = document.createElement('div');
+    card.className = 'pin-card';
+    card.innerHTML = `
+      <div class="pin-emoji">${p.emo}</div>
+      <div><div class="pin-name">${p.name}</div><div class="pin-cat">${meta.label}</div></div>
+      <a class="pin-go" href="${gurl}" target="_blank" rel="noopener">導航 →</a>
+    `;
+    wrap.appendChild(card);
+  });
+}
+
+/* =========================================================
+   Checklists (localStorage)
+   ========================================================= */
+function loadListState(key, defaults){
+  try{
+    const raw = localStorage.getItem(key);
+    if(raw) return JSON.parse(raw);
+  }catch(e){}
+  const init = defaults.map(txt=>({txt, done:false}));
+  localStorage.setItem(key, JSON.stringify(init));
+  return init;
+}
+function saveListState(key, arr){
+  try{ localStorage.setItem(key, JSON.stringify(arr)); }catch(e){}
+}
+
+function setupChecklist(cfg){
+  let state = loadListState(cfg.key, cfg.defaults);
+
+  function render(){
+    const wrap = document.getElementById(cfg.listEl);
+    wrap.innerHTML = '';
+    state.forEach((item, i)=>{
+      const row = document.createElement('div');
+      row.className = 'check-item' + (item.done?' done':'');
+      row.innerHTML = `
+        <div class="box">${item.done?'✓':''}</div>
+        <div class="txt">${item.txt}</div>
+        <div class="del">✕</div>
+      `;
+      row.querySelector('.box').addEventListener('click', ()=>{
+        state[i].done = !state[i].done;
+        saveListState(cfg.key, state);
+        render();
+      });
+      row.querySelector('.txt').addEventListener('click', ()=>{
+        state[i].done = !state[i].done;
+        saveListState(cfg.key, state);
+        render();
+      });
+      row.querySelector('.del').addEventListener('click', (e)=>{
+        e.stopPropagation();
+        state.splice(i,1);
+        saveListState(cfg.key, state);
+        render();
+      });
+      wrap.appendChild(row);
+    });
+    const done = state.filter(s=>s.done).length;
+    document.getElementById(cfg.progLab).textContent = `${done} / ${state.length} ${cfg.progWord}`;
+    document.getElementById(cfg.progBar).style.width = state.length ? `${done/state.length*100}%` : '0%';
+    if(cfg.capEl) document.getElementById(cfg.capEl).textContent = `${done}/${state.length}`;
+  }
+
+  document.getElementById(cfg.addBtn).addEventListener('click', ()=>{
+    const input = document.getElementById(cfg.inputEl);
+    const v = input.value.trim();
+    if(!v) return;
+    state.push({txt:v, done:false});
+    saveListState(cfg.key, state);
+    input.value = '';
+    render();
+  });
+  document.getElementById(cfg.inputEl).addEventListener('keydown', (e)=>{
+    if(e.key === 'Enter') document.getElementById(cfg.addBtn).click();
+  });
+
+  render();
+}
+
+setupChecklist({
+  key:'cnx_packing_v1', defaults:PACK_DEFAULT,
+  listEl:'packList', addBtn:'packAddBtn', inputEl:'packInput',
+  progLab:'packProgLab', progBar:'packProgBar', progWord:'已打包', capEl:'packingCap'
+});
+setupChecklist({
+  key:'cnx_wishlist_v1', defaults:WISH_DEFAULT,
+  listEl:'wishList', addBtn:'wishAddBtn', inputEl:'wishInput',
+  progLab:'wishProgLab', progBar:'wishProgBar', progWord:'已完成', capEl:null
+});
+
+/* =========================================================
+   Tips
+   ========================================================= */
+function renderTips(){
+  const wrap = document.getElementById('tipList');
+  wrap.innerHTML = TIPS.map(t=>`
+    <div class="tip-card">
+      <div class="tip-ico">${t.ico}</div>
+      <div><div class="tip-h">${t.h}</div><div class="tip-t">${t.t}</div></div>
+    </div>
+  `).join('');
+}
+renderTips();
+
+/* =========================================================
+   Exchange rate (open.er-api.com — 免金鑰)
+   ========================================================= */
+let rateLoaded = false;
+let TWD_PER_THB = null;
+
+async function loadRates(){
+  rateLoaded = true;
+  const card = document.getElementById('rateCard');
+  try{
+    const res = await fetch('https://open.er-api.com/v6/latest/THB');
+    const data = await res.json();
+    if(data.result !== 'success') throw new Error('rate api error');
+    TWD_PER_THB = data.rates.TWD;
+    card.innerHTML = `
+      <div class="rate-big">1 THB ≈ ${TWD_PER_THB.toFixed(3)} TWD</div>
+      <div class="rate-sub">資料時間：${data.time_last_update_utc}</div>
+    `;
+    document.getElementById('twdInput').addEventListener('input', convFromTWD);
+    document.getElementById('thbInput').addEventListener('input', convFromTHB);
+  }catch(e){
+    card.innerHTML = `<div class="err">匯率讀取失敗，請檢查網路連線後重新進入此頁。</div>`;
+  }
+}
+function convFromTWD(){
+  if(!TWD_PER_THB) return;
+  const v = parseFloat(document.getElementById('twdInput').value);
+  document.getElementById('thbInput').value = isNaN(v) ? '' : (v/TWD_PER_THB).toFixed(2);
+}
+function convFromTHB(){
+  if(!TWD_PER_THB) return;
+  const v = parseFloat(document.getElementById('thbInput').value);
+  document.getElementById('twdInput').value = isNaN(v) ? '' : (v*TWD_PER_THB).toFixed(2);
+}
+document.getElementById('swapBtn').addEventListener('click', ()=>{
+  const a = document.getElementById('twdInput');
+  const b = document.getElementById('thbInput');
+  const tmp = a.value; a.value = b.value; b.value = tmp;
+});
+
+/* =========================================================
+   Weather (Open-Meteo — 免金鑰)
+   ========================================================= */
+let weatherLoaded = false;
+const WMO_ICON = (code)=>{
+  if(code===0) return '☀️';
+  if([1,2].includes(code)) return '🌤️';
+  if(code===3) return '☁️';
+  if([45,48].includes(code)) return '🌫️';
+  if([51,53,55,56,57].includes(code)) return '🌦️';
+  if([61,63,65,66,67,80,81,82].includes(code)) return '🌧️';
+  if([71,73,75,77,85,86].includes(code)) return '🌨️';
+  if([95,96,99].includes(code)) return '⛈️';
+  return '🌡️';
+};
+
+async function loadWeather(){
+  weatherLoaded = true;
+  const loading = document.getElementById('weatherLoading');
+  const row = document.getElementById('weatherRow');
+  const note = document.getElementById('weatherNote');
+  try{
+    const url = 'https://api.open-meteo.com/v1/forecast?latitude=18.7883&longitude=98.9853&daily=weathercode,temperature_2m_max,temperature_2m_min&timezone=Asia%2FBangkok&forecast_days=16';
+    const res = await fetch(url);
+    const data = await res.json();
+    loading.style.display = 'none';
+    const tripDates = new Set(DAYS.map(d=>d.d));
+    let matchCount = 0;
+    row.innerHTML = data.daily.time.map((date, i)=>{
+      const isTrip = tripDates.has(date);
+      if(isTrip) matchCount++;
+      const md = date.slice(5).replace('-','/');
+      return `
+        <div class="w-card ${isTrip?'match':''}">
+          <div class="w-date">${md}</div>
+          <div class="w-ico">${WMO_ICON(data.daily.weathercode[i])}</div>
+          <div class="w-temp">${Math.round(data.daily.temperature_2m_max[i])}° <span class="lo">${Math.round(data.daily.temperature_2m_min[i])}°</span></div>
+        </div>`;
+    }).join('');
+    note.textContent = matchCount > 0
+      ? `已為你標示 ${matchCount} 天與行程重疊的預報（橘色卡片）。`
+      : `目前預報範圍尚未涵蓋行程日期（9/19–9/26），出發前 16 天內再回來看會更準確。`;
+  }catch(e){
+    loading.textContent = '天氣讀取失敗，請檢查網路連線後重新進入此頁。';
+  }
+}
+
+/* =========================================================
+   PWA: manifest 已用外部檔案引入；這裡註冊 service worker
+   （網路優先策略，避免更新後看到舊版）
+   ========================================================= */
+if('serviceWorker' in navigator){
+  window.addEventListener('load', ()=>{
+    navigator.serviceWorker.register('./sw.js').catch(()=>{ /* 靜默失敗，不影響一般使用 */ });
+  });
+}
+</script>
+</body>
+</html>
