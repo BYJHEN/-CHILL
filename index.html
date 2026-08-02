@@ -3,55 +3,75 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>清邁家族旅行 ✈️ 2026.09.19–09.26</title>
-<meta name="theme-color" content="#4A3627">
+<title>清邁放鬆之旅 Chill ✈️ 2026.09.19–09.26</title>
+<meta name="theme-color" content="#263D35">
 <link rel="manifest" href="./manifest.json">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>%E2%9C%88%EF%B8%8F</text></svg>">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700;900&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@500;600;700&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
 
 <style>
   :root{
-    --sand:        #F2ECDD;
-    --sand-deep:   #E9E0C8;
-    --panel:       #FBF8F0;
-    --line:        #DCD0AE;
-    --brown:       #4A3627;
-    --brown-soft:  #6B5843;
-    --grey:        #4B4740;
-    --sage:        #7C8B6F;
-    --sage-soft:   #E4E8DC;
-    --clay:        #B8734A;
-    --clay-soft:   #F1E0D2;
-    --river:       #5F8A8B;
-    --river-soft:  #DEEAE9;
-    --gold:        #C8A24A;
-    --shadow: 0 10px 30px -12px rgba(74,54,39,.25);
+    /* ---- 指定色彩系統 ---- */
+    --background:      #F5F0E6;
+    --background-soft: #E5D5BC;
+    --primary:         #748B72;
+    --primary-dark:    #263D35;
+    --accent:          #C97D60;
+    --highlight:       #E8C77B;
+    --mint:            #C9D5C2;
+    --text:            #665F55;
+
+    /* ---- 沿用既有元件命名，統一對應到上面的色彩比例 ----
+       60% 米白沙色 / 25% 鼠尾草・森林綠 / 10% 陶土橘・芒果黃 / 5% 薄荷點綴 */
+    --sand:        var(--background);
+    --sand-deep:   var(--background-soft);
+    --panel:       #FFFDF8;
+    --line:        #E4D6BC;
+    --brown:       var(--primary-dark);
+    --brown-soft:  var(--text);
+    --grey:        var(--text);
+    --sage:        var(--primary);
+    --sage-soft:   color-mix(in srgb, var(--primary) 16%, var(--background));
+    --clay:        var(--accent);
+    --clay-soft:   color-mix(in srgb, var(--accent) 18%, var(--background));
+    --river:       color-mix(in srgb, var(--mint), var(--primary-dark) 35%);
+    --river-soft:  color-mix(in srgb, var(--mint), var(--background) 55%);
+    --gold:        var(--highlight);
+    --shadow: 0 10px 30px -12px rgba(38,61,53,.22);
     --radius: 18px;
   }
   *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
   html,body{margin:0;padding:0;}
   body{
     background:
-      radial-gradient(1200px 600px at 100% -10%, rgba(124,139,111,.10), transparent 60%),
-      radial-gradient(900px 500px at -10% 110%, rgba(184,115,74,.10), transparent 60%),
-      var(--sand);
-    color:var(--brown);
-    font-family:'Noto Sans TC','PingFang TC','Microsoft JhengHei',sans-serif;
+      radial-gradient(1200px 600px at 100% -10%, rgba(116,139,114,.10), transparent 60%),
+      radial-gradient(900px 500px at -10% 110%, rgba(201,125,96,.08), transparent 60%),
+      var(--background);
+    color:var(--text);
+    font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
     font-weight:400;
     line-height:1.35;
     min-height:100vh;
     overscroll-behavior:none;
   }
-  h1,h2,h3,.rounded,.brand,.nav-label,.big-num,.hero-title,.tab-label,button{
-    font-family:'Zen Maru Gothic','Noto Sans TC',sans-serif;
+  h1,h2,h3,.hero-title,#topTitle,.day-heading,.doc-title,.tip-h,.fm-airline-name{
+    font-family:"Noto Serif TC","Noto Sans TC",serif;
+    color:var(--primary-dark);
+  }
+  .english-title{
+    font-family:"Cormorant Garamond",serif;
+    letter-spacing:.04em;
   }
   p,li,span,div,input{ line-height:1.4; }
   a{color:inherit;}
-  button{font:inherit; cursor:pointer; border:none; background:none; color:inherit;}
+  button{
+    font-family:"Inter","Noto Sans TC",sans-serif;
+    cursor:pointer; border:none; background:none; color:inherit;
+  }
   ::selection{ background:var(--clay-soft); }
 
   /* ---------- App shell ---------- */
@@ -98,10 +118,16 @@
     background:
       radial-gradient(140px 140px at 92% -20%, rgba(200,162,74,.35), transparent 70%),
       radial-gradient(160px 160px at -10% 120%, rgba(95,138,139,.35), transparent 70%);
+    z-index:0;
   }
+  .hero-temple{
+    position:absolute; right:-8px; bottom:-10px; width:62%; height:auto;
+    opacity:.24; pointer-events:none; z-index:0;
+  }
+  .hero-row, .stub{ z-index:1; }
   .hero-row{ display:flex; justify-content:space-between; align-items:flex-start; position:relative; }
   .hero-eyebrow{ font-size:11px; opacity:.75; letter-spacing:.14em; }
-  .hero-title{ font-size:19px; font-weight:700; margin-top:2px; }
+  .hero-title{ font-size:19px; font-weight:700; margin-top:2px; color:var(--background); }
   .stub{
     position:relative; margin-top:12px; padding-top:12px;
     display:flex; align-items:center; justify-content:space-between;
@@ -124,32 +150,41 @@
     animation:fly 3.2s ease-in-out infinite;
   }
   @keyframes fly{ 0%{left:0%;} 50%{left:88%;} 100%{left:0%;} }
-  .flight-mini{ font-size:11px; opacity:.85; text-align:right; }
+  .flight-mini{
+    font-size:11px; opacity:.9; text-align:right; color:var(--sand); line-height:1.3;
+    padding:2px 4px; border-radius:8px;
+  }
+  .flight-mini:active{ opacity:.65; }
+  .flight-pills{ display:flex; gap:8px; margin-top:12px; position:relative; z-index:1; }
+  .flight-pill{
+    flex:1; background:rgba(242,236,221,.10); border:1px solid rgba(242,236,221,.28); color:var(--sand);
+    font-size:11.5px; padding:8px 6px; border-radius:12px; text-align:center; font-weight:500;
+    transition:background .15s ease;
+  }
+  .flight-pill:active{ background:rgba(242,236,221,.24); }
 
-  .menu-grid{
-    display:grid; grid-template-columns:repeat(3,1fr); gap:10px;
-    margin-top:14px; flex:1 1 auto;
+  .home-tabs{
+    display:flex; gap:10px; overflow-x:auto; -webkit-overflow-scrolling:touch;
+    padding:16px 2px 8px; margin-top:2px; flex:1 1 auto; align-content:flex-start;
+    scrollbar-width:none;
   }
-  .menu-card{
-    background:var(--panel); border-radius:16px; box-shadow:var(--shadow);
-    padding:12px 8px; display:flex; flex-direction:column; align-items:center; gap:6px;
-    justify-content:center; text-align:center;
-    border:1px solid rgba(220,208,174,.6);
-    transition:transform .15s ease;
+  .home-tabs::-webkit-scrollbar{ display:none; }
+  .home-tab{
+    flex:0 0 auto; display:flex; flex-direction:column; align-items:center; gap:4px;
+    background:var(--panel); border:1px solid var(--line); border-radius:16px;
+    padding:12px 14px; min-width:78px; height:fit-content;
+    box-shadow:0 2px 6px rgba(38,61,53,.07);
+    transition:transform .15s ease, background .15s ease;
   }
-  .menu-card:active{ transform:scale(.94); }
-  .menu-card .ico{ font-size:22px; }
-  .menu-card .lab{ font-size:12.5px; font-weight:500; }
-  .menu-card .cap{ font-size:9.5px; color:var(--brown-soft); }
-  .menu-card.wide{ grid-column:span 3; flex-direction:row; justify-content:space-between; text-align:left; padding:12px 14px;}
-  .menu-card.wide .ico{ font-size:20px; }
+  .home-tab:active{ transform:scale(.93); background:var(--sage-soft); }
+  .home-tab .ico{ font-size:21px; }
+  .home-tab .lab{ font-size:11.5px; font-weight:500; color:var(--text); white-space:nowrap; }
+  .home-tab .cap{ font-size:9px; color:var(--brown-soft); white-space:nowrap; }
 
   .home-foot{
     display:flex; justify-content:space-between; align-items:center;
-    margin-top:10px; font-size:11px; color:var(--brown-soft); flex:0 0 auto;
+    margin-top:2px; font-size:11px; color:var(--brown-soft); flex:0 0 auto;
   }
-  .dots{ display:flex; gap:4px; }
-  .dots i{ width:5px;height:5px;border-radius:50%; background:var(--line); display:block; }
 
   /* ---------- Bottom nav ---------- */
   .tabbar{
@@ -169,19 +204,36 @@
   .sec-head h2{ font-size:18px; font-weight:700; margin:0 0 2px; }
   .sec-head .desc{ font-size:12px; color:var(--brown-soft); }
 
-  /* ---------- Itinerary ---------- */
+  /* ---------- Itinerary: tabs + swipeable pager ---------- */
   .day-scroller{ display:flex; gap:8px; overflow-x:auto; padding:4px 0 10px; scrollbar-width:none; }
   .day-scroller::-webkit-scrollbar{ display:none; }
   .day-chip{
     flex:0 0 auto; padding:8px 12px; border-radius:14px; background:var(--panel);
     border:1px solid var(--line); font-size:12px; text-align:center; min-width:56px;
-    box-shadow:0 2px 6px rgba(74,54,39,.06);
+    box-shadow:0 2px 6px rgba(38,61,53,.06); position:relative;
+    transition:background .15s ease, color .15s ease;
   }
   .day-chip .d{ font-weight:700; font-size:14px; }
-  .day-chip.today{ background:var(--brown); color:var(--sand); border-color:var(--brown); }
-  .day-chip.today .d{ color:var(--gold); }
+  .day-chip.today{ border-color:var(--clay); }
+  .day-chip.today::after{
+    content:''; position:absolute; top:5px; right:6px; width:6px; height:6px; border-radius:50%; background:var(--clay);
+  }
+  .day-chip.active{ background:var(--brown); color:var(--sand); border-color:var(--brown); }
+  .day-chip.active .d{ color:var(--gold); }
+  .day-chip.active.today::after{ background:var(--gold); }
 
-  .day-block{ margin-bottom:22px; position:relative; }
+  .day-pager-wrap{ display:flex; align-items:flex-start; gap:2px; }
+  .pager-arrow{
+    flex:0 0 auto; width:30px; height:30px; border-radius:50%; margin-top:6px;
+    background:var(--panel); border:1px solid var(--line); color:var(--brown-soft); font-size:16px;
+    display:flex; align-items:center; justify-content:center; box-shadow:0 2px 6px rgba(38,61,53,.06);
+  }
+  .pager-arrow:disabled{ opacity:.35; }
+  .day-pager{ flex:1 1 auto; overflow:hidden; }
+  .day-pager-track{ display:flex; transition:transform .32s cubic-bezier(.22,.8,.36,1); }
+  .day-panel{ flex:0 0 100%; min-width:100%; padding:2px 2px 4px; }
+
+  .day-block{ position:relative; }
   .day-title{ display:flex; align-items:center; gap:8px; margin-bottom:10px; }
   .day-badge{
     width:38px;height:38px;border-radius:12px; background:var(--brown); color:var(--sand);
@@ -206,9 +258,11 @@
   .titem.flight::before{ border-color:var(--clay); background:var(--clay); }
   .titem-card{
     background:var(--panel); border:1px solid var(--line); border-radius:14px;
-    padding:10px 12px; box-shadow:0 2px 6px rgba(74,54,39,.05);
+    padding:10px 12px; box-shadow:0 2px 6px rgba(38,61,53,.05);
   }
-  .titem.flight .titem-card{ background:var(--clay-soft); border-color:#e3c3ab; }
+  .titem.flight .titem-card{ background:var(--clay-soft); border-color:color-mix(in srgb, var(--accent), var(--background) 45%); cursor:pointer; transition:transform .12s ease; }
+  .titem.flight .titem-card:active{ transform:scale(.98); }
+  .titem.flight .titem-title::after{ content:'  查看航班詳情 →'; font-size:10.5px; font-weight:400; color:var(--clay); }
   .titem-time{ font-size:11px; color:var(--brown-soft); font-weight:500; }
   .titem-title{ font-size:13.5px; font-weight:500; margin:2px 0 3px; }
   .titem-desc{ font-size:12px; color:var(--grey); }
@@ -241,7 +295,7 @@
     font-size:13px; color:var(--brown); font-family:inherit;
   }
   .list-add input:focus{ outline:2px solid var(--sage); outline-offset:1px; }
-  .list-add button{ background:var(--brown); color:var(--sand); padding:0 16px; border-radius:12px; font-size:13px; font-weight:500; }
+  .list-add button{ background:var(--primary); color:#FFFDF8; padding:0 18px; border-radius:999px; font-size:13px; font-weight:500; }
   .check-list{ display:flex; flex-direction:column; gap:7px; }
   .check-item{
     display:flex; align-items:center; gap:10px; background:var(--panel); border:1px solid var(--line);
@@ -259,6 +313,35 @@
   .progress-bar i{ display:block; height:100%; background:var(--sage); border-radius:6px; transition:width .3s ease; }
   .progress-lab{ font-size:11px; color:var(--brown-soft); margin-bottom:4px; }
 
+  /* ---------- Docs (important documents) ---------- */
+  .doc-note{ font-size:11px; color:var(--brown-soft); margin-bottom:12px; display:flex; gap:6px; align-items:flex-start; }
+  .doc-card{
+    background:var(--panel); border:1px solid var(--line); border-radius:16px; padding:12px 14px; margin-bottom:10px;
+    box-shadow:0 2px 8px rgba(38,61,53,.05);
+  }
+  .doc-card-head{ display:flex; align-items:center; gap:8px; }
+  .doc-card-head input.doc-title{
+    flex:1; font-family:"Noto Serif TC","Noto Sans TC",serif; font-weight:700; font-size:14px; color:var(--primary-dark);
+    border:none; background:transparent; color:var(--brown); padding:2px 0;
+  }
+  .doc-card-head input.doc-title:focus{ outline:none; border-bottom:1px dashed var(--line); }
+  .doc-icon-btn{ font-size:14px; color:var(--brown-soft); padding:4px 6px; flex:0 0 auto; }
+  .doc-content{
+    width:100%; margin-top:8px; border:1px solid var(--line); border-radius:10px; background:#fff;
+    font-family:inherit; font-size:12.5px; color:var(--grey); padding:9px 10px; resize:vertical; min-height:60px;
+  }
+  .doc-content:focus{ outline:2px solid var(--sage); outline-offset:1px; }
+  .doc-img-wrap{ margin-top:8px; }
+  .doc-img-wrap img{ max-width:100%; border-radius:10px; display:block; }
+  .doc-img-actions{ display:flex; gap:8px; margin-top:8px; align-items:center; }
+  .doc-img-btn{
+    font-size:11px; background:var(--sand-deep); padding:6px 10px; border-radius:20px; color:var(--brown-soft);
+  }
+  .doc-add-card{
+    display:flex; align-items:center; justify-content:center; gap:6px; padding:14px; border-radius:16px;
+    border:1.5px dashed var(--line); color:var(--brown-soft); font-size:13px;
+  }
+
   /* ---------- Tips ---------- */
   .tip-card{
     background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:12px 14px; margin-bottom:10px;
@@ -269,7 +352,7 @@
   .tip-t{ font-size:12.5px; color:var(--grey); }
 
   /* ---------- Exchange / weather ---------- */
-  .card{ background:var(--panel); border:1px solid var(--line); border-radius:16px; padding:14px 16px; margin-bottom:12px; box-shadow:0 2px 8px rgba(74,54,39,.05); }
+  .card{ background:var(--panel); border:1px solid var(--line); border-radius:16px; padding:14px 16px; margin-bottom:12px; box-shadow:0 2px 8px rgba(38,61,53,.05); }
   .rate-big{ font-size:26px; font-weight:700; }
   .rate-sub{ font-size:11.5px; color:var(--brown-soft); margin-top:2px; }
   .conv-row{ display:flex; align-items:center; gap:8px; margin-top:12px; }
@@ -283,7 +366,7 @@
     flex:0 0 auto; width:74px; text-align:center; background:var(--panel); border:1px solid var(--line);
     border-radius:14px; padding:10px 4px;
   }
-  .w-card.match{ background:var(--clay-soft); border-color:#e3c3ab; }
+  .w-card.match{ background:var(--clay-soft); border-color:color-mix(in srgb, var(--accent), var(--background) 45%); }
   .w-date{ font-size:10.5px; color:var(--brown-soft); }
   .w-ico{ font-size:20px; margin:4px 0; }
   .w-temp{ font-size:12px; font-weight:500; }
@@ -292,11 +375,57 @@
   .loading{ font-size:12px; color:var(--brown-soft); padding:10px 0; }
   .err{ font-size:12px; color:var(--clay); }
 
+  /* ---------- Flight detail modal ---------- */
+  .flight-modal-backdrop{
+    position:fixed; inset:0; background:rgba(38,61,53,.55); z-index:100;
+    display:none; align-items:flex-end; justify-content:center;
+    backdrop-filter:blur(2px);
+  }
+  .flight-modal-backdrop.open{ display:flex; }
+  .flight-modal{
+    width:100%; max-width:520px;
+    background:linear-gradient(180deg, color-mix(in srgb, var(--primary-dark), white 14%), var(--primary-dark));
+    color:var(--background); border-radius:24px 24px 0 0; padding:0 0 24px;
+    max-height:88vh; overflow-y:auto; animation:slideUp .3s ease;
+    box-shadow:0 -20px 50px rgba(0,0,0,.35);
+  }
+  @keyframes slideUp{ from{ transform:translateY(30px); opacity:0;} to{ transform:translateY(0); opacity:1;} }
+  .fm-handle{ width:36px; height:4px; background:rgba(245,240,230,.25); border-radius:4px; margin:10px auto 6px; }
+  .fm-close{
+    position:absolute; top:14px; right:16px; width:30px; height:30px; border-radius:50%;
+    background:rgba(245,240,230,.12); color:var(--background); font-size:14px;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .fm-map{ position:relative; padding:22px 22px 18px; }
+  .fm-route{ width:100%; height:auto; }
+  .fm-airline{ padding:2px 22px 14px; }
+  .fm-airline-name{ font-family:"Noto Serif TC","Noto Sans TC",serif; font-weight:700; font-size:17px; color:var(--background); }
+  .fm-code{ font-size:12px; color:var(--mint); margin-top:2px; }
+  .fm-status{ float:right; text-align:right; font-size:12px; color:var(--mint); }
+  .fm-status .v{ font-weight:700; margin-top:2px; }
+  .fm-status .v.ok{ color:color-mix(in srgb, var(--mint), white 25%); }
+  .fm-status .v.wait{ color:var(--highlight); }
+  .fm-route-row{
+    display:flex; align-items:center; justify-content:space-between; padding:14px 22px;
+    border-top:1px solid rgba(245,240,230,.12); border-bottom:1px solid rgba(245,240,230,.12);
+  }
+  .fm-city{ font-size:12px; color:var(--mint); }
+  .fm-code-big{ font-family:"Cormorant Garamond",serif; letter-spacing:.04em; font-weight:600; font-size:32px; color:var(--background); }
+  .fm-plane-mid{ font-size:20px; opacity:.8; }
+  .fm-detail-row{
+    display:flex; justify-content:space-between; align-items:center; padding:14px 22px;
+    border-bottom:1px solid rgba(245,240,230,.08); font-size:13px;
+  }
+  .fm-detail-row .lab{ color:var(--mint); }
+  .fm-detail-row .val{ text-align:right; font-weight:500; }
+  .fm-note{ padding:14px 22px 0; font-size:10.5px; color:color-mix(in srgb, var(--mint), var(--primary-dark) 35%); line-height:1.5; }
+
   @media (prefers-reduced-motion:reduce){
     .plane-track span{ animation:none; }
   }
   @media (max-width:360px){
-    .menu-card .lab{ font-size:11.5px; }
+    .home-tab .lab{ font-size:10.5px; }
+    .home-tab{ min-width:70px; padding:10px 12px; }
   }
 </style>
 </head>
@@ -306,7 +435,7 @@
   <div class="topbar">
     <button class="back hide" id="backBtn" aria-label="返回首頁">←</button>
     <div>
-      <div class="title" id="topTitle">清邁家族旅行</div>
+      <div class="title" id="topTitle">清邁放鬆之旅 Chill</div>
       <div class="sub" id="topSub">2026.09.19 – 09.26</div>
     </div>
   </div>
@@ -314,9 +443,25 @@
   <!-- ============ HOME ============ -->
   <section class="view active" id="home">
     <div class="hero">
+      <svg class="hero-temple" viewBox="0 0 300 180" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="var(--gold)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <line x1="6" y1="170" x2="294" y2="170"/>
+        <path d="M40 170 L40 140 M70 170 L70 140 M30 140 Q55 102 80 140 Z"/>
+        <path d="M23 140 L87 140 M18 149 Q55 127 92 149"/>
+        <path d="M23 140 Q13 127 8 131"/>
+        <path d="M87 140 Q97 127 102 131"/>
+        <path d="M150 170 L150 122 M132 122 L168 122 M141 122 L141 96 M159 122 L159 96 M136 96 L164 96 M146 96 L146 60 M154 96 L154 60 M147 60 L153 60 M150 60 L150 28"/>
+        <circle cx="150" cy="24" r="4"/>
+        <path d="M108 140 Q150 88 192 140"/>
+        <path d="M102 149 Q150 104 198 149"/>
+        <path d="M96 158 Q150 118 204 158"/>
+        <path d="M220 170 L220 140 M250 170 L250 140 M210 140 Q235 102 260 140 Z"/>
+        <path d="M203 140 L267 140 M198 149 Q235 127 272 149"/>
+        <path d="M203 140 Q193 127 188 131"/>
+        <path d="M267 140 Q277 127 282 131"/>
+      </svg>
       <div class="hero-row">
         <div>
-          <div class="hero-eyebrow">TPE → CNX · FAMILY TRIP</div>
+          <div class="hero-eyebrow english-title">TPE → CNX · CHILL</div>
           <div class="hero-title">泰國清邁渡假 🌿</div>
         </div>
         <div style="text-align:right; font-size:11px; opacity:.8;">
@@ -330,41 +475,44 @@
           <div class="cell"><div class="num">--</div><div class="lab">分</div></div>
         </div>
         <div class="plane-track"><span>✈️</span></div>
-        <div class="flight-mini">JX751<br>09.19 13:05</div>
+        <button class="flight-mini" id="heroFlightMini">JX751<br>09.19 13:05</button>
+      </div>
+      <div class="flight-pills">
+        <button class="flight-pill" data-flight="JX751">🛫 去程 JX751</button>
+        <button class="flight-pill" data-flight="CI0852">🛬 回程 CI0852</button>
       </div>
     </div>
 
-    <div class="menu-grid">
-      <div class="menu-card" data-go="itinerary">
-        <div class="ico">🗓️</div><div class="lab">每日行程</div><div class="cap">Day1–8</div>
-      </div>
-      <div class="menu-card" data-go="map">
-        <div class="ico">🗺️</div><div class="lab">地圖</div><div class="cap">景點導航</div>
-      </div>
-      <div class="menu-card" data-go="packing">
-        <div class="ico">🧳</div><div class="lab">行李清單</div><div class="cap" id="packingCap">0/0</div>
-      </div>
-      <div class="menu-card" data-go="wishlist">
-        <div class="ico">🛍️</div><div class="lab">願望清單</div><div class="cap" id="wishCap">必買 / 想去</div>
-      </div>
-      <div class="menu-card" data-go="tips">
-        <div class="ico">📌</div><div class="lab">實用提醒</div><div class="cap">穿著/交通</div>
-      </div>
-      <div class="menu-card" data-go="exchange">
-        <div class="ico">💱</div><div class="lab">匯率換算</div><div class="cap">THB⇄TWD</div>
-      </div>
-      <div class="menu-card wide" data-go="weather">
-        <div style="display:flex; align-items:center; gap:10px;">
-          <div class="ico">☀️</div>
-          <div><div class="lab">清邁天氣</div><div class="cap">Open-Meteo 即時預報</div></div>
-        </div>
-        <div style="font-size:20px;">›</div>
-      </div>
+    <div class="home-tabs" id="homeTabs">
+      <button class="home-tab" data-go="itinerary">
+        <span class="ico">🗓️</span><span class="lab">每日行程</span><span class="cap">Day1–8</span>
+      </button>
+      <button class="home-tab" data-go="map">
+        <span class="ico">🗺️</span><span class="lab">地圖</span><span class="cap">景點導航</span>
+      </button>
+      <button class="home-tab" data-go="packing">
+        <span class="ico">🧳</span><span class="lab">行李清單</span><span class="cap" id="packingCap">0/0</span>
+      </button>
+      <button class="home-tab" data-go="wishlist">
+        <span class="ico">🛍️</span><span class="lab">願望清單</span><span class="cap" id="wishCap">必買/想去</span>
+      </button>
+      <button class="home-tab" data-go="docs">
+        <span class="ico">📁</span><span class="lab">重要文件</span><span class="cap">護照/保險</span>
+      </button>
+      <button class="home-tab" data-go="tips">
+        <span class="ico">📌</span><span class="lab">實用提醒</span><span class="cap">穿著/交通</span>
+      </button>
+      <button class="home-tab" data-go="exchange">
+        <span class="ico">💱</span><span class="lab">匯率換算</span><span class="cap">THB⇄TWD</span>
+      </button>
+      <button class="home-tab" data-go="weather">
+        <span class="ico">☀️</span><span class="lab">清邁天氣</span><span class="cap">即時預報</span>
+      </button>
     </div>
 
     <div class="home-foot">
       <span id="homeFootNote">出發前每天都可以來看看喔 🍃</span>
-      <div class="dots"><i></i><i></i><i></i></div>
+      <span style="font-size:10px; opacity:.6;">左右滑動看更多 ›</span>
     </div>
   </section>
 
@@ -372,10 +520,14 @@
   <section class="view" id="itinerary">
     <div class="sec-head">
       <h2>每日行程</h2>
-      <div class="desc">今天會自動反白，點日期可快速跳轉</div>
+      <div class="desc">左右滑動或點日期切換，今天會自動反白</div>
     </div>
     <div class="day-scroller" id="dayScroller"></div>
-    <div id="dayBlocks"></div>
+    <div class="day-pager-wrap">
+      <button class="pager-arrow left" id="dayPrev" aria-label="前一天">‹</button>
+      <div class="day-pager" id="dayPager"></div>
+      <button class="pager-arrow right" id="dayNext" aria-label="後一天">›</button>
+    </div>
   </section>
 
   <!-- ============ MAP ============ -->
@@ -418,6 +570,17 @@
       <button id="wishAddBtn">新增</button>
     </div>
     <div class="check-list" id="wishList"></div>
+  </section>
+
+  <!-- ============ DOCS ============ -->
+  <section class="view" id="docs">
+    <div class="sec-head">
+      <h2>重要文件</h2>
+      <div class="desc">護照、訂房確認、保險等資料放這裡，隨時查</div>
+    </div>
+    <div class="doc-note">🔒 <span>僅儲存在你目前這台裝置的瀏覽器裡（localStorage），不會上傳雲端；換裝置或清除瀏覽器資料要重新輸入。</span></div>
+    <div id="docList"></div>
+    <div class="doc-add-card" id="docAddBtn">＋ 新增一份文件</div>
   </section>
 
   <!-- ============ TIPS ============ -->
@@ -463,6 +626,11 @@
     <div class="map-note" id="weatherNote"></div>
   </section>
 
+  <!-- ============ FLIGHT DETAIL MODAL ============ -->
+  <div class="flight-modal-backdrop" id="flightModalBackdrop">
+    <div class="flight-modal" id="flightModal"></div>
+  </div>
+
 </div>
 
 <div class="tabbar" id="tabbar">
@@ -476,7 +644,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <script>
 /* =========================================================
-   清邁家族旅行 App — 單檔資料設定
+   清邁放鬆之旅 Chill App — 單檔資料設定
    ========================================================= */
 const TRIP_START = '2026-09-19';
 const TRIP_END   = '2026-09-26';
@@ -486,7 +654,7 @@ const DAYS = [
   {
     d:'2026-09-19', dow:'Sat', label:'抵達清邁', stay:true,
     items:[
-      {t:'13:05–16:05', ty:'flight', title:'✈️ 星宇航空 JX751', desc:'桃園(TPE) → 清邁(CNX)'},
+      {t:'13:05–16:05', ty:'flight', title:'✈️ 星宇航空 JX751', desc:'桃園(TPE) → 清邁(CNX)', flightKey:'JX751'},
       {t:'約 17:00', ty:'transport', title:'接機', desc:'預計傍晚 5 點左右抵達飯店 / 接機。'},
       {t:'晚上', ty:'food', title:'寧曼路 One Nimman · White Market', desc:'逛街、吃晚餐、按摩放鬆。'}
     ]
@@ -543,12 +711,30 @@ const DAYS = [
     items:[
       {t:'一早', ty:'food', title:'吃頓早一點的早餐', desc:'今天要回家囉，吃飽再出發。'},
       {t:'08:00 / 08:20', ty:'transport', title:'出發前往機場', desc:'約 8:00 出門，8:20 抵達機場（Grab 接駁），預留充足時間辦理登機。'},
-      {t:'14:05–18:40', ty:'flight', title:'✈️ 中華航空 CI0852', desc:'清邁(CNX) → 桃園(TPE)'}
+      {t:'14:05–18:40', ty:'flight', title:'✈️ 中華航空 CI0852', desc:'清邁(CNX) → 桃園(TPE)', flightKey:'CI0852'}
     ]
   }
 ];
 
 const TYPE_ICON = { flight:'✈️', transport:'🚖', food:'🍜', market:'🛒', shop:'🛍️', attraction:'📍', note:'☕' };
+
+/* 航班詳情資料（點擊 JX751 / CI0852 會開啟這份資訊卡） */
+const FLIGHTS = {
+  JX751: {
+    airline:'星宇航空 STARLUX Airlines', code:'JX751',
+    from:{code:'TPE', city:'Taipei 桃園', tz:'GMT+8'},
+    to:{code:'CNX', city:'Chiang Mai 清邁', tz:'GMT+7'},
+    departISO:'2026-09-19T13:05:00+08:00',
+    arriveISO:'2026-09-19T16:05:00+07:00'
+  },
+  CI0852: {
+    airline:'中華航空 China Airlines', code:'CI0852',
+    from:{code:'CNX', city:'Chiang Mai 清邁', tz:'GMT+7'},
+    to:{code:'TPE', city:'Taipei 桃園', tz:'GMT+8'},
+    departISO:'2026-09-26T14:05:00+07:00',
+    arriveISO:'2026-09-26T18:40:00+08:00'
+  }
+};
 
 const TIPS = [
   { ico:'🧣', h:'穿著', t:'進入寺廟嚴禁露肩、短裙或破洞褲，請隨身備妥披肩或長裙。' },
@@ -559,6 +745,14 @@ const TIPS = [
 const PACK_DEFAULT = ['護照 / 證件影本','機票 / 訂房確認單','現金（泰銖）','信用卡','萬國轉接頭 / 充電線','行動電源','防曬乳','太陽眼鏡','薄外套（冷氣房用）','拖鞋','披肩 / 薄長裙（進廟宇用）','個人藥品','盥洗用品','泳衣','相機 / 記憶卡','濕紙巾','防蚊液','折疊傘'];
 
 const WISH_DEFAULT = ['大象褲','泰式奶茶包','手工皂 / 精油','Mistine / Beauty Buffet 美妝','清邁在地咖啡豆','泰式辣椒醬','清邁木雕小物','泰絲收納包'];
+
+const DOCS_DEFAULT = [
+  { title:'護照', content:'姓名 / 護照號碼 / 效期日期，點這裡輸入…', img:null },
+  { title:'訂房確認', content:'飯店名稱、地址、確認碼、入住/退房日期…', img:null },
+  { title:'機票 / 電子機票', content:'JX751、CI0852 訂位代號，或貼上電子機票連結…', img:null },
+  { title:'旅遊保險', content:'保險公司、保單號碼、24 小時緊急救援電話…', img:null },
+  { title:'緊急聯絡資訊', content:'駐泰國台北經濟文化辦事處、家人緊急聯絡電話…', img:null }
+];
 
 const PLACES = [
   {name:'清邁機場 CNX', cat:'transport', emo:'✈️', lat:18.7669, lng:98.9626},
@@ -585,11 +779,12 @@ const topSub = document.getElementById('topSub');
 const tabBtns = document.querySelectorAll('.tab-btn');
 
 const TITLES = {
-  home:['清邁家族旅行','2026.09.19 – 09.26'],
+  home:['清邁放鬆之旅 Chill','2026.09.19 – 09.26'],
   itinerary:['每日行程','Day 1 – Day 8'],
   map:['地圖導航','景點 · 市集 · 餐廳'],
   packing:['行李清單','出發前打勾勾'],
   wishlist:['願望清單','必買 / 必去'],
+  docs:['重要文件','僅存本機，不會上傳'],
   tips:['實用小提醒','出發前必看'],
   exchange:['匯率換算','THB ⇄ TWD'],
   weather:['清邁天氣','Open-Meteo']
@@ -615,14 +810,28 @@ backBtn.addEventListener('click', ()=>goTo('home'));
 /* =========================================================
    Countdown
    ========================================================= */
+function nextUpcomingFlightKey(){
+  const now = new Date();
+  if(now < new Date(FLIGHTS.JX751.departISO)) return 'JX751';
+  if(now < new Date(FLIGHTS.CI0852.departISO)) return 'CI0852';
+  return null;
+}
+
 function tickCountdown(){
   const now = new Date();
-  const diff = DEPARTURE_DT - now;
+  const key = nextUpcomingFlightKey();
   const box = document.getElementById('countdownBox');
-  if(diff <= 0){
+  const mini = document.getElementById('heroFlightMini');
+
+  if(!key){
     box.innerHTML = `<div class="cell" style="min-width:auto;"><div class="num" style="font-size:16px;">旅途愉快 🌴</div></div>`;
+    if(mini) mini.innerHTML = `已完成行程<br>歡迎回家`;
     return;
   }
+
+  const f = FLIGHTS[key];
+  const target = new Date(f.departISO);
+  const diff = target - now;
   const d = Math.floor(diff/86400000);
   const h = Math.floor(diff%86400000/3600000);
   const m = Math.floor(diff%3600000/60000);
@@ -630,9 +839,25 @@ function tickCountdown(){
     <div class="cell"><div class="num">${d}</div><div class="lab">天</div></div>
     <div class="cell"><div class="num">${h}</div><div class="lab">時</div></div>
     <div class="cell"><div class="num">${m}</div><div class="lab">分</div></div>`;
+
+  if(mini){
+    const md = target.toISOString ? '' : '';
+    const label = key === 'JX751' ? '去程' : '回程';
+    const dateStr = f.departISO.slice(5,10).replace('-','.');
+    const timeStr = f.departISO.slice(11,16);
+    mini.innerHTML = `${label} ${f.code}<br>${dateStr} ${timeStr}`;
+    mini.dataset.flight = key;
+  }
 }
 tickCountdown();
 setInterval(tickCountdown, 30000);
+
+document.getElementById('heroFlightMini').addEventListener('click', function(){
+  openFlightModal(this.dataset.flight || 'JX751');
+});
+document.querySelectorAll('.flight-pill').forEach(btn=>{
+  btn.addEventListener('click', ()=> openFlightModal(btn.dataset.flight));
+});
 
 /* =========================================================
    Itinerary render + auto highlight today
@@ -642,12 +867,23 @@ function todayStr(){
   return n.getFullYear()+'-'+String(n.getMonth()+1).padStart(2,'0')+'-'+String(n.getDate()).padStart(2,'0');
 }
 
+let activeDayIndex = 0;
+let dayTrackEl = null;
+
 function renderItinerary(){
   const scroller = document.getElementById('dayScroller');
-  const blocksWrap = document.getElementById('dayBlocks');
+  const pager = document.getElementById('dayPager');
   const today = todayStr();
   scroller.innerHTML = '';
-  blocksWrap.innerHTML = '';
+  pager.innerHTML = '';
+
+  const track = document.createElement('div');
+  track.className = 'day-pager-track';
+  track.id = 'dayPagerTrack';
+  dayTrackEl = track;
+
+  let todayIdx = DAYS.findIndex(d=>d.d===today);
+  activeDayIndex = todayIdx >= 0 ? todayIdx : 0;
 
   DAYS.forEach((day, idx)=>{
     const isToday = day.d === today;
@@ -655,15 +891,15 @@ function renderItinerary(){
 
     const chip = document.createElement('div');
     chip.className = 'day-chip' + (isToday?' today':'');
-    chip.innerHTML = `<div class="d">Day${dnum}</div><div>${day.d.slice(5).replace('-','/')}</div>`;
-    chip.addEventListener('click', ()=>{
-      document.getElementById('day-block-'+idx).scrollIntoView({behavior:'smooth', block:'start'});
-    });
+    chip.innerHTML = `<div class="d english-title">Day${dnum}</div><div>${day.d.slice(5).replace('-','/')}</div>`;
+    chip.addEventListener('click', ()=> setActiveDay(idx));
     scroller.appendChild(chip);
+
+    const panel = document.createElement('div');
+    panel.className = 'day-panel';
 
     const block = document.createElement('div');
     block.className = 'day-block' + (isToday ? ' is-today' : '');
-    block.id = 'day-block-'+idx;
 
     let itemsHtml = '';
     day.items.forEach(it=>{
@@ -672,8 +908,9 @@ function renderItinerary(){
       if(it.options){
         optsHtml = `<div class="opt-row">${it.options.map(o=>`<span class="opt-chip">${o}</span>`).join('')}</div>`;
       }
+      const flightAttr = it.flightKey ? `data-flight="${it.flightKey}"` : '';
       itemsHtml += `
-        <div class="titem ${it.ty==='flight'?'flight':''}">
+        <div class="titem ${it.ty==='flight'?'flight':''}" ${flightAttr}>
           <div class="titem-card">
             <div class="titem-time">${icon} ${it.t}</div>
             <div class="titem-title">${it.title}</div>
@@ -693,9 +930,58 @@ function renderItinerary(){
       </div>
       <div class="timeline">${itemsHtml}</div>
     `;
-    blocksWrap.appendChild(block);
+    panel.appendChild(block);
+    track.appendChild(panel);
   });
+
+  pager.appendChild(track);
+
+  // 綁定航班卡片點擊 → 開啟航班詳情
+  track.querySelectorAll('.titem.flight[data-flight]').forEach(el=>{
+    el.addEventListener('click', ()=> openFlightModal(el.dataset.flight));
+  });
+
+  setActiveDay(activeDayIndex, true);
 }
+
+function setActiveDay(idx, skipScrollChip){
+  idx = Math.max(0, Math.min(DAYS.length - 1, idx));
+  activeDayIndex = idx;
+  if(dayTrackEl) dayTrackEl.style.transform = `translateX(-${idx * 100}%)`;
+
+  document.querySelectorAll('.day-chip').forEach((chip, i)=>{
+    chip.classList.toggle('active', i === idx);
+  });
+  if(!skipScrollChip){
+    const activeChip = document.querySelectorAll('.day-chip')[idx];
+    if(activeChip) activeChip.scrollIntoView({behavior:'smooth', inline:'center', block:'nearest'});
+  }
+  document.getElementById('dayPrev').disabled = idx === 0;
+  document.getElementById('dayNext').disabled = idx === DAYS.length - 1;
+}
+
+document.getElementById('dayPrev').addEventListener('click', ()=> setActiveDay(activeDayIndex - 1));
+document.getElementById('dayNext').addEventListener('click', ()=> setActiveDay(activeDayIndex + 1));
+
+// 左右滑動切換日期
+(function(){
+  const pagerWrap = document.getElementById('dayPager');
+  let startX = 0, startY = 0, tracking = false;
+  pagerWrap.addEventListener('touchstart', (e)=>{
+    startX = e.touches[0].clientX; startY = e.touches[0].clientY; tracking = true;
+  }, {passive:true});
+  pagerWrap.addEventListener('touchend', (e)=>{
+    if(!tracking) return;
+    tracking = false;
+    const dx = e.changedTouches[0].clientX - startX;
+    const dy = e.changedTouches[0].clientY - startY;
+    if(Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy)){
+      if(dx < 0) setActiveDay(activeDayIndex + 1);
+      else setActiveDay(activeDayIndex - 1);
+    }
+  }, {passive:true});
+})();
+
 renderItinerary();
 
 /* =========================================================
@@ -703,12 +989,12 @@ renderItinerary();
    ========================================================= */
 let mapInst = null;
 const CAT_META = {
-  hotel:{label:'住宿', color:'#B8734A'},
-  attraction:{label:'景點', color:'#7C8B6F'},
-  food:{label:'餐廳/咖啡', color:'#5F8A8B'},
-  market:{label:'市集', color:'#C8A24A'},
-  shop:{label:'購物', color:'#4A3627'},
-  transport:{label:'交通', color:'#6B5843'}
+  hotel:{label:'住宿', color:'#C97D60'},
+  attraction:{label:'景點', color:'#748B72'},
+  food:{label:'餐廳/咖啡', color:'#263D35'},
+  market:{label:'市集', color:'#E8C77B'},
+  shop:{label:'購物', color:'#665F55'},
+  transport:{label:'交通', color:'#8AA089'}
 };
 let activeLayers = new Set(Object.keys(CAT_META));
 let layerGroups = {};
@@ -857,6 +1143,89 @@ setupChecklist({
 });
 
 /* =========================================================
+   Docs (important documents) — localStorage, editable text + optional photo
+   ========================================================= */
+const DOCS_KEY = 'cnx_docs_v1';
+function loadDocs(){
+  try{
+    const raw = localStorage.getItem(DOCS_KEY);
+    if(raw) return JSON.parse(raw);
+  }catch(e){}
+  localStorage.setItem(DOCS_KEY, JSON.stringify(DOCS_DEFAULT));
+  return JSON.parse(JSON.stringify(DOCS_DEFAULT));
+}
+function saveDocs(arr){ try{ localStorage.setItem(DOCS_KEY, JSON.stringify(arr)); }catch(e){ /* 可能已超過儲存上限 */ } }
+
+let docsState = loadDocs();
+
+function resizeImageFile(file, maxW, cb){
+  const reader = new FileReader();
+  reader.onload = (e)=>{
+    const img = new Image();
+    img.onload = ()=>{
+      const scale = Math.min(1, maxW / img.width);
+      const canvas = document.createElement('canvas');
+      canvas.width = img.width * scale;
+      canvas.height = img.height * scale;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+      cb(canvas.toDataURL('image/jpeg', 0.7));
+    };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+function renderDocs(){
+  const wrap = document.getElementById('docList');
+  wrap.innerHTML = '';
+  docsState.forEach((doc, i)=>{
+    const card = document.createElement('div');
+    card.className = 'doc-card';
+    card.innerHTML = `
+      <div class="doc-card-head">
+        <input class="doc-title" value="${doc.title.replace(/"/g,'&quot;')}" placeholder="文件名稱">
+        <button class="doc-icon-btn del">✕</button>
+      </div>
+      <textarea class="doc-content" placeholder="輸入內容…">${doc.content || ''}</textarea>
+      <div class="doc-img-wrap">${doc.img ? `<img src="${doc.img}" alt="${doc.title}">` : ''}</div>
+      <div class="doc-img-actions">
+        <label class="doc-img-btn">📷 ${doc.img?'更換照片':'新增照片'}<input type="file" accept="image/*" style="display:none" class="doc-file-input"></label>
+        ${doc.img?'<button class="doc-img-btn rm-img">移除照片</button>':''}
+      </div>
+    `;
+    card.querySelector('.doc-title').addEventListener('input', (e)=>{
+      docsState[i].title = e.target.value; saveDocs(docsState);
+    });
+    card.querySelector('.doc-content').addEventListener('input', (e)=>{
+      docsState[i].content = e.target.value; saveDocs(docsState);
+    });
+    card.querySelector('.del').addEventListener('click', ()=>{
+      docsState.splice(i,1); saveDocs(docsState); renderDocs();
+    });
+    card.querySelector('.doc-file-input').addEventListener('change', (e)=>{
+      const file = e.target.files[0];
+      if(!file) return;
+      resizeImageFile(file, 900, (dataUrl)=>{
+        docsState[i].img = dataUrl; saveDocs(docsState); renderDocs();
+      });
+    });
+    const rmBtn = card.querySelector('.rm-img');
+    if(rmBtn) rmBtn.addEventListener('click', ()=>{
+      docsState[i].img = null; saveDocs(docsState); renderDocs();
+    });
+    wrap.appendChild(card);
+  });
+}
+renderDocs();
+
+document.getElementById('docAddBtn').addEventListener('click', ()=>{
+  docsState.push({ title:'新文件', content:'', img:null });
+  saveDocs(docsState);
+  renderDocs();
+});
+
+/* =========================================================
    Tips
    ========================================================= */
 function renderTips(){
@@ -956,6 +1325,104 @@ async function loadWeather(){
     loading.textContent = '天氣讀取失敗，請檢查網路連線後重新進入此頁。';
   }
 }
+
+/* =========================================================
+   Flight detail modal
+   ========================================================= */
+function fmtDateTime(iso){
+  // iso: 2026-09-19T13:05:00+08:00 → { date:'09/19 (Sat)', time:'13:05' }
+  const d = new Date(iso);
+  const weekday = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][d.getUTCDay()];
+  // 用字串直接切，避免時區轉換造成顯示錯誤（因為 ISO 內已含目的地時區資訊）
+  const datePart = iso.slice(5,10).replace('-','/');
+  const timePart = iso.slice(11,16);
+  return { date:datePart, time:timePart };
+}
+
+function flightStatus(f){
+  const now = new Date();
+  const dep = new Date(f.departISO);
+  const arr = new Date(f.arriveISO);
+  if(now < dep) return {label:'尚未起飛', cls:'wait'};
+  if(now >= dep && now <= arr) return {label:'飛行中 ✈️', cls:'wait'};
+  return {label:'已抵達', cls:'ok'};
+}
+
+function flightDurationLabel(f){
+  const ms = new Date(f.arriveISO) - new Date(f.departISO);
+  const h = Math.floor(ms/3600000);
+  const m = Math.round((ms%3600000)/60000);
+  return `${h} 小時 ${m} 分鐘`;
+}
+
+function openFlightModal(key){
+  const f = FLIGHTS[key];
+  if(!f) return;
+  const dep = fmtDateTime(f.departISO);
+  const arr = fmtDateTime(f.arriveISO);
+  const status = flightStatus(f);
+
+  const modal = document.getElementById('flightModal');
+  modal.innerHTML = `
+    <div class="fm-handle"></div>
+    <button class="fm-close" id="fmCloseBtn">✕</button>
+    <div class="fm-map">
+      <svg class="fm-route" viewBox="0 0 460 130" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="40" cy="95" r="5" fill="#E8C77B"/>
+        <circle cx="420" cy="30" r="5" fill="#E8C77B"/>
+        <path d="M40 95 Q230 -10 420 30" stroke="#E8C77B" stroke-width="2" stroke-dasharray="5 6" fill="none"/>
+        <text x="30" y="118" fill="#C9D5C2" font-size="13" font-family="Cormorant Garamond, serif">${f.from.code}</text>
+        <text x="392" y="20" fill="#C9D5C2" font-size="13" font-family="Cormorant Garamond, serif">${f.to.code}</text>
+        <text x="205" y="35" font-size="18" transform="rotate(-18 220 45)">✈️</text>
+      </svg>
+    </div>
+    <div class="fm-airline">
+      <div class="fm-status">
+        <div>狀態</div>
+        <div class="v ${status.cls}">${status.label}</div>
+      </div>
+      <div class="fm-airline-name">${f.airline}</div>
+      <div class="fm-code english-title">${f.code}</div>
+    </div>
+    <div class="fm-route-row">
+      <div>
+        <div class="fm-city">${f.from.city}</div>
+        <div class="fm-code-big">${f.from.code}</div>
+      </div>
+      <div class="fm-plane-mid">✈️</div>
+      <div style="text-align:right;">
+        <div class="fm-city">${f.to.city}</div>
+        <div class="fm-code-big">${f.to.code}</div>
+      </div>
+    </div>
+    <div class="fm-detail-row">
+      <div class="lab">預定起飛</div>
+      <div class="val">${f.from.tz} ${dep.time}<br>${dep.date}</div>
+    </div>
+    <div class="fm-detail-row">
+      <div class="lab">預定抵達</div>
+      <div class="val">${f.to.tz} ${arr.time}<br>${arr.date}</div>
+    </div>
+    <div class="fm-detail-row">
+      <div class="lab">飛行時間</div>
+      <div class="val">${flightDurationLabel(f)}</div>
+    </div>
+    <div class="fm-detail-row" style="border-bottom:none;">
+      <div class="lab">登機門 / 航廈</div>
+      <div class="val">依機場看板為準</div>
+    </div>
+    <div class="fm-note">＊ 時刻為訂位時的表定資訊，實際起降時間、登機門請以航空公司通知與機場看板為準。</div>
+  `;
+  document.getElementById('fmCloseBtn').addEventListener('click', closeFlightModal);
+  document.getElementById('flightModalBackdrop').classList.add('open');
+}
+
+function closeFlightModal(){
+  document.getElementById('flightModalBackdrop').classList.remove('open');
+}
+document.getElementById('flightModalBackdrop').addEventListener('click', (e)=>{
+  if(e.target.id === 'flightModalBackdrop') closeFlightModal();
+});
 
 /* =========================================================
    PWA: manifest 已用外部檔案引入；這裡註冊 service worker
