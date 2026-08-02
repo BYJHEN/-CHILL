@@ -101,7 +101,7 @@
   @keyframes fadeIn{ from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);} }
 
   /* ---------- HOME (single screen menu) ---------- */
-  #home{ display:flex; flex-direction:column; padding-top:0; }
+  #home.active{ display:flex; flex-direction:column; padding-top:0; }
   .hero{
     position:relative;
     background:var(--brown);
@@ -165,8 +165,11 @@
 
   .home-tabs{
     display:flex; gap:10px; overflow-x:auto; -webkit-overflow-scrolling:touch;
-    padding:16px 2px 8px; margin-top:2px; flex:0 0 auto;
+    padding:10px 2px 10px; margin-top:-4px; flex:0 0 auto;
     scrollbar-width:none;
+    position:sticky; top:56px; z-index:25;
+    background:var(--background);
+    box-shadow:0 8px 10px -8px rgba(38,61,53,.10);
   }
   .home-tabs::-webkit-scrollbar{ display:none; }
   .home-tab{
