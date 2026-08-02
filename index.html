@@ -75,7 +75,7 @@
   ::selection{ background:var(--clay-soft); }
 
   /* ---------- App shell ---------- */
-  #app{ max-width:520px; margin:0 auto; min-height:100vh; position:relative; padding-bottom:78px; }
+  #app{ max-width:520px; margin:0 auto; min-height:100vh; position:relative; padding-bottom:24px; }
 
   .topbar{
     position:sticky; top:0; z-index:30;
@@ -101,7 +101,7 @@
   @keyframes fadeIn{ from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);} }
 
   /* ---------- HOME (single screen menu) ---------- */
-  #home{ height:calc(100vh - 0px); display:flex; flex-direction:column; padding-top:0; }
+  #home{ display:flex; flex-direction:column; padding-top:0; }
   .hero{
     position:relative;
     background:var(--brown);
@@ -165,7 +165,7 @@
 
   .home-tabs{
     display:flex; gap:10px; overflow-x:auto; -webkit-overflow-scrolling:touch;
-    padding:16px 2px 8px; margin-top:2px; flex:1 1 auto; align-content:flex-start;
+    padding:16px 2px 8px; margin-top:2px; flex:0 0 auto;
     scrollbar-width:none;
   }
   .home-tabs::-webkit-scrollbar{ display:none; }
@@ -186,23 +186,42 @@
     margin-top:2px; font-size:11px; color:var(--brown-soft); flex:0 0 auto;
   }
 
-  /* ---------- Bottom nav ---------- */
-  .tabbar{
-    position:fixed; left:0; right:0; bottom:0; z-index:40;
-    max-width:520px; margin:0 auto;
-    background:rgba(251,248,240,.92); backdrop-filter:blur(10px);
-    border-top:1px solid var(--line);
-    display:flex; justify-content:space-around; padding:8px 4px 10px;
-  }
-  .tab-btn{ display:flex; flex-direction:column; align-items:center; gap:2px; padding:4px 8px; border-radius:12px; color:var(--brown-soft); }
-  .tab-btn.active{ color:var(--brown); background:var(--sage-soft); }
-  .tab-btn .ico{ font-size:17px; }
-  .tab-label{ font-size:9.5px; }
 
   /* ---------- Section headers ---------- */
   .sec-head{ margin:10px 0 12px; }
   .sec-head h2{ font-size:18px; font-weight:700; margin:0 0 2px; }
   .sec-head .desc{ font-size:12px; color:var(--brown-soft); }
+  .sec-head.itin-head{ display:flex; align-items:flex-start; justify-content:space-between; gap:10px; }
+  .edit-toggle-btn{
+    flex:0 0 auto; font-size:11.5px; font-weight:500; background:var(--panel); color:var(--text);
+    border:1px solid var(--line); padding:7px 12px; border-radius:20px; white-space:nowrap;
+  }
+  .edit-toggle-btn.on{ background:var(--primary); color:#FFFDF8; border-color:var(--primary); }
+
+  /* ---------- Itinerary edit mode ---------- */
+  .day-label-edit{
+    width:100%; font-family:"Noto Serif TC","Noto Sans TC",serif; font-weight:700; font-size:14.5px;
+    color:var(--primary-dark); border:none; border-bottom:1px dashed var(--line); background:transparent;
+    padding:2px 0; margin-bottom:2px;
+  }
+  .titem-edit{
+    background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:10px 12px;
+    display:flex; flex-direction:column; gap:6px;
+  }
+  .titem-edit-row{ display:flex; gap:6px; align-items:center; }
+  .titem-edit input, .titem-edit select, .titem-edit textarea{
+    font-family:inherit; font-size:12.5px; color:var(--text); border:1px solid var(--line);
+    background:#fff; border-radius:8px; padding:6px 8px; width:100%;
+  }
+  .titem-edit .ty-select{ width:auto; flex:0 0 auto; }
+  .titem-edit .time-input{ flex:0 0 92px; }
+  .titem-edit textarea{ resize:vertical; min-height:44px; }
+  .titem-del-btn{ flex:0 0 auto; font-size:13px; color:var(--clay); padding:4px 6px; }
+  .add-item-btn, .add-day-btn{
+    width:100%; text-align:center; padding:10px; border-radius:12px; border:1.5px dashed var(--line);
+    color:var(--brown-soft); font-size:12.5px; margin-top:8px;
+  }
+  .day-del-btn{ font-size:11px; color:var(--clay); padding:4px 8px; border-radius:14px; background:var(--clay-soft); white-space:nowrap; }
 
   /* ---------- Itinerary: tabs + swipeable pager ---------- */
   .day-scroller{ display:flex; gap:8px; overflow-x:auto; padding:4px 0 10px; scrollbar-width:none; }
@@ -333,10 +352,16 @@
   .doc-content:focus{ outline:2px solid var(--sage); outline-offset:1px; }
   .doc-img-wrap{ margin-top:8px; }
   .doc-img-wrap img{ max-width:100%; border-radius:10px; display:block; }
-  .doc-img-actions{ display:flex; gap:8px; margin-top:8px; align-items:center; }
+  .doc-img-actions{ display:flex; gap:8px; margin-top:8px; align-items:center; flex-wrap:wrap; }
   .doc-img-btn{
     font-size:11px; background:var(--sand-deep); padding:6px 10px; border-radius:20px; color:var(--brown-soft);
   }
+  .doc-pdf-chip{
+    display:inline-flex; align-items:center; gap:6px; font-size:11.5px; background:var(--clay-soft);
+    color:var(--clay); padding:6px 11px; border-radius:20px; margin-top:8px; font-weight:500;
+  }
+  .doc-pdf-chip:active{ opacity:.7; }
+  .doc-warn{ font-size:10.5px; color:var(--clay); margin-top:6px; }
   .doc-add-card{
     display:flex; align-items:center; justify-content:center; gap:6px; padding:14px; border-radius:16px;
     border:1.5px dashed var(--line); color:var(--brown-soft); font-size:13px;
@@ -518,9 +543,12 @@
 
   <!-- ============ ITINERARY ============ -->
   <section class="view" id="itinerary">
-    <div class="sec-head">
-      <h2>每日行程</h2>
-      <div class="desc">左右滑動或點日期切換，今天會自動反白</div>
+    <div class="sec-head itin-head">
+      <div>
+        <h2>每日行程</h2>
+        <div class="desc">左右滑動或點日期切換，今天會自動反白</div>
+      </div>
+      <button class="edit-toggle-btn" id="itinEditToggle">✎ 編輯行程</button>
     </div>
     <div class="day-scroller" id="dayScroller"></div>
     <div class="day-pager-wrap">
@@ -633,13 +661,6 @@
 
 </div>
 
-<div class="tabbar" id="tabbar">
-  <button class="tab-btn active" data-go="home"><span class="ico">🏠</span><span class="tab-label">首頁</span></button>
-  <button class="tab-btn" data-go="itinerary"><span class="ico">🗓️</span><span class="tab-label">行程</span></button>
-  <button class="tab-btn" data-go="map"><span class="ico">🗺️</span><span class="tab-label">地圖</span></button>
-  <button class="tab-btn" data-go="packing"><span class="ico">🧳</span><span class="tab-label">行李</span></button>
-  <button class="tab-btn" data-go="wishlist"><span class="ico">🛍️</span><span class="tab-label">清單</span></button>
-</div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <script>
@@ -776,7 +797,6 @@ const views = document.querySelectorAll('.view');
 const backBtn = document.getElementById('backBtn');
 const topTitle = document.getElementById('topTitle');
 const topSub = document.getElementById('topSub');
-const tabBtns = document.querySelectorAll('.tab-btn');
 
 const TITLES = {
   home:['清邁放鬆之旅 Chill','2026.09.19 – 09.26'],
@@ -795,7 +815,6 @@ function goTo(id){
   backBtn.classList.toggle('hide', id==='home');
   topTitle.textContent = TITLES[id][0];
   topSub.textContent = TITLES[id][1];
-  tabBtns.forEach(b=>b.classList.toggle('active', b.dataset.go===id));
   window.scrollTo({top:0});
   if(id==='map') setTimeout(()=>{ if(mapInst){ mapInst.invalidateSize(); } else { initMap(); } }, 50);
   if(id==='exchange' && !rateLoaded) loadRates();
@@ -860,15 +879,42 @@ document.querySelectorAll('.flight-pill').forEach(btn=>{
 });
 
 /* =========================================================
-   Itinerary render + auto highlight today
+   Itinerary render + auto highlight today + 新增/編輯行程
    ========================================================= */
 function todayStr(){
   const n = new Date();
   return n.getFullYear()+'-'+String(n.getMonth()+1).padStart(2,'0')+'-'+String(n.getDate()).padStart(2,'0');
 }
 
+const ITINERARY_KEY = 'cnx_itinerary_v1';
+function loadItinerary(){
+  try{
+    const raw = localStorage.getItem(ITINERARY_KEY);
+    if(raw) return JSON.parse(raw);
+  }catch(e){}
+  const init = JSON.parse(JSON.stringify(DAYS));
+  try{ localStorage.setItem(ITINERARY_KEY, JSON.stringify(init)); }catch(e){}
+  return init;
+}
+function saveItinerary(){
+  try{ localStorage.setItem(ITINERARY_KEY, JSON.stringify(itineraryState)); return true; }
+  catch(e){ return false; }
+}
+
+let itineraryState = loadItinerary();
+let itinEditMode = false;
+let itinFirstRender = true;
 let activeDayIndex = 0;
 let dayTrackEl = null;
+
+function nextDateStr(dateStr){
+  const d = new Date(dateStr + 'T00:00:00');
+  d.setDate(d.getDate() + 1);
+  return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+}
+function dowOf(dateStr){
+  return ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][new Date(dateStr+'T00:00:00').getDay()];
+}
 
 function renderItinerary(){
   const scroller = document.getElementById('dayScroller');
@@ -879,19 +925,22 @@ function renderItinerary(){
 
   const track = document.createElement('div');
   track.className = 'day-pager-track';
-  track.id = 'dayPagerTrack';
   dayTrackEl = track;
 
-  let todayIdx = DAYS.findIndex(d=>d.d===today);
-  activeDayIndex = todayIdx >= 0 ? todayIdx : 0;
+  if(itinFirstRender){
+    const todayIdx = itineraryState.findIndex(d=>d.d===today);
+    activeDayIndex = todayIdx >= 0 ? todayIdx : 0;
+    itinFirstRender = false;
+  }
+  activeDayIndex = Math.max(0, Math.min(itineraryState.length - 1, activeDayIndex));
 
-  DAYS.forEach((day, idx)=>{
+  itineraryState.forEach((day, idx)=>{
     const isToday = day.d === today;
     const dnum = idx+1;
 
     const chip = document.createElement('div');
     chip.className = 'day-chip' + (isToday?' today':'');
-    chip.innerHTML = `<div class="d english-title">Day${dnum}</div><div>${day.d.slice(5).replace('-','/')}</div>`;
+    chip.innerHTML = `<div class="d english-title">Day${dnum}</div><div>${(day.d||'').slice(5).replace('-','/')}</div>`;
     chip.addEventListener('click', ()=> setActiveDay(idx));
     scroller.appendChild(chip);
 
@@ -902,50 +951,153 @@ function renderItinerary(){
     block.className = 'day-block' + (isToday ? ' is-today' : '');
 
     let itemsHtml = '';
-    day.items.forEach(it=>{
-      const icon = TYPE_ICON[it.ty] || '•';
-      let optsHtml = '';
-      if(it.options){
-        optsHtml = `<div class="opt-row">${it.options.map(o=>`<span class="opt-chip">${o}</span>`).join('')}</div>`;
-      }
-      const flightAttr = it.flightKey ? `data-flight="${it.flightKey}"` : '';
-      itemsHtml += `
-        <div class="titem ${it.ty==='flight'?'flight':''}" ${flightAttr}>
-          <div class="titem-card">
-            <div class="titem-time">${icon} ${it.t}</div>
-            <div class="titem-title">${it.title}</div>
-            ${it.desc?`<div class="titem-desc">${it.desc}</div>`:''}
-            ${optsHtml}
-          </div>
-        </div>`;
-    });
+    if(itinEditMode){
+      day.items.forEach((it, ii)=>{
+        const optsVal = it.options ? it.options.join('、') : '';
+        itemsHtml += `
+          <div class="titem-edit" data-day="${idx}" data-item="${ii}">
+            <div class="titem-edit-row">
+              <input class="time-input it-time" value="${(it.t||'').replace(/"/g,'&quot;')}" placeholder="時間">
+              <select class="ty-select it-ty">
+                ${Object.keys(TYPE_ICON).map(k=>`<option value="${k}" ${k===it.ty?'selected':''}>${TYPE_ICON[k]} ${k}</option>`).join('')}
+              </select>
+              <button class="titem-del-btn it-del">✕</button>
+            </div>
+            <input class="it-title" value="${(it.title||'').replace(/"/g,'&quot;')}" placeholder="行程標題">
+            <textarea class="it-desc" placeholder="說明（選填）">${it.desc||''}</textarea>
+            <input class="it-opts" value="${optsVal.replace(/"/g,'&quot;')}" placeholder="擇一選項，用「、」分隔（選填）">
+          </div>`;
+      });
+    } else {
+      day.items.forEach(it=>{
+        const icon = TYPE_ICON[it.ty] || '•';
+        let optsHtml = '';
+        if(it.options && it.options.length){
+          optsHtml = `<div class="opt-row">${it.options.map(o=>`<span class="opt-chip">${o}</span>`).join('')}</div>`;
+        }
+        const flightAttr = it.flightKey ? `data-flight="${it.flightKey}"` : '';
+        itemsHtml += `
+          <div class="titem ${it.ty==='flight'?'flight':''}" ${flightAttr}>
+            <div class="titem-card">
+              <div class="titem-time">${icon} ${it.t}</div>
+              <div class="titem-title">${it.title}</div>
+              ${it.desc?`<div class="titem-desc">${it.desc}</div>`:''}
+              ${optsHtml}
+            </div>
+          </div>`;
+      });
+    }
+
+    const headHtml = itinEditMode
+      ? `<div class="day-title">
+           <div class="day-badge">${dnum}</div>
+           <input class="day-label-edit it-day-label" data-day="${idx}" value="${(day.label||'').replace(/"/g,'&quot;')}" placeholder="這天的標題">
+           <button class="day-del-btn it-day-del" data-day="${idx}">刪除此天</button>
+         </div>`
+      : `<div class="day-title">
+           <div class="day-badge">${dnum}</div>
+           <div>
+             <div class="day-heading">${day.label} <span class="date">· ${(day.d||'').slice(5).replace('-','/')} (${day.dow||dowOf(day.d)})</span></div>
+           </div>
+           ${day.stay?'<div class="stay-tag">🏨 住宿</div>':''}
+         </div>`;
 
     block.innerHTML = `
-      <div class="day-title">
-        <div class="day-badge">${dnum}</div>
-        <div>
-          <div class="day-heading">${day.label} <span class="date">· ${day.d.slice(5).replace('-','/')} (${day.dow})</span></div>
-        </div>
-        ${day.stay?'<div class="stay-tag">🏨 住宿</div>':''}
+      ${headHtml}
+      <div class="timeline" style="${itinEditMode?'padding-left:0;':''}">
+        ${itinEditMode ? `<div style="display:flex;flex-direction:column;gap:8px;">${itemsHtml}</div>` : itemsHtml}
       </div>
-      <div class="timeline">${itemsHtml}</div>
+      ${itinEditMode ? `<button class="add-item-btn it-add-item" data-day="${idx}">＋ 新增一項行程</button>` : ''}
     `;
+    if(itinEditMode) block.querySelector('.timeline').style.setProperty('padding-left','0');
     panel.appendChild(block);
     track.appendChild(panel);
   });
 
   pager.appendChild(track);
 
-  // 綁定航班卡片點擊 → 開啟航班詳情
+  if(itinEditMode){
+    const addDayChip = document.createElement('button');
+    addDayChip.className = 'day-chip';
+    addDayChip.style.color = 'var(--primary-dark)';
+    addDayChip.innerHTML = `<div style="font-size:18px;line-height:1;">＋</div><div style="font-size:10px;">新增一天</div>`;
+    addDayChip.addEventListener('click', ()=>{
+      const last = itineraryState[itineraryState.length - 1];
+      const newDate = last ? nextDateStr(last.d) : todayStr();
+      itineraryState.push({ d:newDate, dow:dowOf(newDate), label:'新的一天', stay:false, items:[] });
+      activeDayIndex = itineraryState.length - 1;
+      saveItinerary(); renderItinerary();
+    });
+    scroller.appendChild(addDayChip);
+  }
+
+  // 綁定航班卡片點擊 → 開啟航班詳情（僅檢視模式）
   track.querySelectorAll('.titem.flight[data-flight]').forEach(el=>{
     el.addEventListener('click', ()=> openFlightModal(el.dataset.flight));
   });
 
+  if(itinEditMode) bindItineraryEditEvents(track);
+
   setActiveDay(activeDayIndex, true);
 }
 
+function bindItineraryEditEvents(track){
+  track.querySelectorAll('.it-day-label').forEach(inp=>{
+    inp.addEventListener('input', (e)=>{
+      itineraryState[+inp.dataset.day].label = e.target.value; saveItinerary();
+    });
+  });
+  track.querySelectorAll('.it-day-del').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const di = +btn.dataset.day;
+      if(itineraryState.length <= 1) return;
+      itineraryState.splice(di, 1);
+      if(activeDayIndex >= itineraryState.length) activeDayIndex = itineraryState.length - 1;
+      saveItinerary(); renderItinerary();
+    });
+  });
+  track.querySelectorAll('.it-add-item').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const di = +btn.dataset.day;
+      itineraryState[di].items.push({t:'', ty:'note', title:'新行程項目', desc:'', options:null});
+      saveItinerary(); renderItinerary();
+    });
+  });
+  track.querySelectorAll('.titem-edit').forEach(row=>{
+    const di = +row.dataset.day, ii = +row.dataset.item;
+    row.querySelector('.it-time').addEventListener('input', (e)=>{
+      itineraryState[di].items[ii].t = e.target.value; saveItinerary();
+    });
+    row.querySelector('.it-ty').addEventListener('change', (e)=>{
+      itineraryState[di].items[ii].ty = e.target.value; saveItinerary();
+    });
+    row.querySelector('.it-title').addEventListener('input', (e)=>{
+      itineraryState[di].items[ii].title = e.target.value; saveItinerary();
+    });
+    row.querySelector('.it-desc').addEventListener('input', (e)=>{
+      itineraryState[di].items[ii].desc = e.target.value; saveItinerary();
+    });
+    row.querySelector('.it-opts').addEventListener('input', (e)=>{
+      const v = e.target.value.trim();
+      itineraryState[di].items[ii].options = v ? v.split(/、|,/).map(s=>s.trim()).filter(Boolean) : null;
+      saveItinerary();
+    });
+    row.querySelector('.it-del').addEventListener('click', ()=>{
+      itineraryState[di].items.splice(ii, 1);
+      saveItinerary(); renderItinerary();
+    });
+  });
+}
+
+document.getElementById('itinEditToggle').addEventListener('click', function(){
+  itinEditMode = !itinEditMode;
+  this.classList.toggle('on', itinEditMode);
+  this.textContent = itinEditMode ? '✓ 完成編輯' : '✎ 編輯行程';
+  renderItinerary();
+});
+
 function setActiveDay(idx, skipScrollChip){
-  idx = Math.max(0, Math.min(DAYS.length - 1, idx));
+  idx = Math.max(0, Math.min(itineraryState.length - 1, idx));
   activeDayIndex = idx;
   if(dayTrackEl) dayTrackEl.style.transform = `translateX(-${idx * 100}%)`;
 
@@ -957,7 +1109,7 @@ function setActiveDay(idx, skipScrollChip){
     if(activeChip) activeChip.scrollIntoView({behavior:'smooth', inline:'center', block:'nearest'});
   }
   document.getElementById('dayPrev').disabled = idx === 0;
-  document.getElementById('dayNext').disabled = idx === DAYS.length - 1;
+  document.getElementById('dayNext').disabled = idx === itineraryState.length - 1;
 }
 
 document.getElementById('dayPrev').addEventListener('click', ()=> setActiveDay(activeDayIndex - 1));
@@ -1154,7 +1306,10 @@ function loadDocs(){
   localStorage.setItem(DOCS_KEY, JSON.stringify(DOCS_DEFAULT));
   return JSON.parse(JSON.stringify(DOCS_DEFAULT));
 }
-function saveDocs(arr){ try{ localStorage.setItem(DOCS_KEY, JSON.stringify(arr)); }catch(e){ /* 可能已超過儲存上限 */ } }
+function saveDocs(arr){
+  try{ localStorage.setItem(DOCS_KEY, JSON.stringify(arr)); return true; }
+  catch(e){ return false; /* 可能已超過瀏覽器儲存空間上限 */ }
+}
 
 let docsState = loadDocs();
 
@@ -1189,10 +1344,14 @@ function renderDocs(){
       </div>
       <textarea class="doc-content" placeholder="輸入內容…">${doc.content || ''}</textarea>
       <div class="doc-img-wrap">${doc.img ? `<img src="${doc.img}" alt="${doc.title}">` : ''}</div>
+      ${doc.pdfData ? `<a class="doc-pdf-chip" href="${doc.pdfData}" target="_blank" rel="noopener">📄 ${doc.pdfName || 'PDF 檔案'}　查看 →</a>` : ''}
       <div class="doc-img-actions">
         <label class="doc-img-btn">📷 ${doc.img?'更換照片':'新增照片'}<input type="file" accept="image/*" style="display:none" class="doc-file-input"></label>
         ${doc.img?'<button class="doc-img-btn rm-img">移除照片</button>':''}
+        <label class="doc-img-btn">📄 ${doc.pdfData?'更換 PDF':'上傳 PDF'}<input type="file" accept="application/pdf" style="display:none" class="doc-pdf-input"></label>
+        ${doc.pdfData?'<button class="doc-img-btn rm-pdf">移除 PDF</button>':''}
       </div>
+      <div class="doc-warn" style="display:none;"></div>
     `;
     card.querySelector('.doc-title').addEventListener('input', (e)=>{
       docsState[i].title = e.target.value; saveDocs(docsState);
@@ -1207,20 +1366,56 @@ function renderDocs(){
       const file = e.target.files[0];
       if(!file) return;
       resizeImageFile(file, 900, (dataUrl)=>{
-        docsState[i].img = dataUrl; saveDocs(docsState); renderDocs();
+        const prev = docsState[i].img;
+        docsState[i].img = dataUrl;
+        if(saveDocs(docsState)){ renderDocs(); }
+        else{
+          docsState[i].img = prev;
+          showDocWarn(card, '儲存失敗，這張照片可能太大，建議換一張較小的圖片。');
+        }
       });
     });
     const rmBtn = card.querySelector('.rm-img');
     if(rmBtn) rmBtn.addEventListener('click', ()=>{
       docsState[i].img = null; saveDocs(docsState); renderDocs();
     });
+    card.querySelector('.doc-pdf-input').addEventListener('change', (e)=>{
+      const file = e.target.files[0];
+      if(!file) return;
+      if(file.type !== 'application/pdf'){
+        showDocWarn(card, '請選擇 PDF 檔案。');
+        return;
+      }
+      const reader = new FileReader();
+      reader.onload = (ev)=>{
+        const prevData = docsState[i].pdfData, prevName = docsState[i].pdfName;
+        docsState[i].pdfData = ev.target.result;
+        docsState[i].pdfName = file.name;
+        if(saveDocs(docsState)){ renderDocs(); }
+        else{
+          docsState[i].pdfData = prevData; docsState[i].pdfName = prevName;
+          showDocWarn(card, '儲存失敗，這份 PDF 可能太大（瀏覽器儲存空間有上限），建議改用較小的檔案。');
+        }
+      };
+      reader.readAsDataURL(file);
+    });
+    const rmPdf = card.querySelector('.rm-pdf');
+    if(rmPdf) rmPdf.addEventListener('click', ()=>{
+      docsState[i].pdfData = null; docsState[i].pdfName = null; saveDocs(docsState); renderDocs();
+    });
     wrap.appendChild(card);
   });
 }
 renderDocs();
 
+function showDocWarn(cardEl, msg){
+  const warn = cardEl.querySelector('.doc-warn');
+  warn.textContent = '⚠️ ' + msg;
+  warn.style.display = 'block';
+}
+
 document.getElementById('docAddBtn').addEventListener('click', ()=>{
-  docsState.push({ title:'新文件', content:'', img:null });
+  docsState.push({ title:'新文件', content:'', img:null, pdfData:null, pdfName:null });
   saveDocs(docsState);
   renderDocs();
 });
@@ -1305,7 +1500,7 @@ async function loadWeather(){
     const res = await fetch(url);
     const data = await res.json();
     loading.style.display = 'none';
-    const tripDates = new Set(DAYS.map(d=>d.d));
+    const tripDates = new Set(itineraryState.map(d=>d.d));
     let matchCount = 0;
     row.innerHTML = data.daily.time.map((date, i)=>{
       const isTrip = tripDates.has(date);
