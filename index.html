@@ -45,7 +45,7 @@
     --radius: 18px;
   }
   *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
-  html,body{margin:0;padding:0;}
+  html,body{margin:0;padding:0; overflow-x:hidden; max-width:100%;}
   body{
     background:
       radial-gradient(1200px 600px at 100% -10%, rgba(116,139,114,.10), transparent 60%),
@@ -84,33 +84,31 @@
     background:linear-gradient(var(--sand) 70%, rgba(242,236,221,0));
     backdrop-filter:blur(2px);
   }
-  .topbar .back{
-    width:36px;height:36px;border-radius:50%;
-    background:var(--panel); box-shadow:var(--shadow);
-    display:flex;align-items:center;justify-content:center;
-    font-size:16px; flex:0 0 auto;
-    transition:transform .15s ease;
-  }
-  .topbar .back:active{ transform:scale(.9); }
-  .topbar .back.hide{ visibility:hidden; }
   .topbar .title{ font-weight:700; font-size:17px; letter-spacing:.02em; }
   .topbar .sub{ font-size:11px; color:var(--brown-soft); margin-top:1px; }
+  .home-masthead-eyebrow{
+    font-family:"Cormorant Garamond",serif; font-style:italic; font-size:12.5px;
+    color:var(--brown-soft); letter-spacing:.03em; margin-bottom:1px;
+  }
+  .home-masthead-main{
+    font-family:"Noto Serif TC","Noto Sans TC",serif; font-weight:700; font-size:19px;
+    color:var(--primary-dark); line-height:1.2;
+  }
 
-  section.view{ display:none; padding:4px 16px 20px; animation:fadeIn .35s ease; }
+  section.view{ display:none; padding:12px 16px 20px; animation:fadeIn .35s ease; }
   section.view.active{ display:block; }
   @keyframes fadeIn{ from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);} }
 
-  /* ---------- HOME (single screen menu) ---------- */
-  #home.active{ display:flex; flex-direction:column; padding-top:0; }
+  /* ---------- Persistent hero + tabs ---------- */
   .hero{
     position:relative;
     background:var(--brown);
     color:var(--sand);
     border-radius:22px;
     padding:18px 18px 16px;
+    margin:14px 16px 14px;
     box-shadow:var(--shadow);
     overflow:hidden;
-    flex:0 0 auto;
   }
   .hero::before{
     content:'';
@@ -124,13 +122,9 @@
     position:absolute; right:-8px; bottom:-10px; width:62%; height:auto;
     opacity:.24; pointer-events:none; z-index:0;
   }
-  .hero-row, .stub{ z-index:1; }
-  .hero-row{ display:flex; justify-content:space-between; align-items:flex-start; position:relative; }
-  .hero-eyebrow{ font-size:11px; opacity:.75; letter-spacing:.14em; }
-  .hero-title{ font-size:19px; font-weight:700; margin-top:2px; color:var(--background); }
   .stub{
     position:relative; margin-top:12px; padding-top:12px;
-    display:flex; align-items:center; justify-content:space-between;
+    display:flex; align-items:center; justify-content:center;
   }
   .stub::before{
     content:''; position:absolute; top:0; left:-18px; right:-18px; height:0;
@@ -144,17 +138,12 @@
   .countdown .num{ font-size:26px; font-weight:900; line-height:1; }
   .countdown .lab{ font-size:10px; opacity:.7; margin-top:2px; }
   .countdown .cell{ text-align:center; min-width:34px; }
-  .plane-track{ position:relative; flex:1; margin:0 14px; height:2px; background:rgba(242,236,221,.25); }
+  .plane-track{ position:relative; flex:0 0 90px; margin:0 14px; height:2px; background:rgba(242,236,221,.25); }
   .plane-track span{
     position:absolute; top:-9px; font-size:14px;
     animation:fly 3.2s ease-in-out infinite;
   }
   @keyframes fly{ 0%{left:0%;} 50%{left:88%;} 100%{left:0%;} }
-  .flight-mini{
-    font-size:11px; opacity:.9; text-align:right; color:var(--sand); line-height:1.3;
-    padding:2px 4px; border-radius:8px;
-  }
-  .flight-mini:active{ opacity:.65; }
   .flight-pills{ display:flex; gap:8px; margin-top:12px; position:relative; z-index:1; }
   .flight-pill{
     flex:1; background:rgba(242,236,221,.10); border:1px solid rgba(242,236,221,.28); color:var(--sand);
@@ -165,7 +154,7 @@
 
   .home-tabs{
     display:flex; gap:10px; overflow-x:auto; -webkit-overflow-scrolling:touch;
-    padding:10px 2px 10px; margin-top:-4px; flex:0 0 auto;
+    padding:10px 16px;
     scrollbar-width:none;
     position:sticky; top:56px; z-index:25;
     background:var(--background);
@@ -179,14 +168,16 @@
     box-shadow:0 2px 6px rgba(38,61,53,.07);
     transition:transform .15s ease, background .15s ease;
   }
-  .home-tab:active{ transform:scale(.93); background:var(--sage-soft); }
+  .home-tab:active{ transform:scale(.93); }
+  .home-tab.active{ background:var(--primary); border-color:var(--primary); }
+  .home-tab.active .lab, .home-tab.active .cap{ color:#FFFDF8; }
   .home-tab .ico{ font-size:21px; }
   .home-tab .lab{ font-size:11.5px; font-weight:500; color:var(--text); white-space:nowrap; }
   .home-tab .cap{ font-size:9px; color:var(--brown-soft); white-space:nowrap; }
 
   .home-foot{
     display:flex; justify-content:space-between; align-items:center;
-    margin-top:2px; font-size:11px; color:var(--brown-soft); flex:0 0 auto;
+    margin:2px 16px 4px; font-size:11px; color:var(--brown-soft);
   }
 
 
@@ -313,7 +304,7 @@
   /* ---------- Lists (packing / wishlist) ---------- */
   .list-add{ display:flex; gap:8px; margin-bottom:10px; }
   .list-add input{
-    flex:1; padding:10px 12px; border-radius:12px; border:1px solid var(--line); background:var(--panel);
+    flex:1; min-width:0; padding:10px 12px; border-radius:12px; border:1px solid var(--line); background:var(--panel);
     font-size:13px; color:var(--brown); font-family:inherit;
   }
   .list-add input:focus{ outline:2px solid var(--sage); outline-offset:1px; }
@@ -343,7 +334,7 @@
   }
   .doc-card-head{ display:flex; align-items:center; gap:8px; }
   .doc-card-head input.doc-title{
-    flex:1; font-family:"Noto Serif TC","Noto Sans TC",serif; font-weight:700; font-size:14px; color:var(--primary-dark);
+    flex:1; min-width:0; font-family:"Noto Serif TC","Noto Sans TC",serif; font-weight:700; font-size:14px; color:var(--primary-dark);
     border:none; background:transparent; color:var(--brown); padding:2px 0;
   }
   .doc-card-head input.doc-title:focus{ outline:none; border-bottom:1px dashed var(--line); }
@@ -419,8 +410,8 @@
   .rate-big{ font-size:26px; font-weight:700; }
   .rate-sub{ font-size:11.5px; color:var(--brown-soft); margin-top:2px; }
   .conv-row{ display:flex; align-items:center; gap:8px; margin-top:12px; }
-  .conv-row input{ flex:1; padding:10px; border-radius:10px; border:1px solid var(--line); font-size:14px; font-family:inherit; background:#fff; }
-  .conv-row .cur{ font-size:12px; color:var(--brown-soft); width:38px; text-align:center; }
+  .conv-row input{ flex:1; min-width:0; padding:10px; border-radius:10px; border:1px solid var(--line); font-size:14px; font-family:inherit; background:#fff; }
+  .conv-row .cur{ font-size:12px; color:var(--brown-soft); width:38px; flex:0 0 auto; text-align:center; }
   .swap-btn{ font-size:15px; background:var(--sand-deep); border-radius:50%; width:30px; height:30px; }
 
   .weather-row{ display:flex; overflow-x:auto; gap:8px; padding-bottom:4px; scrollbar-width:none; }
@@ -511,91 +502,83 @@
 <div id="app">
 
   <div class="topbar">
-    <button class="back hide" id="backBtn" aria-label="返回首頁">←</button>
     <div>
-      <div class="title" id="topTitle">清邁放鬆之旅 Chill</div>
-      <div class="sub" id="topSub">2026.09.19 – 09.26</div>
+      <div class="title" id="topTitle">
+        <div class="home-masthead-eyebrow english-title">Trip · Chiang Mai · Thailand</div>
+        <div class="home-masthead-main">2026 泰國<br>清邁Chill</div>
+      </div>
+      <div class="sub" id="topSub" style="display:none;">2026.09.19 – 09.26</div>
     </div>
   </div>
 
-  <!-- ============ HOME ============ -->
-  <section class="view active" id="home">
-    <div class="hero">
-      <svg class="hero-temple" viewBox="0 0 300 180" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="var(--gold)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-        <line x1="6" y1="170" x2="294" y2="170"/>
-        <path d="M40 170 L40 140 M70 170 L70 140 M30 140 Q55 102 80 140 Z"/>
-        <path d="M23 140 L87 140 M18 149 Q55 127 92 149"/>
-        <path d="M23 140 Q13 127 8 131"/>
-        <path d="M87 140 Q97 127 102 131"/>
-        <path d="M150 170 L150 122 M132 122 L168 122 M141 122 L141 96 M159 122 L159 96 M136 96 L164 96 M146 96 L146 60 M154 96 L154 60 M147 60 L153 60 M150 60 L150 28"/>
-        <circle cx="150" cy="24" r="4"/>
-        <path d="M108 140 Q150 88 192 140"/>
-        <path d="M102 149 Q150 104 198 149"/>
-        <path d="M96 158 Q150 118 204 158"/>
-        <path d="M220 170 L220 140 M250 170 L250 140 M210 140 Q235 102 260 140 Z"/>
-        <path d="M203 140 L267 140 M198 149 Q235 127 272 149"/>
-        <path d="M203 140 Q193 127 188 131"/>
-        <path d="M267 140 Q277 127 282 131"/>
-      </svg>
-      <div class="hero-row">
-        <div>
-          <div class="hero-eyebrow english-title">TPE → CNX · CHILL</div>
-          <div class="hero-title">泰國清邁渡假 🌿</div>
-        </div>
-        <div style="text-align:right; font-size:11px; opacity:.8;">
-          Chia Yi · Jhen<br>住宿 1 間
-        </div>
+  <!-- ============ PERSISTENT HERO + TABS (always visible) ============ -->
+  <div class="hero">
+    <svg class="hero-temple" viewBox="0 0 300 180" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="var(--gold)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <line x1="6" y1="170" x2="294" y2="170"/>
+      <path d="M40 170 L40 140 M70 170 L70 140 M30 140 Q55 102 80 140 Z"/>
+      <path d="M23 140 L87 140 M18 149 Q55 127 92 149"/>
+      <path d="M23 140 Q13 127 8 131"/>
+      <path d="M87 140 Q97 127 102 131"/>
+      <path d="M150 170 L150 122 M132 122 L168 122 M141 122 L141 96 M159 122 L159 96 M136 96 L164 96 M146 96 L146 60 M154 96 L154 60 M147 60 L153 60 M150 60 L150 28"/>
+      <circle cx="150" cy="24" r="4"/>
+      <path d="M108 140 Q150 88 192 140"/>
+      <path d="M102 149 Q150 104 198 149"/>
+      <path d="M96 158 Q150 118 204 158"/>
+      <path d="M220 170 L220 140 M250 170 L250 140 M210 140 Q235 102 260 140 Z"/>
+      <path d="M203 140 L267 140 M198 149 Q235 127 272 149"/>
+      <path d="M203 140 Q193 127 188 131"/>
+      <path d="M267 140 Q277 127 282 131"/>
+    </svg>
+    <div class="stub">
+      <div class="countdown" id="countdownBox">
+        <div class="cell"><div class="num">--</div><div class="lab">天</div></div>
+        <div class="cell"><div class="num">--</div><div class="lab">時</div></div>
+        <div class="cell"><div class="num">--</div><div class="lab">分</div></div>
       </div>
-      <div class="stub">
-        <div class="countdown" id="countdownBox">
-          <div class="cell"><div class="num">--</div><div class="lab">天</div></div>
-          <div class="cell"><div class="num">--</div><div class="lab">時</div></div>
-          <div class="cell"><div class="num">--</div><div class="lab">分</div></div>
-        </div>
-        <div class="plane-track"><span>✈️</span></div>
-        <button class="flight-mini" id="heroFlightMini">JX751<br>09.19 13:05</button>
-      </div>
-      <div class="flight-pills">
-        <button class="flight-pill" data-flight="JX751">🛫 去程 JX751</button>
-        <button class="flight-pill" data-flight="CI0852">🛬 回程 CI0852</button>
-      </div>
+      <div class="plane-track"><span>✈️</span></div>
     </div>
+    <div class="flight-pills">
+      <button class="flight-pill" data-flight="JX751">🛫 去程 JX751</button>
+      <button class="flight-pill" data-flight="CI0852">🛬 回程 CI0852</button>
+    </div>
+  </div>
 
-    <div class="home-tabs" id="homeTabs">
-      <button class="home-tab" data-go="itinerary">
-        <span class="ico">🗓️</span><span class="lab">每日行程</span><span class="cap">Day1–8</span>
-      </button>
-      <button class="home-tab" data-go="map">
-        <span class="ico">🗺️</span><span class="lab">地圖</span><span class="cap">景點導航</span>
-      </button>
-      <button class="home-tab" data-go="packing">
-        <span class="ico">🧳</span><span class="lab">行李清單</span><span class="cap" id="packingCap">0/0</span>
-      </button>
-      <button class="home-tab" data-go="wishlist">
-        <span class="ico">🛍️</span><span class="lab">願望清單</span><span class="cap" id="wishCap">必買/想去</span>
-      </button>
-      <button class="home-tab" data-go="docs">
-        <span class="ico">📁</span><span class="lab">重要文件</span><span class="cap">護照/保險</span>
-      </button>
-      <button class="home-tab" data-go="tips">
-        <span class="ico">📌</span><span class="lab">實用提醒</span><span class="cap">穿著/交通</span>
-      </button>
-      <button class="home-tab" data-go="exchange">
-        <span class="ico">💱</span><span class="lab">匯率換算</span><span class="cap">THB⇄TWD</span>
-      </button>
-      <button class="home-tab" data-go="weather">
-        <span class="ico">☀️</span><span class="lab">清邁天氣</span><span class="cap">即時預報</span>
-      </button>
-    </div>
+  <div class="home-tabs" id="homeTabs">
+    <button class="home-tab" data-go="itinerary">
+      <span class="ico">🗓️</span><span class="lab">每日行程</span><span class="cap">Day1–8</span>
+    </button>
+    <button class="home-tab" data-go="map">
+      <span class="ico">🗺️</span><span class="lab">地圖</span><span class="cap">景點導航</span>
+    </button>
+    <button class="home-tab" data-go="packing">
+      <span class="ico">🧳</span><span class="lab">行李清單</span><span class="cap" id="packingCap">0/0</span>
+    </button>
+    <button class="home-tab" data-go="wishlist">
+      <span class="ico">🛍️</span><span class="lab">願望清單</span><span class="cap" id="wishCap">必買/想去</span>
+    </button>
+    <button class="home-tab" data-go="docs">
+      <span class="ico">📁</span><span class="lab">重要文件</span><span class="cap">護照/保險</span>
+    </button>
+    <button class="home-tab" data-go="tips">
+      <span class="ico">📌</span><span class="lab">實用提醒</span><span class="cap">穿著/交通</span>
+    </button>
+    <button class="home-tab" data-go="exchange">
+      <span class="ico">💱</span><span class="lab">匯率換算</span><span class="cap">THB⇄TWD</span>
+    </button>
+    <button class="home-tab" data-go="weather">
+      <span class="ico">☀️</span><span class="lab">清邁天氣</span><span class="cap">即時預報</span>
+    </button>
+  </div>
 
-    <div class="home-foot">
-      <span id="homeFootNote">出發前每天都可以來看看喔 🍃</span>
-      <span style="font-size:10px; opacity:.6;">左右滑動看更多 ›</span>
-    </div>
-  </section>
+  <div class="home-foot">
+    <span id="homeFootNote">出發前每天都可以來看看喔 🍃</span>
+    <span style="font-size:10px; opacity:.6;">左右滑動看更多 ›</span>
+  </div>
+
+  <!-- ============ CONTENT SECTIONS（頁籤下方直接切換，不跳頁） ============ -->
 
   <!-- ============ ITINERARY ============ -->
-  <section class="view" id="itinerary">
+  <section class="view active" id="itinerary">
     <div class="sec-head itin-head">
       <div>
         <h2>每日行程</h2>
@@ -852,31 +835,32 @@ const PLACES = [
 ];
 
 /* =========================================================
-   Navigation
+   Navigation（頁籤永遠釘在頂部，點選後內容直接展開在下方）
    ========================================================= */
 const views = document.querySelectorAll('.view');
-const backBtn = document.getElementById('backBtn');
-const topTitle = document.getElementById('topTitle');
-const topSub = document.getElementById('topSub');
+const homeTabBtns = document.querySelectorAll('.home-tab');
 
-const TITLES = {
-  home:['清邁放鬆之旅 Chill','2026.09.19 – 09.26'],
-  itinerary:['每日行程','Day 1 – Day 8'],
-  map:['地圖導航','景點 · 市集 · 餐廳'],
-  packing:['行李清單','出發前打勾勾'],
-  wishlist:['願望清單','必買 / 必去'],
-  docs:['重要文件','僅存本機，不會上傳'],
-  tips:['實用小提醒','出發前必看'],
-  exchange:['匯率換算','THB ⇄ TWD'],
-  weather:['清邁天氣','Open-Meteo']
+const SECTION_LABEL = {
+  itinerary:'每日行程',
+  map:'地圖導航',
+  packing:'行李清單',
+  wishlist:'願望清單',
+  docs:'重要文件',
+  tips:'實用小提醒',
+  exchange:'匯率換算',
+  weather:'清邁天氣'
 };
 
-function goTo(id){
+function goTo(id, skipScroll){
   views.forEach(v=>v.classList.toggle('active', v.id===id));
-  backBtn.classList.toggle('hide', id==='home');
-  topTitle.textContent = TITLES[id][0];
-  topSub.textContent = TITLES[id][1];
-  window.scrollTo({top:0});
+  homeTabBtns.forEach(b=>b.classList.toggle('active', b.dataset.go===id));
+  if(!skipScroll){
+    const target = document.getElementById(id);
+    if(target){
+      const y = target.getBoundingClientRect().top + window.scrollY - 150;
+      window.scrollTo({top:y, behavior:'smooth'});
+    }
+  }
   if(id==='map') setTimeout(()=>{ if(mapInst){ mapInst.invalidateSize(); } else { initMap(); } }, 50);
   if(id==='exchange' && !rateLoaded) loadRates();
   if(id==='weather' && !weatherLoaded) loadWeather();
@@ -885,7 +869,8 @@ function goTo(id){
 document.querySelectorAll('[data-go]').forEach(el=>{
   el.addEventListener('click', ()=>goTo(el.dataset.go));
 });
-backBtn.addEventListener('click', ()=>goTo('home'));
+// 預設顯示「每日行程」，並讓對應頁籤呈現選中狀態（不做初始捲動）
+goTo('itinerary', true);
 
 /* =========================================================
    Countdown
@@ -901,11 +886,9 @@ function tickCountdown(){
   const now = new Date();
   const key = nextUpcomingFlightKey();
   const box = document.getElementById('countdownBox');
-  const mini = document.getElementById('heroFlightMini');
 
   if(!key){
     box.innerHTML = `<div class="cell" style="min-width:auto;"><div class="num" style="font-size:16px;">旅途愉快 🌴</div></div>`;
-    if(mini) mini.innerHTML = `已完成行程<br>歡迎回家`;
     return;
   }
 
@@ -919,22 +902,10 @@ function tickCountdown(){
     <div class="cell"><div class="num">${d}</div><div class="lab">天</div></div>
     <div class="cell"><div class="num">${h}</div><div class="lab">時</div></div>
     <div class="cell"><div class="num">${m}</div><div class="lab">分</div></div>`;
-
-  if(mini){
-    const md = target.toISOString ? '' : '';
-    const label = key === 'JX751' ? '去程' : '回程';
-    const dateStr = f.departISO.slice(5,10).replace('-','.');
-    const timeStr = f.departISO.slice(11,16);
-    mini.innerHTML = `${label} ${f.code}<br>${dateStr} ${timeStr}`;
-    mini.dataset.flight = key;
-  }
 }
 tickCountdown();
 setInterval(tickCountdown, 30000);
 
-document.getElementById('heroFlightMini').addEventListener('click', function(){
-  openFlightModal(this.dataset.flight || 'JX751');
-});
 document.querySelectorAll('.flight-pill').forEach(btn=>{
   btn.addEventListener('click', ()=> openFlightModal(btn.dataset.flight));
 });
