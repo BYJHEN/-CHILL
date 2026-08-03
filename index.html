@@ -429,20 +429,43 @@
   .conv-row .cur{ font-size:12px; color:var(--brown-soft); width:38px; flex:0 0 auto; text-align:center; }
   .swap-btn{ font-size:15px; background:var(--sand-deep); border-radius:50%; width:30px; height:30px; }
 
+  .weather-hero{
+    background:linear-gradient(150deg, color-mix(in srgb, var(--primary-dark), white 10%), var(--primary-dark));
+    color:var(--background); border-radius:24px; padding:26px 20px 22px; text-align:center;
+    box-shadow:0 14px 34px -16px rgba(38,61,53,.4); margin-bottom:6px;
+  }
+  .weather-hero-icon{ font-size:52px; line-height:1; }
+  .weather-hero-temp{ font-family:"Noto Serif TC","Noto Sans TC",serif; font-size:42px; font-weight:700; margin:6px 0 4px; }
+  .weather-hero-cond{ font-size:12.5px; color:var(--mint); margin-bottom:16px; }
+  .weather-hero-stats{ display:flex; justify-content:center; gap:40px; padding-top:14px; border-top:1px solid rgba(245,240,230,.15); }
+  .weather-hero-stat .v{ font-size:15px; font-weight:700; }
+  .weather-hero-stat .l{ font-size:10px; color:var(--mint); margin-top:2px; }
+
+  .weather-sub-head{ font-size:12px; color:var(--brown-soft); font-weight:500; margin:16px 2px 8px; }
+
   .weather-row{ display:flex; overflow-x:auto; gap:8px; padding-bottom:4px; scrollbar-width:none; }
   .weather-row::-webkit-scrollbar{ display:none; }
   .w-card{
-    flex:0 0 auto; width:74px; text-align:center; background:var(--panel); border:1px solid var(--line);
-    border-radius:14px; padding:10px 4px;
+    flex:0 0 auto; width:80px; text-align:center; background:var(--panel); border:1px solid var(--line);
+    border-radius:14px; padding:12px 6px;
   }
-  .w-card.match{ background:var(--clay-soft); border-color:color-mix(in srgb, var(--accent), var(--background) 45%); }
-  .w-date{ font-size:10.5px; color:var(--brown-soft); }
-  .w-ico{ font-size:20px; margin:4px 0; }
-  .w-temp{ font-size:12px; font-weight:500; }
-  .w-temp .lo{ color:var(--brown-soft); }
+  .w-card.match{ background:var(--sage-soft); border-color:color-mix(in srgb, var(--primary), var(--background) 40%); }
+  .w-date{ font-size:10.5px; color:var(--brown-soft); font-weight:500; }
+  .w-ico{ font-size:22px; margin:6px 0; }
+  .w-temp{ font-size:13px; font-weight:700; color:var(--primary-dark); }
+  .w-temp.lo{ font-size:11px; font-weight:500; color:var(--brown-soft); margin-top:1px; }
+  .w-pop{ font-size:10px; color:var(--river); margin-top:5px; }
+
+  .weather-note-box{
+    background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:12px 14px; margin-top:14px;
+    font-size:11.5px; color:var(--text); line-height:1.6;
+  }
+  .weather-note-box .line{ display:flex; gap:6px; align-items:flex-start; margin-bottom:6px; }
+  .weather-note-box .line:last-child{ margin-bottom:0; }
 
   .loading{ font-size:12px; color:var(--brown-soft); padding:10px 0; }
   .err{ font-size:12px; color:var(--clay); }
+  .doc-link{ color:var(--river); text-decoration:underline; text-underline-offset:2px; word-break:break-all; }
 
   /* ---------- Flight detail modal ---------- */
   .flight-modal-backdrop{
@@ -709,14 +732,15 @@
   <!-- ============ WEATHER ============ -->
   <section class="view" id="weather">
     <div class="sec-head">
-      <h2>清邁天氣</h2>
-      <div class="desc">Open-Meteo 免金鑰預報 · 行程當日會特別標示</div>
+      <h2>天氣預報</h2>
+      <div class="desc">清邁 · Open-Meteo</div>
     </div>
-    <div class="card">
-      <div class="loading" id="weatherLoading">天氣讀取中…</div>
-      <div class="weather-row" id="weatherRow"></div>
+    <div class="weather-hero" id="weatherHero">
+      <div class="loading" id="weatherLoading" style="color:var(--mint);">天氣讀取中…</div>
     </div>
-    <div class="map-note" id="weatherNote"></div>
+    <div class="weather-sub-head" id="weatherForecastLabel" style="display:none;"></div>
+    <div class="weather-row" id="weatherRow"></div>
+    <div class="weather-note-box" id="weatherNote" style="display:none;"></div>
   </section>
 
   <!-- ============ FLIGHT DETAIL MODAL ============ -->
@@ -1358,6 +1382,17 @@ setupChecklist({
    Docs (important documents) — localStorage, editable text + optional photo
    ========================================================= */
 const DOCS_KEY = 'cnx_docs_v1';
+function linkifyDocText(text){
+  const escaped = text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  return escaped.replace(/(https?:\/\/[^\s<]+)/g, (url)=>{
+    // 去掉結尾常見的標點符號，避免把句尾符號也框進連結
+    const trail = url.match(/[.,;:!?）)】」』]+$/);
+    const clean = trail ? url.slice(0, -trail[0].length) : url;
+    const rest = trail ? trail[0] : '';
+    return `<a href="${clean}" target="_blank" rel="noopener" class="doc-link">${clean}</a>${rest}`;
+  });
+}
+
 function loadDocs(){
   try{
     const raw = localStorage.getItem(DOCS_KEY);
@@ -1484,7 +1519,7 @@ function renderDocs(){
           <div class="doc-title-view">${doc.title ? doc.title.replace(/</g,'&lt;') : '未命名文件'}</div>
           <button class="doc-icon-btn edit-btn">✎ 編輯</button>
         </div>
-        <div class="doc-content-view">${doc.content ? doc.content.replace(/</g,'&lt;') : '（尚未填寫內容）'}</div>
+        <div class="doc-content-view">${doc.content ? linkifyDocText(doc.content) : '（尚未填寫內容）'}</div>
         <div class="doc-img-wrap">${doc.img ? `<button class="doc-photo-chip open-photo">🖼️ 已上傳照片　查看 →</button>` : ''}</div>
         ${doc.pdfData ? `<a class="doc-pdf-chip" href="${doc.pdfData}" target="_blank" rel="noopener">📄 ${doc.pdfName || 'PDF 檔案'}　查看 →</a>` : ''}
       `;
@@ -1655,35 +1690,73 @@ const WMO_ICON = (code)=>{
   if([95,96,99].includes(code)) return '⛈️';
   return '🌡️';
 };
+const WMO_LABEL = (code)=>{
+  if(code===0) return '晴朗';
+  if([1,2].includes(code)) return '多雲時晴';
+  if(code===3) return '陰天';
+  if([45,48].includes(code)) return '有霧';
+  if([51,53,55,56,57].includes(code)) return '毛毛雨';
+  if([61,63,65,66,67].includes(code)) return '下雨';
+  if([80,81,82].includes(code)) return '陣雨';
+  if([71,73,75,77,85,86].includes(code)) return '下雪';
+  if([95,96,99].includes(code)) return '雷雨';
+  return '天氣多變';
+};
 
 async function loadWeather(){
   weatherLoaded = true;
-  const loading = document.getElementById('weatherLoading');
+  const hero = document.getElementById('weatherHero');
+  const forecastLabel = document.getElementById('weatherForecastLabel');
   const row = document.getElementById('weatherRow');
   const note = document.getElementById('weatherNote');
   try{
-    const url = 'https://api.open-meteo.com/v1/forecast?latitude=18.7883&longitude=98.9853&daily=weathercode,temperature_2m_max,temperature_2m_min&timezone=Asia%2FBangkok&forecast_days=16';
+    const url = 'https://api.open-meteo.com/v1/forecast?latitude=18.7883&longitude=98.9853&current=temperature_2m,apparent_temperature,relative_humidity_2m,wind_speed_10m,weathercode&daily=weathercode,temperature_2m_max,temperature_2m_min,precipitation_probability_max&timezone=Asia%2FBangkok&forecast_days=16';
     const res = await fetch(url);
     const data = await res.json();
-    loading.style.display = 'none';
+    const cur = data.current;
+
+    hero.innerHTML = `
+      <div class="weather-hero-icon">${WMO_ICON(cur.weathercode)}</div>
+      <div class="weather-hero-temp">${Math.round(cur.temperature_2m)}°</div>
+      <div class="weather-hero-cond">${WMO_LABEL(cur.weathercode)} · 體感 ${Math.round(cur.apparent_temperature)}°C</div>
+      <div class="weather-hero-stats">
+        <div class="weather-hero-stat"><div class="v">${Math.round(cur.relative_humidity_2m)}%</div><div class="l">濕度</div></div>
+        <div class="weather-hero-stat"><div class="v">${cur.wind_speed_10m.toFixed(1)} km/h</div><div class="l">風速</div></div>
+      </div>
+    `;
+
     const tripDates = new Set(itineraryState.map(d=>d.d));
     let matchCount = 0;
+    const weekdayCn = ['日','一','二','三','四','五','六'];
     row.innerHTML = data.daily.time.map((date, i)=>{
       const isTrip = tripDates.has(date);
       if(isTrip) matchCount++;
       const md = date.slice(5).replace('-','/');
+      const wd = weekdayCn[new Date(date+'T00:00:00').getDay()];
+      const pop = data.daily.precipitation_probability_max ? data.daily.precipitation_probability_max[i] : null;
       return `
         <div class="w-card ${isTrip?'match':''}">
-          <div class="w-date">${md}</div>
+          <div class="w-date">${md}(${wd})</div>
           <div class="w-ico">${WMO_ICON(data.daily.weathercode[i])}</div>
-          <div class="w-temp">${Math.round(data.daily.temperature_2m_max[i])}° <span class="lo">${Math.round(data.daily.temperature_2m_min[i])}°</span></div>
+          <div class="w-temp">${Math.round(data.daily.temperature_2m_max[i])}°</div>
+          <div class="w-temp lo">${Math.round(data.daily.temperature_2m_min[i])}°</div>
+          ${pop!=null?`<div class="w-pop">💧${pop}%</div>`:''}
         </div>`;
     }).join('');
-    note.textContent = matchCount > 0
-      ? `已為你標示 ${matchCount} 天與行程重疊的預報（橘色卡片）。`
+    forecastLabel.textContent = `${data.daily.time.length} 天預報`;
+    forecastLabel.style.display = '';
+
+    const matchLine = matchCount > 0
+      ? `已為你標示 ${matchCount} 天與行程重疊的預報（綠色卡片）。`
       : `目前預報範圍尚未涵蓋行程日期（9/19–9/26），出發前 16 天內再回來看會更準確。`;
+    note.innerHTML = `
+      <div class="line">📍 <span>資料來源：Open-Meteo · 清邁（免金鑰）</span></div>
+      <div class="line">📅 <span>${matchLine}</span></div>
+      <div class="line">🌦️ <span>9 月雨季尾聲參考：白天均溫約 31–33°C、夜間約 24–26°C，午後常有短暫雷陣雨，記得攜帶雨具與備用衣物。</span></div>
+    `;
+    note.style.display = '';
   }catch(e){
-    loading.textContent = '天氣讀取失敗，請檢查網路連線後重新進入此頁。';
+    hero.innerHTML = `<div class="err" style="color:var(--highlight);">天氣讀取失敗，請檢查網路連線後重新進入此頁。</div>`;
   }
 }
 
