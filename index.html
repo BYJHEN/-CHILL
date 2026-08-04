@@ -534,6 +534,75 @@
     .home-tab .lab{ font-size:10.5px; }
     .home-tab{ min-width:70px; padding:10px 12px; }
   }
+
+  /* ---------- Export booklet button ---------- */
+  .export-btn{
+    display:block; width:100%; margin-top:16px; padding:13px; border-radius:16px;
+    background:var(--primary-dark); color:#FFFDF8; font-family:"Noto Serif TC","Noto Sans TC",serif;
+    font-weight:700; font-size:13.5px; text-align:center;
+  }
+  .export-btn:active{ opacity:.85; }
+
+  /* ---------- Printable booklet (畫面上不顯示，只在列印/存 PDF 時出現) ---------- */
+  #printBooklet{ display:none; }
+
+  @media print{
+    body *{ visibility:hidden; }
+    #printBooklet, #printBooklet *{ visibility:visible; }
+    #app{ display:none; }
+    #printBooklet{
+      display:block; position:absolute; left:0; top:0; width:100%;
+      background:var(--background); color:var(--text);
+      font-family:"Noto Sans TC",sans-serif;
+    }
+    @page{ size:A5; margin:14mm; }
+
+    .pb-cover{
+      background:linear-gradient(150deg, #90A98E, #C4AD82 65%, #DCC08F);
+      color:#FFFDF8; border-radius:14px; padding:26px 22px; margin-bottom:14px;
+      page-break-after:always;
+    }
+    .pb-eyebrow{ font-family:"Cormorant Garamond",serif; font-style:italic; font-size:12px; opacity:.9; }
+    .pb-title{ font-family:"Noto Serif TC",serif; font-weight:700; font-size:26px; line-height:1.25; margin:6px 0 10px; }
+    .pb-meta{ font-size:10.5px; opacity:.92; }
+    .pb-flights{ margin-top:70mm; font-size:9.5px; }
+    .pb-flights div{ margin-bottom:4px; }
+
+    .pb-section{ margin-bottom:16px; }
+    .pb-section h2{
+      font-family:"Noto Serif TC",serif; font-weight:700; font-size:16px; color:var(--primary-dark);
+      border-bottom:1px solid var(--line); padding-bottom:6px; margin-bottom:10px;
+    }
+    .pb-break{ page-break-before:always; padding-top:2mm; }
+
+    .pb-flight-card{
+      border:1px solid var(--line); border-radius:10px; padding:9px 12px; margin-bottom:8px; font-size:9.5px;
+    }
+    .pb-flight-card b{ color:var(--accent); }
+
+    .pb-day{ page-break-inside:avoid; margin-bottom:10px; }
+    .pb-day-head{ font-family:"Noto Serif TC",serif; font-weight:700; font-size:12.5px; color:var(--primary-dark);
+      background:var(--primary-dark); color:#FFFDF8; display:inline-block; padding:4px 10px; border-radius:8px 8px 0 0; }
+    .pb-day-date{ font-size:9px; font-weight:400; opacity:.85; margin-left:6px; }
+    .pb-item{ border:1px solid var(--line); border-left:3px solid var(--primary); border-radius:0 8px 8px 8px;
+      padding:7px 10px; margin-top:5px; font-size:9px; }
+    .pb-item.flight{ border-left-color:var(--accent); background:#F3E1D3; }
+    .pb-item .t{ color:var(--accent); font-weight:700; font-size:8.3px; }
+    .pb-item .ti{ font-weight:700; color:var(--primary-dark); font-size:9.6px; margin:1px 0; }
+    .pb-item .de{ color:var(--text); }
+
+    .pb-check-grid{ display:grid; grid-template-columns:1fr 1fr; gap:4px 14px; }
+    .pb-check{ font-size:9.3px; padding:3px 0; }
+    .pb-check .box{ display:inline-block; width:11px; }
+
+    .pb-tip{ border:1px solid var(--line); border-radius:8px; padding:7px 10px; margin-bottom:6px; font-size:9px; }
+    .pb-tip b{ color:var(--primary-dark); }
+
+    .pb-doc{ border:1px solid var(--line); border-radius:8px; padding:7px 10px; margin-bottom:6px; font-size:9px; }
+    .pb-doc b{ color:var(--primary-dark); display:block; margin-bottom:2px; }
+
+    .pb-closing{ text-align:center; margin-top:20px; font-size:9px; color:var(--brown-soft); }
+  }
 </style>
 </head>
 <body>
@@ -618,6 +687,9 @@
     </button>
     <button class="home-tab" data-go="weather">
       <span class="ico">☀️</span><span class="lab">清邁天氣</span><span class="cap">即時預報</span>
+    </button>
+    <button class="home-tab" data-go="export">
+      <span class="ico">📖</span><span class="lab">匯出手冊</span><span class="cap">PDF小冊子</span>
     </button>
   </div>
 
@@ -743,6 +815,25 @@
     <div class="weather-note-box" id="weatherNote" style="display:none;"></div>
   </section>
 
+  <!-- ============ EXPORT BOOKLET ============ -->
+  <section class="view" id="export">
+    <div class="sec-head">
+      <h2>匯出小冊子</h2>
+      <div class="desc">把目前 App 裡的內容做成一份可列印 / 存成 PDF 的小手冊</div>
+    </div>
+    <div class="card">
+      <div style="font-size:12.5px; color:var(--text); line-height:1.7;">
+        會包含：每日行程、行李清單（含打勾狀態）、願望清單、實用小提醒、重要文件的文字內容。<br>
+        <b style="color:var(--primary-dark);">會用你目前實際的內容</b>（包含你自己新增、編輯、勾選過的東西），不是預設範本。
+      </div>
+      <button class="export-btn" id="exportBookletBtn">📖 產生手冊並列印 / 存成 PDF</button>
+      <div style="font-size:10.5px; color:var(--brown-soft); margin-top:10px; line-height:1.6;">
+        按下按鈕後會打開瀏覽器的「列印」畫面，將目的地選擇<b>「儲存為 PDF」</b>即可下載。<br>
+        照片附件因為版面因素不會印出，PDF 內建的文字連結、文件標題與內容都會保留。
+      </div>
+    </div>
+  </section>
+
   <!-- ============ FLIGHT DETAIL MODAL ============ -->
   <div class="flight-modal-backdrop" id="flightModalBackdrop">
     <div class="flight-modal" id="flightModal"></div>
@@ -756,6 +847,9 @@
   </div>
 
 </div>
+
+<!-- ============ PRINTABLE BOOKLET（只在列印/存 PDF 時顯示，故意放在 #app 外面） ============ -->
+<div id="printBooklet"></div>
 
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
@@ -1873,6 +1967,100 @@ function closeImageLightbox(){
 document.getElementById('imgLightboxClose').addEventListener('click', closeImageLightbox);
 document.getElementById('imgLightboxBackdrop').addEventListener('click', (e)=>{
   if(e.target.id === 'imgLightboxBackdrop') closeImageLightbox();
+});
+
+/* =========================================================
+   匯出手冊（讀取目前 App 的即時資料，組成可列印版面，交給瀏覽器「列印/存為 PDF」）
+   ========================================================= */
+function escHtml(s){
+  return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function buildPrintBooklet(){
+  const pack = (()=>{ try{ return JSON.parse(localStorage.getItem('cnx_packing_v1')) || []; }catch(e){ return []; } })();
+  const wish = (()=>{ try{ return JSON.parse(localStorage.getItem('cnx_wishlist_v1')) || []; }catch(e){ return []; } })();
+
+  let html = '';
+
+  // 封面
+  html += `
+    <div class="pb-cover">
+      <div class="pb-eyebrow">Trip · Chiang Mai · Thailand</div>
+      <div class="pb-title">2026 泰國<br>清邁Chill</div>
+      <div class="pb-meta">${itineraryState[0] ? itineraryState[0].d : ''} – ${itineraryState[itineraryState.length-1] ? itineraryState[itineraryState.length-1].d : ''}　|　Chia Yi ・ Jhen</div>
+      <div class="pb-flights">
+        <div>◆ 去程 ${FLIGHTS.JX751.code}　${FLIGHTS.JX751.departISO.slice(5,10).replace('-','.')} ${FLIGHTS.JX751.departISO.slice(11,16)}</div>
+        <div>◆ 回程 ${FLIGHTS.CI0852.code}　${FLIGHTS.CI0852.departISO.slice(5,10).replace('-','.')} ${FLIGHTS.CI0852.departISO.slice(11,16)}</div>
+      </div>
+    </div>`;
+
+  // 航班資訊
+  html += `<div class="pb-section"><h2>航班資訊</h2>`;
+  [FLIGHTS.JX751, FLIGHTS.CI0852].forEach(f=>{
+    html += `
+      <div class="pb-flight-card">
+        <b>${f.from.code===('TPE')?'去程':'回程'}</b>　${escHtml(f.airline)}　${f.code}<br>
+        ${f.from.city} → ${f.to.city}　|　起飛 ${f.departISO.slice(5,10).replace('-','.')} ${f.departISO.slice(11,16)}　→　抵達 ${f.arriveISO.slice(11,16)}
+      </div>`;
+  });
+  html += `</div>`;
+
+  // 每日行程
+  html += `<div class="pb-section pb-break"><h2>每日行程</h2>`;
+  itineraryState.forEach((day, idx)=>{
+    html += `<div class="pb-day">
+      <div class="pb-day-head">Day ${idx+1}　${escHtml(day.label)}<span class="pb-day-date">${escHtml(day.d)}</span></div>`;
+    day.items.forEach(it=>{
+      const isFlight = it.ty === 'flight';
+      html += `<div class="pb-item ${isFlight?'flight':''}">
+        <div class="t">${escHtml(it.t)}</div>
+        <div class="ti">${escHtml(it.title)}</div>
+        ${it.desc?`<div class="de">${escHtml(it.desc)}</div>`:''}
+        ${it.options?`<div class="de">（擇一）${it.options.map(escHtml).join('／')}</div>`:''}
+      </div>`;
+    });
+    html += `</div>`;
+  });
+  html += `</div>`;
+
+  // 行李清單
+  html += `<div class="pb-section pb-break"><h2>行李清單</h2><div class="pb-check-grid">`;
+  pack.forEach(p=>{
+    html += `<div class="pb-check"><span class="box">${p.done?'☑':'☐'}</span>${escHtml(p.txt)}</div>`;
+  });
+  html += `</div></div>`;
+
+  // 願望清單
+  html += `<div class="pb-section"><h2>願望清單</h2><div class="pb-check-grid">`;
+  wish.forEach(w=>{
+    html += `<div class="pb-check"><span class="box">${w.done?'☑':'☐'}</span>${escHtml(w.txt)}</div>`;
+  });
+  html += `</div></div>`;
+
+  // 實用提醒
+  html += `<div class="pb-section pb-break"><h2>實用小提醒</h2>`;
+  tipsState.forEach(t=>{
+    html += `<div class="pb-tip"><b>${escHtml(t.h||'')}</b>${escHtml(t.t||'')}</div>`;
+  });
+  html += `</div>`;
+
+  // 重要文件（僅文字內容，照片/PDF 附件不列印）
+  if(docsState.length){
+    html += `<div class="pb-section pb-break"><h2>重要文件</h2>`;
+    docsState.forEach(d=>{
+      html += `<div class="pb-doc"><b>${escHtml(d.title||'未命名文件')}</b>${escHtml(d.content||'')}</div>`;
+    });
+    html += `</div>`;
+  }
+
+  html += `<div class="pb-closing">祝旅途愉快 ❀ Have a chill trip in Chiang Mai.</div>`;
+
+  document.getElementById('printBooklet').innerHTML = html;
+}
+
+document.getElementById('exportBookletBtn').addEventListener('click', ()=>{
+  buildPrintBooklet();
+  setTimeout(()=> window.print(), 80);
 });
 
 /* =========================================================
