@@ -554,13 +554,16 @@
       display:block; position:absolute; left:0; top:0; width:100%;
       background:var(--background); color:var(--text);
       font-family:"Noto Sans TC",sans-serif;
+      -webkit-print-color-adjust:exact; print-color-adjust:exact; color-adjust:exact;
     }
+    #printBooklet *{ -webkit-print-color-adjust:exact; print-color-adjust:exact; color-adjust:exact; }
     @page{ size:A4; margin:20mm; }
 
     .pb-cover{
       background:linear-gradient(150deg, #90A98E, #C4AD82 65%, #DCC08F);
       color:#FFFDF8; border-radius:14px; padding:26px 22px; margin-bottom:14px;
-      page-break-after:always;
+      page-break-after:always; break-after:page;
+      page-break-inside:avoid; break-inside:avoid;
     }
     .pb-eyebrow{ font-family:"Cormorant Garamond",serif; font-style:italic; font-size:12px; opacity:.9; }
     .pb-title{ font-family:"Noto Serif TC",serif; font-weight:700; font-size:26px; line-height:1.25; margin:6px 0 10px; }
@@ -572,20 +575,24 @@
     .pb-section h2{
       font-family:"Noto Serif TC",serif; font-weight:700; font-size:16px; color:var(--primary-dark);
       border-bottom:1px solid var(--line); padding-bottom:6px; margin-bottom:10px;
+      page-break-after:avoid; break-after:avoid;
     }
-    .pb-break{ page-break-before:always; padding-top:2mm; }
+    .pb-break{ page-break-before:always; break-before:page; padding-top:2mm; }
 
     .pb-flight-card{
       border:1px solid var(--line); border-radius:10px; padding:9px 12px; margin-bottom:8px; font-size:9.5px;
+      page-break-inside:avoid; break-inside:avoid;
     }
     .pb-flight-card b{ color:var(--accent); }
 
-    .pb-day{ page-break-inside:avoid; margin-bottom:10px; }
+    .pb-day{ page-break-inside:avoid; break-inside:avoid; margin-bottom:10px; }
     .pb-day-head{ font-family:"Noto Serif TC",serif; font-weight:700; font-size:12.5px; color:var(--primary-dark);
-      background:var(--primary-dark); color:#FFFDF8; display:inline-block; padding:4px 10px; border-radius:8px 8px 0 0; }
+      background:var(--primary-dark); color:#FFFDF8; display:inline-block; padding:4px 10px; border-radius:8px 8px 0 0;
+      page-break-after:avoid; break-after:avoid;
+    }
     .pb-day-date{ font-size:9px; font-weight:400; opacity:.85; margin-left:6px; }
     .pb-item{ border:1px solid var(--line); border-left:3px solid var(--primary); border-radius:0 8px 8px 8px;
-      padding:7px 10px; margin-top:5px; font-size:9px; }
+      padding:7px 10px; margin-top:5px; font-size:9px; page-break-inside:avoid; break-inside:avoid; }
     .pb-item.flight{ border-left-color:var(--accent); background:#F3E1D3; }
     .pb-item .t{ color:var(--accent); font-weight:700; font-size:8.3px; }
     .pb-item .ti{ font-weight:700; color:var(--primary-dark); font-size:9.6px; margin:1px 0; }
@@ -595,10 +602,12 @@
     .pb-check{ font-size:9.3px; padding:3px 0; }
     .pb-check .box{ display:inline-block; width:11px; }
 
-    .pb-tip{ border:1px solid var(--line); border-radius:8px; padding:7px 10px; margin-bottom:6px; font-size:9px; }
+    .pb-tip{ border:1px solid var(--line); border-radius:8px; padding:7px 10px; margin-bottom:6px; font-size:9px;
+      page-break-inside:avoid; break-inside:avoid; }
     .pb-tip b{ color:var(--primary-dark); }
 
-    .pb-doc{ border:1px solid var(--line); border-radius:8px; padding:7px 10px; margin-bottom:6px; font-size:9px; }
+    .pb-doc{ border:1px solid var(--line); border-radius:8px; padding:7px 10px; margin-bottom:6px; font-size:9px;
+      page-break-inside:avoid; break-inside:avoid; }
     .pb-doc b{ color:var(--primary-dark); display:block; margin-bottom:2px; }
 
     .pb-closing{ text-align:center; margin-top:20px; font-size:9px; color:var(--brown-soft); }
