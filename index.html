@@ -2006,7 +2006,7 @@ function buildPrintBooklet(){
   html += `</div>`;
 
   // 每日行程
-  html += `<div class="pb-section pb-break"><h2>每日行程</h2>`;
+  html += `<div class="pb-section"><h2>每日行程</h2>`;
   itineraryState.forEach((day, idx)=>{
     html += `<div class="pb-day">
       <div class="pb-day-head">Day ${idx+1}　${escHtml(day.label)}<span class="pb-day-date">${escHtml(day.d)}</span></div>`;
