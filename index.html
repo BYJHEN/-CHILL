@@ -174,7 +174,9 @@
     position:sticky; top:56px; z-index:25;
     background:var(--background);
     box-shadow:0 8px 10px -8px rgba(38,61,53,.10);
+    cursor:grab; user-select:none;
   }
+  .home-tabs.dragging{ cursor:grabbing; }
   .home-tabs::-webkit-scrollbar{ display:none; }
   .home-tab{
     flex:0 0 auto; display:flex; flex-direction:column; align-items:center; gap:5px;
@@ -233,7 +235,8 @@
   .day-del-btn{ font-size:11px; color:var(--clay); padding:4px 8px; border-radius:14px; background:var(--clay-soft); white-space:nowrap; }
 
   /* ---------- Itinerary: tabs + swipeable pager ---------- */
-  .day-scroller{ display:flex; gap:8px; overflow-x:auto; padding:4px 0 10px; scrollbar-width:none; }
+  .day-scroller{ display:flex; gap:8px; overflow-x:auto; padding:4px 0 10px; scrollbar-width:none; cursor:grab; user-select:none; }
+  .day-scroller.dragging{ cursor:grabbing; }
   .day-scroller::-webkit-scrollbar{ display:none; }
   .day-chip{
     flex:0 0 auto; padding:8px 12px; border-radius:14px; background:var(--panel);
@@ -458,7 +461,8 @@
 
   .weather-sub-head{ font-size:12px; color:var(--brown-soft); font-weight:500; margin:16px 2px 8px; }
 
-  .weather-row{ display:flex; overflow-x:auto; gap:8px; padding-bottom:4px; scrollbar-width:none; }
+  .weather-row{ display:flex; overflow-x:auto; gap:8px; padding-bottom:4px; scrollbar-width:none; cursor:grab; user-select:none; }
+  .weather-row.dragging{ cursor:grabbing; }
   .weather-row::-webkit-scrollbar{ display:none; }
   .w-card{
     flex:0 0 auto; width:80px; text-align:center; background:var(--panel); border:1px solid var(--line);
@@ -1068,6 +1072,41 @@ document.querySelectorAll('[data-go]').forEach(el=>{
 });
 // 預設顯示「每日行程」，並讓對應頁籤呈現選中狀態（不做初始捲動）
 goTo('itinerary', true);
+
+// 讓橫向滑動的列表（頁籤、日期、天氣卡）在電腦上也能用滑鼠滾輪 / 拖曳左右移動
+function enableHorizontalScroll(el){
+  if(!el) return;
+  // 滑鼠滾輪（含觸控板上下滾動）→ 轉成橫向捲動
+  el.addEventListener('wheel', (e)=>{
+    if(Math.abs(e.deltaY) > Math.abs(e.deltaX)){
+      el.scrollLeft += e.deltaY;
+      e.preventDefault();
+    }
+  }, {passive:false});
+
+  // 按住滑鼠拖曳橫向捲動
+  let isDown = false, startX = 0, startScroll = 0, moved = false;
+  el.addEventListener('mousedown', (e)=>{
+    isDown = true; moved = false;
+    startX = e.pageX; startScroll = el.scrollLeft;
+    el.classList.add('dragging');
+  });
+  window.addEventListener('mouseup', ()=>{
+    isDown = false;
+    el.classList.remove('dragging');
+  });
+  window.addEventListener('mousemove', (e)=>{
+    if(!isDown) return;
+    const dx = e.pageX - startX;
+    if(Math.abs(dx) > 3) moved = true;
+    el.scrollLeft = startScroll - dx;
+  });
+  // 拖曳之後避免誤觸點擊（例如拖到一半剛好放開在某個按鈕上）
+  el.addEventListener('click', (e)=>{
+    if(moved){ e.stopPropagation(); e.preventDefault(); moved = false; }
+  }, true);
+}
+['homeTabs','dayScroller','weatherRow'].forEach(id=> enableHorizontalScroll(document.getElementById(id)));
 
 /* =========================================================
    Countdown
