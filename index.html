@@ -1103,12 +1103,39 @@ function dowOf(dateStr){
   return ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][new Date(dateStr+'T00:00:00').getDay()];
 }
 
+function timeSortKey(t){
+  if(!t) return 9999;
+  const m = t.match(/(\d{1,2}):(\d{2})/);
+  if(m) return parseInt(m[1],10)*60 + parseInt(m[2],10);
+  const keywordMap = [
+    [/睡到自然醒|一早|清早/, 6*60],
+    [/早午餐/, 9*60+30],
+    [/早餐/, 7*60+30],
+    [/上午|白天/, 11*60],
+    [/中午|午餐/, 12*60],
+    [/下午/, 14*60+30],
+    [/傍晚/, 17*60],
+    [/晚上|晚餐/, 18*60+30],
+    [/視情況/, 21*60],
+  ];
+  for(const [re, val] of keywordMap){
+    if(re.test(t)) return val;
+  }
+  return 9999; // 抓不到時間就排最後
+}
+
 function renderItinerary(){
   const scroller = document.getElementById('dayScroller');
   const pager = document.getElementById('dayPager');
   const today = todayStr();
   scroller.innerHTML = '';
   pager.innerHTML = '';
+
+  // 每天的行程依時間排序（抓不到時間的關鍵字如「白天」「晚上」也會排到合理位置）
+  itineraryState.forEach(day=>{
+    day.items.sort((a,b)=> timeSortKey(a.t) - timeSortKey(b.t));
+  });
+  saveItinerary();
 
   const track = document.createElement('div');
   track.className = 'day-pager-track';
