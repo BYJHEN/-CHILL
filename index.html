@@ -294,21 +294,10 @@
   .titem-time{ font-size:11px; color:var(--brown-soft); font-weight:500; }
   .titem-title{ font-size:13.5px; font-weight:500; margin:2px 0 3px; }
   .titem-desc{ font-size:12px; color:var(--grey); }
-  .titem-map-link{
-    display:inline-flex; align-items:center; gap:3px; margin-top:6px; font-size:10.5px; font-weight:500;
-    color:var(--river); background:var(--river-soft); padding:4px 9px; border-radius:20px;
-  }
-  .titem-map-link:active{ opacity:.7; }
   .opt-row{ display:flex; flex-wrap:wrap; gap:6px; margin-top:6px; }
   .opt-chip{ font-size:10.5px; background:var(--river-soft); color:var(--river); padding:3px 8px; border-radius:10px; }
 
   /* ---------- Map ---------- */
-  .itin-map-head{ margin:22px 0 10px; padding-top:14px; border-top:1px solid var(--line); }
-  .itin-map-head h3{
-    font-family:"Noto Serif TC","Noto Sans TC",serif; font-weight:700; font-size:14.5px; color:var(--primary-dark);
-    margin:0 0 2px;
-  }
-  .itin-map-head .desc{ font-size:11px; color:var(--brown-soft); }
   #leaflet-map{ height:340px; border-radius:16px; overflow:hidden; box-shadow:var(--shadow); border:1px solid var(--line); }
   .layer-toggles{ display:flex; flex-wrap:wrap; gap:8px; margin:10px 0; }
   .layer-chip{
@@ -421,15 +410,14 @@
     border:none; background:transparent; width:100%; padding:2px 0; margin-bottom:2px;
   }
   .tip-t-input{
-    font-size:12.5px; color:var(--text); border:1px solid var(--line); background:#fff; width:100%;
-    resize:vertical; min-height:44px; padding:7px 8px; border-radius:8px; font-family:inherit; margin-top:2px;
+    font-size:12.5px; color:var(--text); border:none; background:transparent; width:100%;
+    resize:vertical; min-height:36px; padding:2px 0; font-family:inherit;
   }
-  .tip-t-input:focus{ outline:2px solid var(--sage); outline-offset:1px; }
   .tip-h-view{
     font-family:"Noto Serif TC","Noto Sans TC",serif; font-weight:700; font-size:13px; color:var(--primary-dark);
     margin-bottom:2px;
   }
-  .tip-t-view{ font-size:12.5px; color:var(--text); line-height:1.5; white-space:pre-wrap; }
+  .tip-t-view{ font-size:12.5px; color:var(--text); line-height:1.5; }
   .tip-del-btn{ font-size:11.5px; color:var(--clay); background:var(--clay-soft); padding:6px 11px; border-radius:20px; }
 
   /* ---------- Exchange / weather ---------- */
@@ -566,16 +554,13 @@
       display:block; position:absolute; left:0; top:0; width:100%;
       background:var(--background); color:var(--text);
       font-family:"Noto Sans TC",sans-serif;
-      -webkit-print-color-adjust:exact; print-color-adjust:exact; color-adjust:exact;
     }
-    #printBooklet *{ -webkit-print-color-adjust:exact; print-color-adjust:exact; color-adjust:exact; }
-    @page{ size:A4; margin:20mm; }
+    @page{ size:A5; margin:14mm; }
 
     .pb-cover{
       background:linear-gradient(150deg, #90A98E, #C4AD82 65%, #DCC08F);
       color:#FFFDF8; border-radius:14px; padding:26px 22px; margin-bottom:14px;
-      page-break-after:always; break-after:page;
-      page-break-inside:avoid; break-inside:avoid;
+      page-break-after:always;
     }
     .pb-eyebrow{ font-family:"Cormorant Garamond",serif; font-style:italic; font-size:12px; opacity:.9; }
     .pb-title{ font-family:"Noto Serif TC",serif; font-weight:700; font-size:26px; line-height:1.25; margin:6px 0 10px; }
@@ -587,24 +572,20 @@
     .pb-section h2{
       font-family:"Noto Serif TC",serif; font-weight:700; font-size:16px; color:var(--primary-dark);
       border-bottom:1px solid var(--line); padding-bottom:6px; margin-bottom:10px;
-      page-break-after:avoid; break-after:avoid;
     }
-    .pb-break{ page-break-before:always; break-before:page; padding-top:2mm; }
+    .pb-break{ page-break-before:always; padding-top:2mm; }
 
     .pb-flight-card{
       border:1px solid var(--line); border-radius:10px; padding:9px 12px; margin-bottom:8px; font-size:9.5px;
-      page-break-inside:avoid; break-inside:avoid;
     }
     .pb-flight-card b{ color:var(--accent); }
 
-    .pb-day{ page-break-inside:avoid; break-inside:avoid; margin-bottom:10px; }
+    .pb-day{ page-break-inside:avoid; margin-bottom:10px; }
     .pb-day-head{ font-family:"Noto Serif TC",serif; font-weight:700; font-size:12.5px; color:var(--primary-dark);
-      background:var(--primary-dark); color:#FFFDF8; display:inline-block; padding:4px 10px; border-radius:8px 8px 0 0;
-      page-break-after:avoid; break-after:avoid;
-    }
+      background:var(--primary-dark); color:#FFFDF8; display:inline-block; padding:4px 10px; border-radius:8px 8px 0 0; }
     .pb-day-date{ font-size:9px; font-weight:400; opacity:.85; margin-left:6px; }
     .pb-item{ border:1px solid var(--line); border-left:3px solid var(--primary); border-radius:0 8px 8px 8px;
-      padding:7px 10px; margin-top:5px; font-size:9px; page-break-inside:avoid; break-inside:avoid; }
+      padding:7px 10px; margin-top:5px; font-size:9px; }
     .pb-item.flight{ border-left-color:var(--accent); background:#F3E1D3; }
     .pb-item .t{ color:var(--accent); font-weight:700; font-size:8.3px; }
     .pb-item .ti{ font-weight:700; color:var(--primary-dark); font-size:9.6px; margin:1px 0; }
@@ -614,12 +595,10 @@
     .pb-check{ font-size:9.3px; padding:3px 0; }
     .pb-check .box{ display:inline-block; width:11px; }
 
-    .pb-tip{ border:1px solid var(--line); border-radius:8px; padding:7px 10px; margin-bottom:6px; font-size:9px;
-      page-break-inside:avoid; break-inside:avoid; }
+    .pb-tip{ border:1px solid var(--line); border-radius:8px; padding:7px 10px; margin-bottom:6px; font-size:9px; }
     .pb-tip b{ color:var(--primary-dark); }
 
-    .pb-doc{ border:1px solid var(--line); border-radius:8px; padding:7px 10px; margin-bottom:6px; font-size:9px;
-      page-break-inside:avoid; break-inside:avoid; }
+    .pb-doc{ border:1px solid var(--line); border-radius:8px; padding:7px 10px; margin-bottom:6px; font-size:9px; }
     .pb-doc b{ color:var(--primary-dark); display:block; margin-bottom:2px; }
 
     .pb-closing{ text-align:center; margin-top:20px; font-size:9px; color:var(--brown-soft); }
@@ -685,26 +664,29 @@
   </div>
 
   <div class="home-tabs" id="homeTabs">
-    <button class="home-tab" data-go="tips">
-      <span class="ico">📌</span><span class="lab">實用提醒</span><span class="cap">穿著/交通</span>
-    </button>
     <button class="home-tab" data-go="itinerary">
       <span class="ico">🗓️</span><span class="lab">每日行程</span><span class="cap">Day1–8</span>
     </button>
+    <button class="home-tab" data-go="map">
+      <span class="ico">🗺️</span><span class="lab">地圖</span><span class="cap">景點導航</span>
+    </button>
+    <button class="home-tab" data-go="packing">
+      <span class="ico">🧳</span><span class="lab">行李清單</span><span class="cap" id="packingCap">0/0</span>
+    </button>
     <button class="home-tab" data-go="wishlist">
       <span class="ico">🛍️</span><span class="lab">願望清單</span><span class="cap" id="wishCap">必買/想去</span>
+    </button>
+    <button class="home-tab" data-go="docs">
+      <span class="ico">📁</span><span class="lab">重要文件</span><span class="cap">護照/保險</span>
+    </button>
+    <button class="home-tab" data-go="tips">
+      <span class="ico">📌</span><span class="lab">實用提醒</span><span class="cap">穿著/交通</span>
     </button>
     <button class="home-tab" data-go="exchange">
       <span class="ico">💱</span><span class="lab">匯率換算</span><span class="cap">THB⇄TWD</span>
     </button>
     <button class="home-tab" data-go="weather">
       <span class="ico">☀️</span><span class="lab">清邁天氣</span><span class="cap">即時預報</span>
-    </button>
-    <button class="home-tab" data-go="packing">
-      <span class="ico">🧳</span><span class="lab">行李清單</span><span class="cap" id="packingCap">0/0</span>
-    </button>
-    <button class="home-tab" data-go="docs">
-      <span class="ico">📁</span><span class="lab">重要文件</span><span class="cap">護照/保險</span>
     </button>
     <button class="home-tab" data-go="export">
       <span class="ico">📖</span><span class="lab">匯出手冊</span><span class="cap">PDF小冊子</span>
@@ -733,15 +715,17 @@
       <div class="day-pager" id="dayPager"></div>
       <button class="pager-arrow right" id="dayNext" aria-label="後一天">›</button>
     </div>
+  </section>
 
-    <!-- ---- 地圖（併入行程頁，隨目前選到的那一天特別標註地點） ---- -->
-    <div class="itin-map-head">
-      <h3>📍 <span id="mapDayLabel">Day1</span> 地圖</h3>
-      <div class="desc">金色框是這一天的地點，其他天的地點也都還在，只是比較淡</div>
+  <!-- ============ MAP ============ -->
+  <section class="view" id="map">
+    <div class="sec-head">
+      <h2>地圖導航</h2>
+      <div class="desc">依圖層篩選，點「導航」直接開 Google Maps</div>
     </div>
     <div class="layer-toggles" id="layerToggles"></div>
     <div id="leaflet-map"></div>
-    <div class="map-note">📍 座標為地標概略位置，實際店家請以 Google Maps 搜尋店名核對。點行程項目上的「📍 查看地圖」也會直接跳到對應地點。</div>
+    <div class="map-note">📍 座標為地標概略位置，實際店家請以 Google Maps 搜尋店名核對。</div>
     <div class="pin-list" id="pinList"></div>
   </section>
 
@@ -877,36 +861,32 @@ const TRIP_START = '2026-09-19';
 const TRIP_END   = '2026-09-26';
 const DEPARTURE_DT = new Date('2026-09-19T13:05:00+08:00'); // JX751 桃園起飛(台灣時間)
 
-// 地圖狀態先在這裡宣告，因為首次渲染行程時（在地圖區塊程式碼執行前）就會用到
-let mapInst = null;
-let currentMapDay = 1;
-
 const DAYS = [
   {
     d:'2026-09-19', dow:'Sat', label:'抵達清邁', stay:true,
     items:[
-      {t:'13:05–16:05', ty:'flight', title:'✈️ 星宇航空 JX751', desc:'桃園(TPE) → 清邁(CNX)', flightKey:'JX751', place:'airport'},
-      {t:'約 17:00', ty:'transport', title:'接機', desc:'預計傍晚 5 點左右抵達飯店 / 接機。', place:'hotel'},
-      {t:'晚上', ty:'food', title:'寧曼路 One Nimman · White Market', desc:'逛街、吃晚餐、按摩放鬆。', place:'nimman'}
+      {t:'13:05–16:05', ty:'flight', title:'✈️ 星宇航空 JX751', desc:'桃園(TPE) → 清邁(CNX)', flightKey:'JX751'},
+      {t:'約 17:00', ty:'transport', title:'接機', desc:'預計傍晚 5 點左右抵達飯店 / 接機。'},
+      {t:'晚上', ty:'food', title:'寧曼路 One Nimman · White Market', desc:'逛街、吃晚餐、按摩放鬆。'}
     ]
   },
   {
     d:'2026-09-20', dow:'Sun', label:'市集慢遊日', stay:true,
     items:[
       {t:'睡到自然醒', ty:'note', title:'悠閒早晨', desc:'今天不趕行程，睡飽再出發。'},
-      {t:'07:00–14:00', ty:'market', title:'真心市集 Jing Jai Market', desc:'含 Pop-up Store、Srikram.17。', place:'jingjai'},
-      {t:'09:00–14:00', ty:'market', title:'雨林市集', desc:'綠意環繞的市集，適合悠閒逛逛。', place:'rainforest'},
+      {t:'07:00–14:00', ty:'market', title:'真心市集 Jing Jai Market', desc:'含 Pop-up Store、Srikram.17。'},
+      {t:'09:00–14:00', ty:'market', title:'雨林市集', desc:'綠意環繞的市集，適合悠閒逛逛。'},
       {t:'早午餐', ty:'food', title:'早午餐（擇一）', desc:'', options:['Early Owls（近真心市集，步行15分）','Meena Rice Based Cuisine（雨林市集尾端）']},
       {t:'下午', ty:'food', title:'咖啡時光（擇一）', desc:'', options:['The Baristro at Ping River（真心市集車程15分）','For the Good Times（雨林市集車程9分）','Monday Attack（想去的店，18:00關門）']},
-      {t:'晚上', ty:'market', title:'清邁週日夜市', desc:'塔佩門 → 帕辛寺 一路逛過去。', place:'thapae'}
+      {t:'晚上', ty:'market', title:'清邁週日夜市', desc:'塔佩門 → 帕辛寺 一路逛過去。'}
     ]
   },
   {
     d:'2026-09-21', dow:'Mon', label:'寧曼路・復古市集', stay:true,
     items:[
-      {t:'白天', ty:'shop', title:'寧曼路', desc:'逛街、買睡衣。', place:'nimman'},
+      {t:'白天', ty:'shop', title:'寧曼路', desc:'逛街、買睡衣。'},
       {t:'白天', ty:'market', title:'復古市集', desc:'挖寶小物、老件雜貨。'},
-      {t:'午餐', ty:'food', title:'Blackitch Artisan Kitchen', desc:'在地食材創意料理，建議提前預約。', place:'blackitch'}
+      {t:'午餐', ty:'food', title:'Blackitch Artisan Kitchen', desc:'在地食材創意料理，建議提前預約。'}
     ]
   },
   {
@@ -920,7 +900,7 @@ const DAYS = [
   {
     d:'2026-09-23', dow:'Wed', label:'白廟 + Akha 農場一日遊', stay:true,
     items:[
-      {t:'07:30–18:30', ty:'attraction', title:'Klook 一日行程', desc:'白廟（Wat Rong Khun）＋ Akha 農場，含接送。', place:'whitetemple'}
+      {t:'07:30–18:30', ty:'attraction', title:'Klook 一日行程', desc:'白廟（Wat Rong Khun）＋ Akha 農場，含接送。'}
     ]
   },
   {
@@ -933,16 +913,16 @@ const DAYS = [
   {
     d:'2026-09-25', dow:'Fri', label:'伴手禮採購日', stay:true,
     items:[
-      {t:'白天', ty:'market', title:'瓦洛洛市集', desc:'買伴手禮的最後衝刺。', place:'warorot'},
-      {t:'白天', ty:'shop', title:'Big C', desc:'超市系伴手禮、零食採購。', place:'bigc'}
+      {t:'白天', ty:'market', title:'瓦洛洛市集', desc:'買伴手禮的最後衝刺。'},
+      {t:'白天', ty:'shop', title:'Big C', desc:'超市系伴手禮、零食採購。'}
     ]
   },
   {
     d:'2026-09-26', dow:'Sat', label:'賦歸', stay:true,
     items:[
       {t:'一早', ty:'food', title:'吃頓早一點的早餐', desc:'今天要回家囉，吃飽再出發。'},
-      {t:'08:00 / 08:20', ty:'transport', title:'出發前往機場', desc:'約 8:00 出門，8:20 抵達機場（Grab 接駁），預留充足時間辦理登機。', place:'airport'},
-      {t:'14:05–18:40', ty:'flight', title:'✈️ 中華航空 CI0852', desc:'清邁(CNX) → 桃園(TPE)', flightKey:'CI0852', place:'airport'}
+      {t:'08:00 / 08:20', ty:'transport', title:'出發前往機場', desc:'約 8:00 出門，8:20 抵達機場（Grab 接駁），預留充足時間辦理登機。'},
+      {t:'14:05–18:40', ty:'flight', title:'✈️ 中華航空 CI0852', desc:'清邁(CNX) → 桃園(TPE)', flightKey:'CI0852'}
     ]
   }
 ];
@@ -986,18 +966,18 @@ const DOCS_DEFAULT = [
 ];
 
 const PLACES = [
-  {id:'airport',   name:'清邁機場 CNX', cat:'transport', emo:'✈️', lat:18.7669, lng:98.9626, days:[1,8]},
-  {id:'hotel',     name:'（假設）飯店位置', cat:'hotel', emo:'🏨', lat:18.7900, lng:98.9880, days:[1,2,3,4,5,6,7,8]},
-  {id:'thapae',    name:'塔佩門 Tha Pae Gate', cat:'attraction', emo:'🚪', lat:18.7877, lng:98.9931, days:[2]},
-  {id:'wpsingh',   name:'帕辛寺 Wat Phra Singh', cat:'attraction', emo:'🛕', lat:18.7887, lng:98.9793, days:[2]},
-  {id:'nimman',    name:'寧曼路 One Nimman', cat:'shop', emo:'🛍️', lat:18.8000, lng:98.9673, days:[1,3]},
-  {id:'jingjai',   name:'真心市集 Jing Jai Market', cat:'market', emo:'🛒', lat:18.8331, lng:98.9856, days:[2]},
-  {id:'rainforest',name:'雨林市集', cat:'market', emo:'🌿', lat:18.8300, lng:98.9800, days:[2]},
-  {id:'warorot',   name:'瓦洛洛市集 Warorot Market', cat:'market', emo:'🛒', lat:18.7906, lng:99.0011, days:[7]},
-  {id:'bigc',      name:'Big C Extra Chiangmai', cat:'shop', emo:'🏬', lat:18.7986, lng:99.0103, days:[7]},
-  {id:'blackitch', name:'Blackitch Artisan Kitchen', cat:'food', emo:'🍽️', lat:18.7959, lng:98.9673, days:[3]},
-  {id:'whitetemple',name:'白廟 Wat Rong Khun（清萊）', cat:'attraction', emo:'⛩️', lat:19.8318, lng:99.7368, days:[5]},
-  {id:'akha',      name:'Akha 農場（清萊山區，約略）', cat:'attraction', emo:'🌾', lat:19.9500, lng:99.8300, days:[5]},
+  {name:'清邁機場 CNX', cat:'transport', emo:'✈️', lat:18.7669, lng:98.9626},
+  {name:'（假設）飯店位置', cat:'hotel', emo:'🏨', lat:18.7900, lng:98.9880},
+  {name:'塔佩門 Tha Pae Gate', cat:'attraction', emo:'🚪', lat:18.7877, lng:98.9931},
+  {name:'帕辛寺 Wat Phra Singh', cat:'attraction', emo:'🛕', lat:18.7887, lng:98.9793},
+  {name:'寧曼路 One Nimman', cat:'shop', emo:'🛍️', lat:18.8000, lng:98.9673},
+  {name:'真心市集 Jing Jai Market', cat:'market', emo:'🛒', lat:18.8331, lng:98.9856},
+  {name:'雨林市集', cat:'market', emo:'🌿', lat:18.8300, lng:98.9800},
+  {name:'瓦洛洛市集 Warorot Market', cat:'market', emo:'🛒', lat:18.7906, lng:99.0011},
+  {name:'Big C Extra Chiangmai', cat:'shop', emo:'🏬', lat:18.7986, lng:99.0103},
+  {name:'Blackitch Artisan Kitchen', cat:'food', emo:'🍽️', lat:18.7959, lng:98.9673},
+  {name:'白廟 Wat Rong Khun（清萊）', cat:'attraction', emo:'⛩️', lat:19.8318, lng:99.7368},
+  {name:'Akha 農場（清萊山區，約略）', cat:'attraction', emo:'🌾', lat:19.9500, lng:99.8300},
 ];
 
 /* =========================================================
@@ -1008,6 +988,7 @@ const homeTabBtns = document.querySelectorAll('.home-tab');
 
 const SECTION_LABEL = {
   itinerary:'每日行程',
+  map:'地圖導航',
   packing:'行李清單',
   wishlist:'願望清單',
   docs:'重要文件',
@@ -1026,7 +1007,7 @@ function goTo(id, skipScroll){
       window.scrollTo({top:y, behavior:'smooth'});
     }
   }
-  if(id==='itinerary' && mapInst) setTimeout(()=> mapInst.invalidateSize(), 50);
+  if(id==='map') setTimeout(()=>{ if(mapInst){ mapInst.invalidateSize(); } else { initMap(); } }, 50);
   if(id==='exchange' && !rateLoaded) loadRates();
   if(id==='weather' && !weatherLoaded) loadWeather();
 }
@@ -1113,39 +1094,12 @@ function dowOf(dateStr){
   return ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][new Date(dateStr+'T00:00:00').getDay()];
 }
 
-function timeSortKey(t){
-  if(!t) return 9999;
-  const m = t.match(/(\d{1,2}):(\d{2})/);
-  if(m) return parseInt(m[1],10)*60 + parseInt(m[2],10);
-  const keywordMap = [
-    [/睡到自然醒|一早|清早/, 6*60],
-    [/早午餐/, 9*60+30],
-    [/早餐/, 7*60+30],
-    [/上午|白天/, 11*60],
-    [/中午|午餐/, 12*60],
-    [/下午/, 14*60+30],
-    [/傍晚/, 17*60],
-    [/晚上|晚餐/, 18*60+30],
-    [/視情況/, 21*60],
-  ];
-  for(const [re, val] of keywordMap){
-    if(re.test(t)) return val;
-  }
-  return 9999; // 抓不到時間就排最後
-}
-
 function renderItinerary(){
   const scroller = document.getElementById('dayScroller');
   const pager = document.getElementById('dayPager');
   const today = todayStr();
   scroller.innerHTML = '';
   pager.innerHTML = '';
-
-  // 每天的行程依時間排序（抓不到時間的關鍵字如「白天」「晚上」也會排到合理位置）
-  itineraryState.forEach(day=>{
-    day.items.sort((a,b)=> timeSortKey(a.t) - timeSortKey(b.t));
-  });
-  saveItinerary();
 
   const track = document.createElement('div');
   track.className = 'day-pager-track';
@@ -1200,16 +1154,13 @@ function renderItinerary(){
           optsHtml = `<div class="opt-row">${it.options.map(o=>`<span class="opt-chip">${o}</span>`).join('')}</div>`;
         }
         const flightAttr = it.flightKey ? `data-flight="${it.flightKey}"` : '';
-        const placeAttr = it.place ? `data-place="${it.place}"` : '';
-        const mapLinkHtml = it.place ? `<div class="titem-map-link" data-place="${it.place}">📍 查看地圖</div>` : '';
         itemsHtml += `
-          <div class="titem ${it.ty==='flight'?'flight':''}" ${flightAttr} ${placeAttr}>
+          <div class="titem ${it.ty==='flight'?'flight':''}" ${flightAttr}>
             <div class="titem-card">
               <div class="titem-time">${icon} ${it.t}</div>
               <div class="titem-title">${it.title}</div>
               ${it.desc?`<div class="titem-desc">${it.desc}</div>`:''}
               ${optsHtml}
-              ${mapLinkHtml}
             </div>
           </div>`;
       });
@@ -1261,14 +1212,6 @@ function renderItinerary(){
   // 綁定航班卡片點擊 → 開啟航班詳情（僅檢視模式）
   track.querySelectorAll('.titem.flight[data-flight]').forEach(el=>{
     el.addEventListener('click', ()=> openFlightModal(el.dataset.flight));
-  });
-
-  // 綁定「📍 查看地圖」→ 捲到地圖並定位到該地點
-  track.querySelectorAll('.titem-map-link[data-place]').forEach(el=>{
-    el.addEventListener('click', (e)=>{
-      e.stopPropagation();
-      focusMapOnPlace(el.dataset.place);
-    });
   });
 
   if(itinEditMode) bindItineraryEditEvents(track);
@@ -1345,9 +1288,6 @@ function setActiveDay(idx, skipScrollChip){
   }
   document.getElementById('dayPrev').disabled = idx === 0;
   document.getElementById('dayNext').disabled = idx === itineraryState.length - 1;
-
-  if(mapInst) highlightDayOnMap(idx + 1);
-  else currentMapDay = idx + 1;
 }
 
 document.getElementById('dayPrev').addEventListener('click', ()=> setActiveDay(activeDayIndex - 1));
@@ -1377,6 +1317,7 @@ renderItinerary();
 /* =========================================================
    Map (Leaflet + OSM)
    ========================================================= */
+let mapInst = null;
 const CAT_META = {
   hotel:{label:'住宿', color:'#C97D60'},
   attraction:{label:'景點', color:'#748B72'},
@@ -1387,7 +1328,6 @@ const CAT_META = {
 };
 let activeLayers = new Set(Object.keys(CAT_META));
 let layerGroups = {};
-let placeMarkers = {};   // id -> Leaflet marker
 
 function initMap(){
   mapInst = L.map('leaflet-map', {zoomControl:true}).setView([18.80, 98.99], 12);
@@ -1406,56 +1346,10 @@ function initMap(){
     const gurl = `https://www.google.com/maps/dir/?api=1&destination=${p.lat},${p.lng}`;
     marker.bindPopup(`<b>${p.emo} ${p.name}</b><br><span style="color:${meta.color}">${meta.label}</span><br><a href="${gurl}" target="_blank" rel="noopener">開啟 Google Maps 導航 →</a>`);
     marker.addTo(layerGroups[p.cat]);
-    placeMarkers[p.id] = marker;
   });
 
   renderLayerToggles();
   renderPinList();
-  highlightDayOnMap(currentMapDay);
-}
-
-// 依目前選到的那一天，把相關地點標大、加金框；其他天的地點還在，只是縮小、變淡（不刪除）
-function highlightDayOnMap(dayNum){
-  currentMapDay = dayNum;
-  const label = document.getElementById('mapDayLabel');
-  if(label) label.textContent = 'Day' + dayNum;
-  if(!mapInst) return;
-
-  const boundsPts = [];
-  PLACES.forEach(p=>{
-    const marker = placeMarkers[p.id];
-    if(!marker) return;
-    const isToday = (p.days||[]).includes(dayNum);
-    const meta = CAT_META[p.cat];
-    if(isToday){
-      marker.setStyle({radius:12, color:'#E8C77B', weight:3, fillColor:meta.color, fillOpacity:1});
-      marker.setZIndexOffset && marker.setZIndexOffset(1000);
-      boundsPts.push([p.lat, p.lng]);
-    } else {
-      marker.setStyle({radius:7, color:'#fff', weight:1.5, fillColor:meta.color, fillOpacity:.55});
-    }
-  });
-  if(boundsPts.length){
-    if(boundsPts.length === 1){
-      mapInst.setView(boundsPts[0], 14);
-    } else {
-      mapInst.fitBounds(boundsPts, {padding:[36,36], maxZoom:15});
-    }
-  }
-}
-
-// 點行程項目上的「📍 查看地圖」→ 捲到地圖、放大並打開該地點的資訊框
-function focusMapOnPlace(placeId){
-  const p = PLACES.find(pp=>pp.id===placeId);
-  const marker = placeMarkers[placeId];
-  if(!p || !marker || !mapInst) return;
-  const mapEl = document.getElementById('leaflet-map');
-  mapEl.scrollIntoView({behavior:'smooth', block:'center'});
-  setTimeout(()=>{
-    mapInst.invalidateSize();
-    mapInst.setView([p.lat, p.lng], 15, {animate:true});
-    marker.openPopup();
-  }, 350);
 }
 
 function renderLayerToggles(){
@@ -1496,20 +1390,6 @@ function renderPinList(){
     wrap.appendChild(card);
   });
 }
-
-function initMapWhenReady(triesLeft){
-  if(typeof L === 'undefined'){
-    if(triesLeft <= 0){
-      document.getElementById('leaflet-map').innerHTML =
-        '<div class="loading" style="padding:20px;">地圖載入失敗，請檢查網路連線後重新整理頁面。</div>';
-      return;
-    }
-    setTimeout(()=> initMapWhenReady(triesLeft - 1), 200);
-    return;
-  }
-  initMap();
-}
-initMapWhenReady(50); // 最多等 10 秒讓 Leaflet 從 CDN 載入完成
 
 /* =========================================================
    Checklists (localStorage)
@@ -2126,7 +2006,7 @@ function buildPrintBooklet(){
   html += `</div>`;
 
   // 每日行程
-  html += `<div class="pb-section"><h2>每日行程</h2>`;
+  html += `<div class="pb-section pb-break"><h2>每日行程</h2>`;
   itineraryState.forEach((day, idx)=>{
     html += `<div class="pb-day">
       <div class="pb-day-head">Day ${idx+1}　${escHtml(day.label)}<span class="pb-day-date">${escHtml(day.d)}</span></div>`;
