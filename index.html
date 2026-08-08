@@ -557,6 +557,17 @@
     font-weight:700; font-size:13.5px; text-align:center;
   }
   .export-btn:active{ opacity:.85; }
+  .export-btn.accent{ background:var(--accent); }
+
+  /* ---------- Cloud sync ---------- */
+  .sync-code-input{
+    width:100%; margin-top:10px; padding:10px 12px; border-radius:12px; border:1px solid var(--line);
+    background:#fff; font-size:13px; color:var(--text); font-family:inherit;
+  }
+  .sync-code-input:focus{ outline:2px solid var(--sage); outline-offset:1px; }
+  .sync-btn-row{ display:flex; gap:8px; margin-top:8px; }
+  .sync-btn-half{ flex:1; margin-top:0; font-size:12px; padding:11px 6px; }
+  .sync-status{ font-size:11px; color:var(--primary-dark); margin-top:8px; min-height:14px; }
 
   /* ---------- Printable booklet (畫面上不顯示，只在列印/存 PDF 時出現) ---------- */
   #printBooklet{ display:none; }
@@ -849,6 +860,24 @@
       <div style="font-size:10.5px; color:var(--brown-soft); margin-top:10px; line-height:1.6;">
         按下按鈕後會打開瀏覽器的「列印」畫面，將目的地選擇<b>「儲存為 PDF」</b>即可下載。<br>
         照片附件因為版面因素不會印出，PDF 內建的文字連結、文件標題與內容都會保留。
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:14px;">
+      <div style="font-size:12.5px; color:var(--text); line-height:1.7;">
+        ☁️ <b style="color:var(--primary-dark);">雲端同步</b><br>
+        手機和電腦輸入<b style="color:var(--primary-dark);">同一組同步碼</b>，行程、清單、文件內容就能互通。
+      </div>
+      <input type="text" id="syncCodeInput" class="sync-code-input" placeholder="設定一組同步碼（建議設複雜一點，像密碼）">
+      <button class="export-btn" id="syncSaveCodeBtn" style="margin-top:8px;">💾 儲存同步碼</button>
+      <div class="sync-btn-row">
+        <button class="export-btn sync-btn-half" id="syncPushBtn">⬆️ 上傳到雲端</button>
+        <button class="export-btn sync-btn-half accent" id="syncPullBtn">⬇️ 下載最新版本</button>
+      </div>
+      <div id="syncStatus" class="sync-status"></div>
+      <div style="font-size:10.5px; color:var(--brown-soft); margin-top:8px; line-height:1.6;">
+        開啟 App 時會自動抓一次雲端最新資料，之後每隔一段時間也會自動悄悄上傳。<br>
+        提醒：知道同步碼的人都能看到/修改這份資料，請不要用太簡單的字串，也不要分享給不相關的人。
       </div>
     </div>
   </section>
@@ -2197,6 +2226,119 @@ document.getElementById('exportBookletBtn').addEventListener('click', ()=>{
   buildPrintBooklet();
   setTimeout(()=> window.print(), 80);
 });
+
+/* =========================================================
+   雲端同步（Supabase）
+   ========================================================= */
+const SUPABASE_URL = 'https://yucsfizhnhfyucymigbu.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_wYdJRSPZ2BqP6_E6svaHhg_SbQd_RmX';
+const SYNC_TABLE = 'trip_sync';
+const SYNC_CODE_KEY = 'cnx_sync_code';
+
+function getSyncCode(){ return localStorage.getItem(SYNC_CODE_KEY) || ''; }
+function setSyncCodeStorage(code){ localStorage.setItem(SYNC_CODE_KEY, code); }
+
+function setSyncStatus(msg){
+  const el = document.getElementById('syncStatus');
+  if(el) el.textContent = msg;
+}
+function nowTimeStr(){
+  const d = new Date();
+  return String(d.getHours()).padStart(2,'0') + ':' + String(d.getMinutes()).padStart(2,'0');
+}
+
+function collectSyncData(){
+  let packing = [], wishlist = [];
+  try{ packing = JSON.parse(localStorage.getItem('cnx_packing_v1')) || []; }catch(e){}
+  try{ wishlist = JSON.parse(localStorage.getItem('cnx_wishlist_v1')) || []; }catch(e){}
+  return {
+    itinerary: itineraryState,
+    packing: packing,
+    wishlist: wishlist,
+    tips: tipsState,
+    docs: docsState,
+  };
+}
+
+async function pushToCloud(silent){
+  const code = getSyncCode();
+  if(!code) return;
+  try{
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/${SYNC_TABLE}?on_conflict=sync_code`, {
+      method:'POST',
+      headers:{
+        'apikey': SUPABASE_KEY,
+        'Authorization': 'Bearer ' + SUPABASE_KEY,
+        'Content-Type': 'application/json',
+        'Prefer': 'resolution=merge-duplicates'
+      },
+      body: JSON.stringify({ sync_code: code, data: collectSyncData(), updated_at: new Date().toISOString() })
+    });
+    if(res.ok){
+      if(!silent) setSyncStatus('✅ 已上傳到雲端　' + nowTimeStr());
+    } else if(!silent){
+      setSyncStatus('⚠️ 上傳失敗，請確認同步碼設定跟資料表是否正確。');
+    }
+  }catch(e){
+    if(!silent) setSyncStatus('⚠️ 上傳失敗，請檢查網路連線。');
+  }
+}
+
+async function pullFromCloud(){
+  const code = getSyncCode();
+  if(!code){ setSyncStatus('請先輸入並儲存同步碼。'); return; }
+  setSyncStatus('下載中…');
+  try{
+    const res = await fetch(
+      `${SUPABASE_URL}/rest/v1/${SYNC_TABLE}?sync_code=eq.${encodeURIComponent(code)}&select=data,updated_at`,
+      { headers:{ 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } }
+    );
+    if(!res.ok){ setSyncStatus('⚠️ 下載失敗，請確認同步碼設定跟資料表是否正確。'); return; }
+    const arr = await res.json();
+    if(Array.isArray(arr) && arr.length && arr[0].data){
+      applySyncData(arr[0].data);
+    } else {
+      setSyncStatus('雲端還沒有這組同步碼的資料，先按「⬆️ 上傳到雲端」建立一份。');
+    }
+  }catch(e){
+    setSyncStatus('⚠️ 下載失敗，請檢查網路連線。');
+  }
+}
+
+function applySyncData(data){
+  try{
+    if(data.itinerary) localStorage.setItem(ITINERARY_KEY, JSON.stringify(data.itinerary));
+    if(data.packing) localStorage.setItem('cnx_packing_v1', JSON.stringify(data.packing));
+    if(data.wishlist) localStorage.setItem('cnx_wishlist_v1', JSON.stringify(data.wishlist));
+    if(data.tips) localStorage.setItem(TIPS_KEY, JSON.stringify(data.tips));
+    if(data.docs) localStorage.setItem(DOCS_KEY, JSON.stringify(data.docs));
+  }catch(e){
+    setSyncStatus('⚠️ 資料寫入失敗，可能是空間不足。');
+    return;
+  }
+  setSyncStatus('✅ 已更新為雲端最新版本，畫面即將重新整理…');
+  setTimeout(()=> location.reload(), 600);
+}
+
+document.getElementById('syncSaveCodeBtn').addEventListener('click', ()=>{
+  const v = document.getElementById('syncCodeInput').value.trim();
+  if(!v){ setSyncStatus('請輸入同步碼。'); return; }
+  setSyncCodeStorage(v);
+  setSyncStatus('已儲存同步碼，可以按下面按鈕開始同步了。');
+});
+document.getElementById('syncPushBtn').addEventListener('click', ()=> pushToCloud(false));
+document.getElementById('syncPullBtn').addEventListener('click', ()=> pullFromCloud());
+
+// 開啟 App 時，如果已經有存過同步碼，自動抓一次雲端最新資料
+(function autoPullOnLoad(){
+  const code = getSyncCode();
+  const input = document.getElementById('syncCodeInput');
+  if(code && input) input.value = code;
+  if(code) pullFromCloud();
+})();
+
+// 之後每隔一段時間自動悄悄把目前資料上傳（不打斷使用者、不會跳提示）
+setInterval(()=> pushToCloud(true), 20000);
 
 /* =========================================================
    PWA: manifest 已用外部檔案引入；這裡註冊 service worker
