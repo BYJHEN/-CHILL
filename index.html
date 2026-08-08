@@ -2273,6 +2273,7 @@ const SUPABASE_URL = 'https://yucsfizhnhfyucymigbu.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_wYdJRSPZ2BqP6_E6svaHhg_SbQd_RmX';
 const SYNC_TABLE = 'trip_sync';
 const SYNC_CODE_KEY = 'cnx_sync_code';
+const SYNC_SEEN_KEY = 'cnx_sync_last_seen';
 
 function getSyncCode(){ return localStorage.getItem(SYNC_CODE_KEY) || ''; }
 function setSyncCodeStorage(code){ localStorage.setItem(SYNC_CODE_KEY, code); }
@@ -2303,6 +2304,7 @@ async function pushToCloud(silent){
   const code = getSyncCode();
   if(!code) return;
   try{
+    const ts = new Date().toISOString();
     const res = await fetch(`${SUPABASE_URL}/rest/v1/${SYNC_TABLE}?on_conflict=sync_code`, {
       method:'POST',
       headers:{
@@ -2311,9 +2313,11 @@ async function pushToCloud(silent){
         'Content-Type': 'application/json',
         'Prefer': 'resolution=merge-duplicates'
       },
-      body: JSON.stringify({ sync_code: code, data: collectSyncData(), updated_at: new Date().toISOString() })
+      body: JSON.stringify({ sync_code: code, data: collectSyncData(), updated_at: ts })
     });
     if(res.ok){
+      // 這次是我們自己推上去的版本，記住它，避免等一下自動下載時把自己剛推的資料當成「新版本」又觸發重新整理
+      localStorage.setItem(SYNC_SEEN_KEY, ts);
       if(!silent) setSyncStatus('✅ 已上傳到雲端　' + nowTimeStr());
     } else if(!silent){
       setSyncStatus('⚠️ 上傳失敗，請確認同步碼設定跟資料表是否正確。');
@@ -2335,7 +2339,14 @@ async function pullFromCloud(){
     if(!res.ok){ setSyncStatus('⚠️ 下載失敗，請確認同步碼設定跟資料表是否正確。'); return; }
     const arr = await res.json();
     if(Array.isArray(arr) && arr.length && arr[0].data){
-      applySyncData(arr[0].data);
+      const remoteTs = arr[0].updated_at;
+      const lastSeen = localStorage.getItem(SYNC_SEEN_KEY);
+      if(remoteTs && lastSeen && remoteTs === lastSeen){
+        // 雲端資料跟我們上次看過的一樣，沒有變化，不需要整頁重新整理
+        setSyncStatus('目前已是最新版本　' + nowTimeStr());
+        return;
+      }
+      applySyncData(arr[0].data, remoteTs);
     } else {
       setSyncStatus('雲端還沒有這組同步碼的資料，先按「⬆️ 上傳到雲端」建立一份。');
     }
@@ -2344,13 +2355,15 @@ async function pullFromCloud(){
   }
 }
 
-function applySyncData(data){
+function applySyncData(data, remoteTs){
   try{
     if(data.itinerary) localStorage.setItem(ITINERARY_KEY, JSON.stringify(data.itinerary));
     if(data.packing) localStorage.setItem('cnx_packing_v1', JSON.stringify(data.packing));
     if(data.wishlist) localStorage.setItem('cnx_wishlist_v1', JSON.stringify(data.wishlist));
     if(data.tips) localStorage.setItem(TIPS_KEY, JSON.stringify(data.tips));
     if(data.docs) localStorage.setItem(DOCS_KEY, JSON.stringify(data.docs));
+    // 記住這個版本的時間戳記，重新整理後才不會又把同一份資料當成「新的」再重整一次
+    if(remoteTs) localStorage.setItem(SYNC_SEEN_KEY, remoteTs);
   }catch(e){
     setSyncStatus('⚠️ 資料寫入失敗，可能是空間不足。');
     return;
@@ -2368,7 +2381,7 @@ document.getElementById('syncSaveCodeBtn').addEventListener('click', ()=>{
 document.getElementById('syncPushBtn').addEventListener('click', ()=> pushToCloud(false));
 document.getElementById('syncPullBtn').addEventListener('click', ()=> pullFromCloud());
 
-// 開啟 App 時，如果已經有存過同步碼，自動抓一次雲端最新資料
+// 開啟 App 時，如果已經有存過同步碼，自動抓一次雲端最新資料（只有真的有新版本才會整頁重新整理）
 (function autoPullOnLoad(){
   const code = getSyncCode();
   const input = document.getElementById('syncCodeInput');
